@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\obj\\Debug\\net8.0\\compressed\\mazvd0ij6t.gz",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\obj\\Debug\\net8.0\\scopedcss\\bundle\\LaptopStoreClient.styles.css",
+      "PackagePath": "staticwebassets\\LaptopStoreClient.styles.css"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\icon-192.png",
+      "PackagePath": "staticwebassets\\icon-192.png"
+    },
+    {
+      "Id": "D:\\TTTN\\LaptopStore\\LaptopStoreClient\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.LaptopStoreClient.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.LaptopStoreClient.props",
+      "PackagePath": "build\\LaptopStoreClient.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.LaptopStoreClient.props",
+      "PackagePath": "buildMultiTargeting\\LaptopStoreClient.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.LaptopStoreClient.props",
+      "PackagePath": "buildTransitive\\LaptopStoreClient.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

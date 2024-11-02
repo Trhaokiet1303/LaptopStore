@@ -1,0 +1,145 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TTTN\\LaptopStore\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|d:\\tttn\\laptopstore\\laptopstoreserver\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|solutionrelative:laptopstoreserver\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102103026_First.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:LaptopStoreServer\\Migrations\\20241102103026_First.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trhao\\AppData\\Local\\Temp\\bzwi35wo..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E055ABA-EE8A-4AEE-B6FA-DB586FA297B8}|LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj|d:\\tttn\\laptopstore\\laptopstoresharedlibrary\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E055ABA-EE8A-4AEE-B6FA-DB586FA297B8}|LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj|solutionrelative:laptopstoresharedlibrary\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|d:\\tttn\\laptopstore\\laptopstoreserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|solutionrelative:laptopstoreserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102100503_Second.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:LaptopStoreServer\\Migrations\\20241102100503_Second.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|d:\\tttn\\laptopstore\\laptopstoreserver\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|solutionrelative:laptopstoreserver\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trhao\\AppData\\Local\\Temp\\bzwi35wo..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trhao\\AppData\\Local\\Temp\\bzwi35wo..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20241102103026_First.cs",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102103026_First.cs",
+              "RelativeDocumentMoniker": "LaptopStoreServer\\Migrations\\20241102103026_First.cs",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102103026_First.cs",
+              "RelativeToolTip": "LaptopStoreServer\\Migrations\\20241102103026_First.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T10:30:26.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SQLQuery1.sql ",
+              "DocumentMoniker": "C:\\Users\\trhao\\AppData\\Local\\Temp\\bzwi35wo..sql",
+              "ToolTip": "SQLQuery1.sql *",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-11-02T10:15:27.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "20241102100503_Second.cs",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102100503_Second.cs",
+              "RelativeDocumentMoniker": "LaptopStoreServer\\Migrations\\20241102100503_Second.cs",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Migrations\\20241102100503_Second.cs",
+              "RelativeToolTip": "LaptopStoreServer\\Migrations\\20241102100503_Second.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T10:05:03.102Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Program.cs",
+              "RelativeDocumentMoniker": "LaptopStoreServer\\Program.cs",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Program.cs",
+              "RelativeToolTip": "LaptopStoreServer\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T09:21:02.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreSharedLibrary\\Models\\Product.cs",
+              "RelativeDocumentMoniker": "LaptopStoreSharedLibrary\\Models\\Product.cs",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreSharedLibrary\\Models\\Product.cs",
+              "RelativeToolTip": "LaptopStoreSharedLibrary\\Models\\Product.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T09:42:53.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "LaptopStoreServer\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "LaptopStoreServer\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T09:44:10.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\appsettings.json",
+              "RelativeDocumentMoniker": "LaptopStoreServer\\appsettings.json",
+              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\appsettings.json",
+              "RelativeToolTip": "LaptopStoreServer\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-02T09:19:07.682Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

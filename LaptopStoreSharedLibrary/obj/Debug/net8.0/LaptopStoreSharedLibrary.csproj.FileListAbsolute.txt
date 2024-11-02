@@ -1,0 +1,12 @@
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\bin\Debug\net8.0\LaptopStoreSharedLibrary.deps.json
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\bin\Debug\net8.0\LaptopStoreSharedLibrary.dll
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\bin\Debug\net8.0\LaptopStoreSharedLibrary.pdb
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.GeneratedMSBuildEditorConfig.editorconfig
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.AssemblyInfoInputs.cache
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.AssemblyInfo.cs
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.csproj.CoreCompileInputs.cache
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.sourcelink.json
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.dll
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\refint\LaptopStoreSharedLibrary.dll
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\LaptopStoreSharedLibrary.pdb
+D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\obj\Debug\net8.0\ref\LaptopStoreSharedLibrary.dll
