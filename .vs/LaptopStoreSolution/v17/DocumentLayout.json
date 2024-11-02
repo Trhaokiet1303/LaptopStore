@@ -1,10 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\TTTN\\LaptopStore\\",
+  "WorkspaceRootPath": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|d:\\tttn\\laptopstore\\laptopstoreserver\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{4EFD1E29-1DBA-494C-976C-DF38FC2C21CB}|LaptopStoreServer\\LaptopStoreServer.csproj|solutionrelative:laptopstoreserver\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{D49D4C3A-A61C-4D7C-9B54-9E8EEEFDF48D}|LaptopStoreClient\\LaptopStoreClient.csproj|d:\\thai_van_tinh\\net\\laptopstore\\laptopstoreclient\\pages\\addorupdateproductcomponent.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D49D4C3A-A61C-4D7C-9B54-9E8EEEFDF48D}|LaptopStoreClient\\LaptopStoreClient.csproj|solutionrelative:laptopstoreclient\\pages\\addorupdateproductcomponent.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D49D4C3A-A61C-4D7C-9B54-9E8EEEFDF48D}|LaptopStoreClient\\LaptopStoreClient.csproj|d:\\thai_van_tinh\\net\\laptopstore\\laptopstoreclient\\wwwroot\\font-awesome\\css\\all.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{D49D4C3A-A61C-4D7C-9B54-9E8EEEFDF48D}|LaptopStoreClient\\LaptopStoreClient.csproj|solutionrelative:laptopstoreclient\\wwwroot\\font-awesome\\css\\all.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,14 +35,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\appsettings.json",
-              "RelativeDocumentMoniker": "LaptopStoreServer\\appsettings.json",
-              "ToolTip": "D:\\TTTN\\LaptopStore\\LaptopStoreServer\\appsettings.json",
-              "RelativeToolTip": "LaptopStoreServer\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-11-02T10:35:28.484Z",
+              "Title": "AddOrUpdateProductComponent.razor",
+              "DocumentMoniker": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreClient\\Pages\\AddOrUpdateProductComponent.razor",
+              "RelativeDocumentMoniker": "LaptopStoreClient\\Pages\\AddOrUpdateProductComponent.razor",
+              "ToolTip": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreClient\\Pages\\AddOrUpdateProductComponent.razor",
+              "RelativeToolTip": "LaptopStoreClient\\Pages\\AddOrUpdateProductComponent.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-02T12:13:23.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "all.css",
+              "DocumentMoniker": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreClient\\wwwroot\\font-awesome\\css\\all.css",
+              "RelativeDocumentMoniker": "LaptopStoreClient\\wwwroot\\font-awesome\\css\\all.css",
+              "ToolTip": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreClient\\wwwroot\\font-awesome\\css\\all.css",
+              "RelativeToolTip": "LaptopStoreClient\\wwwroot\\font-awesome\\css\\all.css",
+              "ViewState": "AQIAAFcAAAAAAAAAAAAAAGsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-11-02T12:04:18.75Z",
               "EditorCaption": ""
             }
           ]

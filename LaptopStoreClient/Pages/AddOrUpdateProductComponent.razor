@@ -1,0 +1,24 @@
+﻿@page "/add-product"
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm Model="Myproduct" Enhance OnvalidSubmit="HandleSaveProduct">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="card">
+                    <div class="card-header">Add Product</div>
+                    <div class="card-body">
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-primary">Save Product</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+@code {
+    Product MyProduct = new();
+}

@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = LaptopStoreSharedLibrary
-build_property.ProjectDir = D:\TTTN\LaptopStore\LaptopStoreSharedLibrary\
+build_property.ProjectDir = D:\Thai_Van_Tinh\NET\LaptopStore\LaptopStoreSharedLibrary\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

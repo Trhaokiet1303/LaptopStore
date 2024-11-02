@@ -8,23 +8,23 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\trhao\\.nuget\\packages\\": {},
+    "C:\\Users\\tinht\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\TTTN\\LaptopStore\\LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj",
+      "projectUniqueName": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj",
       "projectName": "LaptopStoreSharedLibrary",
-      "projectPath": "D:\\TTTN\\LaptopStore\\LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj",
-      "packagesPath": "C:\\Users\\trhao\\.nuget\\packages\\",
-      "outputPath": "D:\\TTTN\\LaptopStore\\LaptopStoreSharedLibrary\\obj\\",
+      "projectPath": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreSharedLibrary\\LaptopStoreSharedLibrary.csproj",
+      "packagesPath": "C:\\Users\\tinht\\.nuget\\packages\\",
+      "outputPath": "D:\\Thai_Van_Tinh\\NET\\LaptopStore\\LaptopStoreSharedLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\trhao\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tinht\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

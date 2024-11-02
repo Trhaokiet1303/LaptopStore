@@ -13,31 +13,35 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = LaptopStoreClient
 build_property.RootNamespace = LaptopStoreClient
-build_property.ProjectDir = D:\TTTN\LaptopStore\LaptopStoreClient\
+build_property.ProjectDir = D:\Thai_Van_Tinh\NET\LaptopStore\LaptopStoreClient\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\TTTN\LaptopStore\LaptopStoreClient
+build_property.MSBuildProjectDirectory = D:\Thai_Van_Tinh\NET\LaptopStore\LaptopStoreClient
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/TTTN/LaptopStore/LaptopStoreClient/App.razor]
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/TTTN/LaptopStore/LaptopStoreClient/Pages/Home.razor]
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/Pages/AddOrUpdateProductComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkT3JVcGRhdGVQcm9kdWN0Q29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/TTTN/LaptopStore/LaptopStoreClient/_Imports.razor]
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/TTTN/LaptopStore/LaptopStoreClient/Layout/MainLayout.razor]
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-yz8v4npnu6
 
-[D:/TTTN/LaptopStore/LaptopStoreClient/Layout/NavMenu.razor]
+[D:/Thai_Van_Tinh/NET/LaptopStore/LaptopStoreClient/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-eougk5mm00
