@@ -11,7 +11,7 @@
         </MudItem>
 
         <div class="menu-container">
-                <MudNavLink Href="/menu" Class="menu-button">Danh mục</MudNavLink>
+            <MudNavLink Href="/allproducts" Class="menu-button">Danh mục</MudNavLink>
             </div>
 
         <!-- Search Bar -->
@@ -30,11 +30,56 @@
         </MudItem>
     </div>
 </MudPaper>
-
+<MudPaper>
+    <MudContainer Class="breadcrumb-container" MaxWidth="MaxWidth.Large">
+        <MudText Typo="Typo.caption" Color="Color.Default" Class="breadcrumb">
+            <MudIcon Icon="@Icons.Material.Filled.Home" Color="Color.Error" Class="breadcrumb-icon" />
+            <MudLink Href="/" Class="breadcrumb-link">Trang chủ</MudLink>
+            <span class="breadcrumb-separator">></span>
+            <MudText Typo="Typo.caption" Class="breadcrumb-current">@CurrentPage</MudText>
+        </MudText>
+    </MudContainer>
+</MudPaper>
 
 @code {
     [Inject] private IStringLocalizer<Header> Localizer { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+    private string CurrentPage { get; set; } = "Trang chủ";
+    private bool IsHomePage { get; set; } = true;
+    protected override void OnInitialized()
+    {
+        // Đăng ký sự kiện LocationChanged
+        NavigationManager.LocationChanged += OnLocationChanged;
+        UpdateBreadcrumb();
+    }
+    private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        UpdateBreadcrumb(); // Cập nhật breadcrumb khi URL thay đổi
+        InvokeAsync(StateHasChanged); // Kích hoạt render lại
+    }
+    private void UpdateBreadcrumb()
+    {
+        var uri = NavigationManager.Uri;
+        var segments = new Uri(uri).Segments;
 
+        if (segments.Length <= 1 || segments.Last() == "/")
+        {
+            // Nếu đang ở trang chủ
+            CurrentPage = "Trang chủ";
+            IsHomePage = true;
+        }
+        else
+        {
+            // Nếu không ở trang chủ
+            CurrentPage = segments.Last().Replace("/", "").Replace("-", " ");
+            IsHomePage = false;
+        }
+    }
+    public void Dispose()
+    {
+        // Hủy đăng ký sự kiện khi component bị hủy
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
     private string _searchString = "";
 
     private async Task OnSearch(string text)

@@ -22,6 +22,34 @@
     <img class="nav-button right" src="/images/dieuhuong/is-greater-than.png" @onclick="ShowNextImage" />
 </div>
 <br />
+<MudGrid Class="logo-container">
+    <!-- Brand Chips with Logos -->
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/hp-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/asus-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/dell-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/lenovo-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/acer-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/mac-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/msi-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand">
+        <img Class="logo-brand-img" src="/images/brand/samsung-icon.png" href="#" />
+    </MudChip>
+</MudGrid>
+<br />
 <MudGrid>
     <div class="featured-products-section">
 
@@ -69,109 +97,10 @@
     </div>
 </MudGrid>
 <br />
-<!-- Menu các thương hiệu -->
-<div class="menu-bar">
-    <!-- Filter panel -->
-    <MudChip Class="filter-chip" OnClick="ToggleFilterPanel">
-        <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary" />
-        <MudText Typo="Typo.body2" Class="filter-text">Lọc</MudText>
-    </MudChip>
-
-    <!-- Brand Chips with Logos -->
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/hp-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/asus-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/dell-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/lenovo-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/acer-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/mac-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/msi-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/samsung-icon.png" href="#" />
-    </MudChip>
-</div>
-
-
 <MudGrid>
-    <!-- Filter Panel on the Left Side -->
-    <MudItem xs="12" md="3" Class="@GetFilterPanelClass()">
-        <!-- Toggle Button for Filter Panel -->
-       
-        <!-- Conditionally Render Filter Panel -->
-        @if (isFilterPanelVisible )
-        {
-            <MudPaper Class="filter-panel" >
-                <HeroTitle Title="@_localizer["Bộ lọc tìm kiếm"]" />
-                <MudExpansionPanels>
-
-                    <!-- Brand Filter -->
-                    <MudExpansionPanel Text="@_localizer["Brand"]">
-                        @foreach (var brand in _brands)
-                        {
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <MudCheckBox @bind-Checked="brand.IsSelected" />
-                                <img src="@brand.LogoPath" alt="@brand.Name" class="logo-brand" />
-                            </div>
-                        }
-                    </MudExpansionPanel>
-
-                    <!-- Description Filter -->
-                    <MudExpansionPanel Text="@_localizer["Description"]">
-                        @foreach (var description in _descriptions)
-                        {
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <MudCheckBox @bind-Checked="description.IsSelected" Label="@description.Name" />
-                                <img src="@description.DescriptionPath" alt="@description.Name" class="logo-decription" />
-                            </div>
-                        }
-                    </MudExpansionPanel>
-
-                    <!-- Price Filter -->
-                    <MudExpansionPanel Text="@_localizer["Price"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedPriceRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label><br>
-                            <MudRadio T="string" Value="under10" /><label>Dưới 10 triệu</label><br>
-                            <MudRadio T="string" Value="10to15" /><label>Từ 10 - 15 triệu</label><br>
-                            <MudRadio T="string" Value="15to20" /><label>Từ 15 - 20 triệu</label><br>
-                            <MudRadio T="string" Value="20to25" /><label>Từ 20 - 25 triệu</label><br>
-                            <MudRadio T="string" Value="25to30" /><label>Từ 25 - 30 triệu</label><br>
-                            <MudRadio T="string" Value="over30" /><label>Trên 30 triệu</label><br>
-                        </MudRadioGroup>
-                    </MudExpansionPanel>
-
-                    <!-- Rate Filter -->
-                    <MudExpansionPanel Text="@_localizer["Rate"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedRateRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label> <br>
-                            <MudRadio T="string" Value="4andAbove" /><label>4 sao trở lên</label><br>
-                            <MudRadio T="string" Value="3andAbove" /><label>3 sao trở lên</label><br>
-                            <MudRadio T="string" Value="2andAbove" /><label>2 sao trở lên</label><br>
-                            <MudRadio T="string" Value="1andAbove" /><label>1 sao trở lên</label><br>
-                        </MudRadioGroup>
-                    </MudExpansionPanel>
-
-                </MudExpansionPanels>
-
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
-            </MudPaper>
-        }
-    </MudItem>
 
     <!-- Product Grid on the Right Side -->
-    <MudItem xs="12" md="9" Class="@GetProductGridContainerClass()">
+    <MudItem xs="12" md="9">
         <!-- Featured Products Section -->
         <HeroTitle Title="@_localizer["Sản phẩm nổi bật"]"/>
         @if (!_loaded)

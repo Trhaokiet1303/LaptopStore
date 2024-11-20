@@ -1,13 +1,8 @@
-﻿.search-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
+﻿
 .main-container {
     display: flex;
 }
-
+/*
 .filter-panel-container {
     width: 260px;
     padding: 16px;
@@ -16,12 +11,12 @@
 }
 
 .filter-panel-hidden {
-    display: none; /* Hide the filter panel */
+    display: none; 
 }
 
 .product-section {
     flex-grow: 1;
-    padding-left: 16px; /* Spacing between filter and products */
+    padding-left: 16px; 
     transition: margin-left 0.3s ease;
 }
 
@@ -91,39 +86,45 @@
     font-size: 20px;
 }
 
-.nav-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
+
+*/
+/*logo */
+.logo-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.brand {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px; /* Giảm kích thước font */
-    width: 35px; /* Giảm kích thước nút */
-    height: 35px; /* Giảm kích thước nút */
-    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 150px;
+    height: 110px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
-    .nav-button img {
-        transition: transform 0.3s ease; /* Thêm hiệu ứng mượt khi chuyển đổi */
+    .brand:hover {
+        transform: scale(1.1);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .nav-button:hover img {
-        transform: scale(1.1); /* Phóng to ảnh bên trong nút khi hover */
-    }
+.logo-brand-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
 
-    .nav-button.left {
-        left: 5px;
-    }
 
-    .nav-button.right {
-        right: 5px;
-    }
-
+/*banner */
 .banner-container {
     position: relative;
     display: flex;
@@ -145,6 +146,38 @@
     .banner img {
         width: 49%; /* Đặt mỗi ảnh chiếm 49% chiều rộng */
         height: auto;
+    }
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 35px;
+    height: 35px;
+    z-index: 1;
+}
+
+    .nav-button img {
+        transition: transform 0.3s ease;
+    }
+
+    .nav-button:hover img {
+        transform: scale(1.1);
+    }
+
+    .nav-button.left {
+        left: 5px;
+    }
+
+    .nav-button.right {
+        right: 5px;
     }
 
 /*Product css*/

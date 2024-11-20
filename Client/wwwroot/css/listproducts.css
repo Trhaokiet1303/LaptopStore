@@ -1,0 +1,229 @@
+﻿.main-container {
+    display: flex;
+}
+
+.filter-panel-container {
+    width: 260px;
+    padding: 16px;
+    background-color: #f5f5f5;
+    transition: transform 0.3s ease;
+}
+
+.filter-panel-hidden {
+    display: none; /* Hide the filter panel */
+}
+
+.product-section {
+    flex-grow: 1;
+    padding-left: 16px; /* Spacing between filter and products */
+    transition: margin-left 0.3s ease;
+}
+
+.menu-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+    .filter-chip:hover {
+        border: 1px solid transparent;
+        border-color: #1e88e5;
+    }
+
+.filter-text {
+    color: #333;
+    font-size: 14px;
+}
+
+.brand-chip {
+    border: 1px solid #e0e0e0;
+    background-color: #f2f4f7;
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    box-shadow: 0 2px 4px #fff;
+    flex-shrink: 0;
+}
+
+    .brand-chip:hover {
+        box-shadow: 0 4px 8px #fff;
+        border: 1px solid transparent;
+        border-color: #1e88e5;
+    }
+
+.logo-brand {
+    width: 100px;
+    height: auto;
+}
+
+.logo-decription {
+    width: 100px;
+    height: auto;
+}
+/*Product css*/
+.product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 500px;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.product {
+    position: relative;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .product:hover {
+        transition: box-shadow 0.3s ease-in-out;
+        transform: scale(1.02);
+    }
+
+.img-product {
+    width: 70%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.badge-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.badge {
+    background-color: #ffe2e2;
+    color: #e91e63;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+
+.product-name {
+    position: absolute; 
+    top: 235px; 
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 10px;
+    left: 50%; /* Căn giữa theo chiều ngang */
+    transform: translateX(-50%);
+}
+
+.specs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    position: absolute;
+    top: 200px; /* Đặt vị trí specs trên thông tin kỹ thuật */
+    left: 50%;
+    transform: translateX(-50%);
+    height: 25px;
+    margin-bottom: 0;
+}
+
+.spec {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 120px; /* Đặt chi tiết sản phẩm giữa specs và price */
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 5px; /* Khoảng cách giữa các dòng thông tin */
+    font-size: 13px;
+    color: #666;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 50px;
+}
+
+.price {
+    font-size: 19px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 5px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 15px;
+}
+
+.rate {
+    color: yellow;
+    fill: yellow;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.action-button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+}

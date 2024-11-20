@@ -51,7 +51,6 @@ namespace LaptopStore.Client.Pages.Shop
             bannerTimer.Elapsed += (s, e) => InvokeAsync(ShowNextImage);
             bannerTimer.Start();
         }
-
         private void ToggleFilterPanel()
         {
             isFilterPanelVisible = !isFilterPanelVisible;

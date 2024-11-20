@@ -123,3 +123,43 @@
         flex: 3; /* Increase search bar size */
     }
 }
+/* thanh địa chỉ*/
+.breadcrumb-container {
+    padding: 10px 20px;
+    background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.breadcrumb-icon {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.breadcrumb-link {
+    text-decoration: none;
+    color: #555;
+    margin-right: 5px;
+}
+
+    .breadcrumb-link:hover {
+        color: #e91e63;
+        text-decoration: underline;
+    }
+
+.breadcrumb-separator {
+    margin: 0 5px;
+    color: #999;
+}
+
+.breadcrumb-current {
+    font-weight: bold;
+    color: #333;
+}
