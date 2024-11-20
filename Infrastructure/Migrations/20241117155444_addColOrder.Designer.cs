@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LaptopStore.Client.Migrations
 {
-    [DbContext(typeof(BlazorHeroContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20241117155444_addColOrder")]
     partial class addColOrder
     {

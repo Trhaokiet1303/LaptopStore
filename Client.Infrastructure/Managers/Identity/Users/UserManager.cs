@@ -65,14 +65,5 @@ namespace LaptopStore.Client.Infrastructure.Managers.Identity.Users
             var response = await _httpClient.PostAsJsonAsync(Routes.UserEndpoints.ResetPassword, request);
             return await response.ToResult();
         }
-
-        public async Task<string> ExportToExcelAsync(string searchString = "")
-        {
-            var response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
-                ? Routes.UserEndpoints.Export
-                : Routes.UserEndpoints.ExportFiltered(searchString));
-            var data = await response.Content.ReadAsStringAsync();
-            return data;
-        }
     }
 }

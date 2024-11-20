@@ -13,12 +13,12 @@ using LaptopStore.Shared.Constants.Storage;
 
 namespace LaptopStore.Client.Infrastructure.Authentication
 {
-    public class BlazorHeroStateProvider : AuthenticationStateProvider
+    public class StateProvider : AuthenticationStateProvider
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
-        public BlazorHeroStateProvider(
+        public StateProvider(
             HttpClient httpClient,
             ILocalStorageService localStorage)
         {

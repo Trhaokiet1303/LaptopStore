@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LaptopStore.Client.Migrations
 {
-    [DbContext(typeof(BlazorHeroContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20241117052140_13h17d11m")]
     partial class _13h17d11m
     {

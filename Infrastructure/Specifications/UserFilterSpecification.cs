@@ -3,7 +3,7 @@ using LaptopStore.Application.Specifications.Base;
 
 namespace LaptopStore.Infrastructure.Specifications
 {
-    public class UserFilterSpecification : HeroSpecification<BlazorHeroUser>
+    public class UserFilterSpecification : HeroSpecification<User>
     {
         public UserFilterSpecification(string searchString)
         {

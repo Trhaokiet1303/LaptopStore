@@ -22,7 +22,7 @@ else
                     <MudCardContent Class="pa-46" Style="padding:26px!important">
                         <MudGrid>
                             <MudCheckBox @bind-Checked="@_active" Label="@_localizer["Active?"]" Color="Color.Primary"></MudCheckBox>
-                            <MudCheckBox @bind-Checked="@_confirm" Label="@_localizer["Cofrim Email?"]" Color="Color.Primary"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@_confirm" Label="@_localizer["Confirm Email?"]" Color="Color.Primary"></MudCheckBox>
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="ToggleUserStatus" ButtonType="ButtonType.Submit">@_localizer["Save Changes"]</MudButton>
                         </MudGrid>
                     </MudCardContent>

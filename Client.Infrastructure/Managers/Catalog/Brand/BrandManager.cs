@@ -18,14 +18,6 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Brand
             _httpClient = httpClient;
         }
 
-        public async Task<IResult<string>> ExportToExcelAsync(string searchString = "")
-        {
-            var response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
-                ? Routes.BrandsEndpoints.Export
-                : Routes.BrandsEndpoints.ExportFiltered(searchString));
-            return await response.ToResult<string>();
-        }
-
         public async Task<IResult<int>> DeleteAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"{Routes.BrandsEndpoints.Delete}/{id}");

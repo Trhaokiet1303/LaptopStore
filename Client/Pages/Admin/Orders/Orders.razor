@@ -17,7 +17,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="_orderList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<GetAllOrdersResponse, bool>(Search)" @bind-order="_order">
+    <MudTable Hover="true" Elevation="25" Items="_orderList" Filter="new Func<GetAllOrdersResponse, bool>(Search)" @bind-order="_order">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canCreateOrders)
@@ -71,11 +71,11 @@ else
             <MudTd DataLabel="IsPayment">
                 @if (context.IsPayment)
                 {
-                    <MudHighlighter Text="True" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="Paid" HighlightedText="@_searchString" />
                 }
                 else
                 {
-                    <MudHighlighter Text="False" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="Not Paid" HighlightedText="@_searchString" />
                 }
             </MudTd>
             <MudTd DataLabel="Actions" Style="text-align: right">
@@ -108,11 +108,7 @@ else
             </MudTd>
 
         </RowTemplate>
-        <FooterContent>
-            <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Dense"]</MudSwitch>
-            <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@_localizer["Striped"]</MudSwitch>
-            <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]</MudSwitch>
-        </FooterContent>
+        
         <PagerContent>
             <TablePager />
         </PagerContent>

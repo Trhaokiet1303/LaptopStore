@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaptopStore.Infrastructure.Models.Identity
 {
-    public class BlazorHeroUser : IdentityUser<string>, IAuditableEntity<string>
+    public class User : IdentityUser<string>, IAuditableEntity<string>
     {
         public string FirstName { get; set; }
 

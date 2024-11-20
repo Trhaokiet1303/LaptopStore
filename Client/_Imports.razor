@@ -29,8 +29,6 @@
 
 @*Shared Libraries*@
 @using LaptopStore.Shared.Constants.Permission
-@using LaptopStore.Client.Shared.Components
-
 @using LaptopStore.Client
 @using LaptopStore.Client.Shared
 @using LaptopStore.Client.Shared.Dialogs
@@ -47,7 +45,7 @@
 @inject IAuthenticationManager _authenticationManager
 @inject IAccountManager _accountManager
 @inject NavigationManager _navigationManager
-@inject BlazorHeroStateProvider _stateProvider
+@inject StateProvider _stateProvider
 @inject IAuthorizationService _authorizationService
 @inject ISnackbar _snackBar
 @inject IDialogService _dialogService

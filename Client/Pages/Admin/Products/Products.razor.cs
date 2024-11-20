@@ -30,15 +30,11 @@ namespace LaptopStore.Client.Pages.Admin.Products
         private int _totalItems;
         private int _currentPage;
         private string _searchString = "";
-        private bool _dense = false;
-        private bool _striped = true;
-        private bool _bordered = false;
 
         private ClaimsPrincipal _currentUser;
         private bool _canCreateProducts;
         private bool _canEditProducts;
         private bool _canDeleteProducts;
-        private bool _canExportProducts;
         private bool _canSearchProducts;
         private bool _loaded;
 
@@ -48,7 +44,6 @@ namespace LaptopStore.Client.Pages.Admin.Products
             _canCreateProducts = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Create)).Succeeded;
             _canEditProducts = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Edit)).Succeeded;
             _canDeleteProducts = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Delete)).Succeeded;
-            _canExportProducts = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Export)).Succeeded;
             _canSearchProducts = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Search)).Succeeded;
 
             _loaded = true;
@@ -110,30 +105,6 @@ namespace LaptopStore.Client.Pages.Admin.Products
         {
             _searchString = text;
             _table.ReloadServerData();
-        }
-
-        private async Task ExportToExcel()
-        {
-            var response = await ProductManager.ExportToExcelAsync(_searchString);
-            if (response.Succeeded)
-            {
-                await _jsRuntime.InvokeVoidAsync("Download", new
-                {
-                    ByteArray = response.Data,
-                    FileName = $"{nameof(Products).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
-                    MimeType = ApplicationConstants.MimeTypes.OpenXml
-                });
-                _snackBar.Add(string.IsNullOrWhiteSpace(_searchString)
-                    ? _localizer["Products exported"]
-                    : _localizer["Filtered Products exported"], Severity.Success);
-            }
-            else
-            {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
         }
 
         private async Task InvokeModal(int id = 0)

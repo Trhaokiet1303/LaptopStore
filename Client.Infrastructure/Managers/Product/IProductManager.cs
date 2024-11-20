@@ -18,6 +18,5 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
 
         Task<IResult<int>> DeleteAsync(int id);
 
-        Task<IResult<string>> ExportToExcelAsync(string searchString = "");
     }
 }

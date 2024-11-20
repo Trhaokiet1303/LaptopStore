@@ -31,14 +31,6 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
             return await response.ToResult<int>();
         }
 
-        public async Task<IResult<string>> ExportToExcelAsync(string searchString = "")
-        {
-            var response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
-                ? Routes.ProductsEndpoints.Export
-                : Routes.ProductsEndpoints.ExportFiltered(searchString));
-            return await response.ToResult<string>();
-        }
-
         public async Task<IResult<string>> GetProductImageAsync(int id)
         {
             var response = await _httpClient.GetAsync(Routes.ProductsEndpoints.GetProductImage(id));

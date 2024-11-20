@@ -27,8 +27,8 @@ namespace LaptopStore.Infrastructure.Services.Identity
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<BlazorHeroUser> _userManager;
-        private readonly RoleManager<BlazorHeroRole> _roleManager;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IMailService _mailService;
         private readonly IStringLocalizer<UserService> _localizer;
         private readonly IExcelService _excelService;
@@ -36,9 +36,9 @@ namespace LaptopStore.Infrastructure.Services.Identity
         private readonly IMapper _mapper;
 
         public UserService(
-            UserManager<BlazorHeroUser> userManager,
+            UserManager<User> userManager,
             IMapper mapper,
-            RoleManager<BlazorHeroRole> roleManager,
+            RoleManager<Role> roleManager,
             IMailService mailService,
             IStringLocalizer<UserService> localizer,
             IExcelService excelService,
@@ -67,7 +67,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             {
                 return await Result.FailAsync(string.Format(_localizer["Username {0} is already taken."], request.UserName));
             }
-            var user = new BlazorHeroUser
+            var user = new User
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
@@ -120,7 +120,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
         }
 
-        private async Task<string> SendVerificationEmail(BlazorHeroUser user, string origin)
+        private async Task<string> SendVerificationEmail(User user, string origin)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -149,6 +149,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             if (user != null)
             {
                 user.IsActive = request.ActivateUser;
+                user.EmailConfirmed = request.EmailConfirm;
                 var identityResult = await _userManager.UpdateAsync(user);
             }
             return await Result.SuccessAsync();
@@ -229,11 +230,9 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
-                // Don't reveal that the user does not exist or is not confirmed
                 return await Result.FailAsync(_localizer["An Error has occurred!"]);
             }
-            // For more information on how to enable account confirmation and password reset please
-            // visit https://go.microsoft.com/fwlink/?LinkID=532713
+          
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var route = "account/reset-password";
@@ -273,33 +272,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
         {
             var count = await _userManager.Users.CountAsync();
             return count;
-        }
-
-        public async Task<string> ExportToExcelAsync(string searchString = "")
-        {
-            var userSpec = new UserFilterSpecification(searchString);
-            var users = await _userManager.Users
-                .Specify(userSpec)
-                .OrderByDescending(a => a.CreatedOn)
-                .ToListAsync();
-            var result = await _excelService.ExportAsync(users, sheetName: _localizer["Users"],
-                mappers: new Dictionary<string, Func<BlazorHeroUser, object>>
-                {
-                    { _localizer["Id"], item => item.Id },
-                    { _localizer["FirstName"], item => item.FirstName },
-                    { _localizer["LastName"], item => item.LastName },
-                    { _localizer["UserName"], item => item.UserName },
-                    { _localizer["Email"], item => item.Email },
-                    { _localizer["EmailConfirmed"], item => item.EmailConfirmed },
-                    { _localizer["PhoneNumber"], item => item.PhoneNumber },
-                    { _localizer["PhoneNumberConfirmed"], item => item.PhoneNumberConfirmed },
-                    { _localizer["IsActive"], item => item.IsActive },
-                    { _localizer["CreatedOn (Local)"], item => DateTime.SpecifyKind(item.CreatedOn, DateTimeKind.Utc).ToLocalTime().ToString("G", CultureInfo.CurrentCulture) },
-                    { _localizer["CreatedOn (UTC)"], item => item.CreatedOn.ToString("G", CultureInfo.CurrentCulture) },
-                    { _localizer["ProfilePictureDataUrl"], item => item.ProfilePictureDataUrl },
-                });
-
-            return result;
         }
     }
 }

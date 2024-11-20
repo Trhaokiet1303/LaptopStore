@@ -14,12 +14,12 @@ namespace LaptopStore.Infrastructure.Repositories
     public class UnitOfWork<TId> : IUnitOfWork<TId>
     {
         private readonly ICurrentUserService _currentUserService;
-        private readonly BlazorHeroContext _dbContext;
+        private readonly DBContext _dbContext;
         private bool disposed;
         private Hashtable _repositories;
         private readonly IAppCache _cache;
 
-        public UnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
+        public UnitOfWork(DBContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _currentUserService = currentUserService;

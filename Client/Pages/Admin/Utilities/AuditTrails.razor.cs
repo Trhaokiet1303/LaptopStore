@@ -22,16 +22,12 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
 
         private RelatedAuditTrail _trail = new();
         private string _searchString = "";
-        private bool _dense = true;
-        private bool _striped = true;
-        private bool _bordered = false;
-        private bool _searchInOldValues = false;
-        private bool _searchInNewValues = false;
+        private bool _searchInOldValues = true;
+        private bool _searchInNewValues = true;
         private MudDateRangePicker _dateRangePicker;
         private DateRange _dateRange;
 
         private ClaimsPrincipal _currentUser;
-        private bool _canExportAuditTrails;
         private bool _canSearchAuditTrails;
         private bool _loaded;
 
@@ -39,7 +35,6 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
         {
             var result = false;
 
-            // check Search String
             if (string.IsNullOrWhiteSpace(_searchString)) result = true;
             if (!result)
             {
@@ -47,19 +42,18 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
                 {
                     result = true;
                 }
-                if (_searchInOldValues &&
+                if (
                     response.OldValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     result = true;
                 }
-                if (_searchInNewValues &&
+                if (
                     response.NewValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     result = true;
                 }
             }
 
-            // check Date Range
             if (_dateRange?.Start == null && _dateRange?.End == null) return result;
             if (_dateRange?.Start != null && response.DateTime < _dateRange.Start)
             {
@@ -76,7 +70,6 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
         protected override async Task OnInitializedAsync()
         {
             _currentUser = await _authenticationManager.CurrentUser();
-            _canExportAuditTrails = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
             _canSearchAuditTrails = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
 
             await GetDataAsync();
@@ -120,30 +113,6 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
                 trial.ShowDetails = false;
             }
             _trail.ShowDetails = !_trail.ShowDetails;
-        }
-
-        private async Task ExportToExcelAsync()
-        {
-            var response = await AuditManager.DownloadFileAsync(_searchString, _searchInOldValues, _searchInNewValues);
-            if (response.Succeeded)
-            {
-                await _jsRuntime.InvokeVoidAsync("Download", new
-                {
-                    ByteArray = response.Data,
-                    FileName = $"{nameof(AuditTrails).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
-                    MimeType = ApplicationConstants.MimeTypes.OpenXml
-                });
-                _snackBar.Add(string.IsNullOrWhiteSpace(_searchString)
-                    ? _localizer["Audit Trails exported"]
-                    : _localizer["Filtered Audit Trails exported"], Severity.Success);
-            }
-            else
-            {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
         }
 
         public class RelatedAuditTrail : AuditResponse

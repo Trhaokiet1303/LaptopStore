@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using LaptopStore.Domain.Contracts;
 using Microsoft.AspNetCore.Identity;
+using static LaptopStore.Shared.Constants.Permission.Permissions;
 
 namespace LaptopStore.Infrastructure.Models.Identity
 {
-    public class BlazorHeroRole : IdentityRole, IAuditableEntity<string>
+    public class Role : IdentityRole, IAuditableEntity<string>
     {
         public string Description { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedOn { get; set; }
-        public virtual ICollection<BlazorHeroRoleClaim> RoleClaims { get; set; }
+        public virtual ICollection<RoleClaim> RoleClaims { get; set; }
 
-        public BlazorHeroRole() : base()
+        public Role() : base()
         {
-            RoleClaims = new HashSet<BlazorHeroRoleClaim>();
+            RoleClaims = new HashSet<RoleClaim>();
         }
 
-        public BlazorHeroRole(string roleName, string roleDescription = null) : base(roleName)
+        public Role(string roleName, string roleDescription = null) : base(roleName)
         {
-            RoleClaims = new HashSet<BlazorHeroRoleClaim>();
+            RoleClaims = new HashSet<RoleClaim>();
             Description = roleDescription;
         }
     }

@@ -29,6 +29,5 @@ namespace LaptopStore.Application.Interfaces.Services.Identity
 
         Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
 
-        Task<string> ExportToExcelAsync(string searchString = "");
     }
 }

@@ -73,9 +73,9 @@ namespace LaptopStore.Client.Infrastructure.Managers.Preferences
             var preference = await GetPreference() as ClientPreference;
             if (preference != null)
             {
-                if (preference.IsDarkMode == true) return BlazorHeroTheme.DarkTheme;
+                if (preference.IsDarkMode == true) return Theme.DarkTheme;
             }
-            return BlazorHeroTheme.DefaultTheme;
+            return Theme.DefaultTheme;
         }
         public async Task<bool> IsRTL()
         {

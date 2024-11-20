@@ -1,4 +1,4 @@
-﻿@page "/audit-trails"
+﻿@page "/admin/audit"
 @using System.Globalization
 @attribute [Authorize(Policy = Permissions.AuditTrails.View)]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<AuditTrails> _localizer
@@ -16,14 +16,8 @@
 }
 else
 {
-    <MudTable Hover="false" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Elevation="25" Items="Trails" Filter="new Func<RelatedAuditTrail, bool>(Search)" @bind-trail="_trail" CustomHeader="true">
+    <MudTable Hover="false" Elevation="25" Items="Trails" Filter="new Func<RelatedAuditTrail, bool>(Search)" @bind-trail="_trail" CustomHeader="true">
         <ToolBarContent>
-            <div class="justify-center mud-text-align-center">
-                @if (_canExportAuditTrails)
-                {
-                    <MudButton DisableElevation IconColor="Color.Secondary" Variant="Variant.Filled" OnClick="ExportToExcelAsync" StartIcon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Surface">@_localizer["Export To Excel"]</MudButton>
-                }
-            </div>
             <MudToolBarSpacer />
             @if (_canSearchAuditTrails)
             {
@@ -43,10 +37,7 @@ else
                             </PickerActions>
                         </MudDateRangePicker>
                     </MudTh>
-                    <MudTh colspan="3" Style="text-align: right">
-                        <MudSwitch @bind-Checked="@_searchInOldValues" Color="Color.Primary" Style="margin-left: 5px;">@_localizer["Search in Old Values"]</MudSwitch>
-                        <MudSwitch @bind-Checked="@_searchInNewValues" Color="Color.Primary" Style="margin-left: 5px;">@_localizer["Search in New Values"]</MudSwitch>
-                    </MudTh>
+                   
                 </MudTHeadRow>
                 }
             <MudTHeadRow IgnoreCheckbox="true">
@@ -65,9 +56,6 @@ else
             <MudTd DataLabel="Date">
                 <MudItem>
                     <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["Local"] : @context.LocalTime.ToString("G", CultureInfo.CurrentCulture)</MudChip>
-                </MudItem>
-                <MudItem>
-                    <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["UTC"] : @context.DateTime.ToString("G", CultureInfo.CurrentCulture)</MudChip>
                 </MudItem>
             </MudTd>
             <MudTd DataLabel="Tax">@context.Type</MudTd>
@@ -121,16 +109,11 @@ else
                                                     <MudItem>
                                                         @foreach (var value in context.OldValues.Trim('{').Trim('}').Split(','))
                                                             {
-                                                            @if (_searchInOldValues)
-                                                                {
+                                                            
                                                                 <MudChip Label="true" Color="Color.Warning">
                                                                     <MudHighlighter Text="@value.Replace('"', ' ').Trim()" HighlightedText="@_searchString" />
                                                                 </MudChip>
-                                                                }
-                                                                else
-                                                                {
-                                                                <MudChip Label="true" Color="Color.Warning">@value.Replace('"', ' ').Trim()</MudChip>
-                                                                }
+                                                                
                                                             }
                                                     </MudItem>
                                                 </td>
@@ -145,16 +128,11 @@ else
                                                     <MudItem>
                                                         @foreach (var value in context.NewValues.Trim('{').Trim('}').Split(','))
                                                             {
-                                                            @if (_searchInNewValues)
-                                                                {
+                                                            
                                                                 <MudChip Label="true" Color="Color.Success">
                                                                     <MudHighlighter Text="@value.Replace('"', ' ').Trim()" HighlightedText="@_searchString" />
                                                                 </MudChip>
-                                                                }
-                                                                else
-                                                                {
-                                                                <MudChip Label="true" Color="Color.Success">@value.Replace('"', ' ').Trim()</MudChip>
-                                                                }
+                                                               
                                                             }
                                                     </MudItem>
                                                 </td>
@@ -167,11 +145,7 @@ else
                     </td>
                 </MudTr>}
         </ChildRowContent>
-        <FooterContent>
-            <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Dense"]</MudSwitch>
-            <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@_localizer["Striped"]</MudSwitch>
-            <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]</MudSwitch>
-        </FooterContent>
+      
         <PagerContent>
             <TablePager />
         </PagerContent>

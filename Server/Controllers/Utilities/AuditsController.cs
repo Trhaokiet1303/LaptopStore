@@ -30,20 +30,5 @@ namespace LaptopStore.Server.Controllers.Utilities
         {
             return Ok(await _auditService.GetCurrentUserTrailsAsync(_currentUserService.UserId));
         }
-
-        /// <summary>
-        /// Search Audit Trails and Export to Excel
-        /// </summary>
-        /// <param name="searchString"></param>
-        /// <param name="searchInOldValues"></param>
-        /// <param name="searchInNewValues"></param>
-        /// <returns>Status 200 OK</returns>
-        [Authorize(Policy = Permissions.AuditTrails.Export)]
-        [HttpGet("export")]
-        public async Task<IActionResult> ExportExcel(string searchString = "", bool searchInOldValues = false, bool searchInNewValues = false)
-        {
-            var data = await _auditService.ExportToExcelAsync(_currentUserService.UserId, searchString, searchInOldValues, searchInNewValues);
-            return Ok(data);
-        }
     }
 }

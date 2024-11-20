@@ -1,6 +1,5 @@
 ﻿using LaptopStore.Application.Features.Products.Commands.AddEdit;
 using LaptopStore.Application.Features.Products.Commands.Delete;
-using LaptopStore.Application.Features.Products.Queries.Export;
 using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using LaptopStore.Application.Features.Products.Queries.GetProductImage;
@@ -50,13 +49,6 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await _mediator.Send(new DeleteProductCommand { Id = id }));
-        }
-
-        [Authorize(Policy = Permissions.Products.Export)]
-        [HttpGet("export")]
-        public async Task<IActionResult> Export(string searchString = "")
-        {
-            return Ok(await _mediator.Send(new ExportProductsQuery(searchString)));
         }
     }
 }

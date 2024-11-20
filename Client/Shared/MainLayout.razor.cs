@@ -2,14 +2,13 @@
 using LaptopStore.Client.Infrastructure.Settings;
 using LaptopStore.Shared.Constants.Application;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using LaptopStore.Client.Infrastructure.Managers.Identity.Roles;
 using Microsoft.AspNetCore.Components;
+using LaptopStore.Client.Infrastructure.Managers.Identity.Roles;
 
 namespace LaptopStore.Client.Shared
 {
@@ -31,7 +30,7 @@ namespace LaptopStore.Client.Shared
             if (user == null) return;
             if (user.Identity?.IsAuthenticated == true)
             {
-                CurrentUserId = user.GetUserId();                
+                CurrentUserId = user.GetUserId();
                 FirstName = user.GetFirstName();
                 if (FirstName.Length > 0)
                 {
@@ -59,41 +58,16 @@ namespace LaptopStore.Client.Shared
         private MudTheme _currentTheme;
         private bool _drawerOpen = true;
         private bool _rightToLeft = false;
-        private async Task RightToLeftToggle()
-        {
-            var isRtl = await _clientPreferenceManager.ToggleLayoutDirection();
-            _rightToLeft = isRtl;
-            _drawerOpen = false;
-        }
 
         protected override async Task OnInitializedAsync()
         {
-            _currentTheme = BlazorHeroTheme.DefaultTheme;
+            _currentTheme = Theme.DefaultTheme;
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
             _rightToLeft = await _clientPreferenceManager.IsRTL();
             _interceptor.RegisterEvent();
             hubConnection = hubConnection.TryInitialize(_navigationManager);
             await hubConnection.StartAsync();
-            hubConnection.On<string, string, string>(ApplicationConstants.SignalR.ReceiveChatNotification, (message, receiverUserId, senderUserId) =>
-            {
-                if (CurrentUserId == receiverUserId)
-                {
-                    _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
-                    _snackBar.Add(message, Severity.Info, config =>
-                    {
-                        config.VisibleStateDuration = 10000;
-                        config.HideTransitionDuration = 500;
-                        config.ShowTransitionDuration = 500;
-                        config.Action = localizer["Chat?"];
-                        config.ActionColor = Color.Primary;
-                        config.Onclick = snackbar =>
-                        {
-                            _navigationManager.NavigateTo($"chat/{senderUserId}");
-                            return Task.CompletedTask;
-                        };
-                    });
-                }
-            });
+
             hubConnection.On(ApplicationConstants.SignalR.ReceiveRegenerateTokens, async () =>
             {
                 try
@@ -113,6 +87,7 @@ namespace LaptopStore.Client.Shared
                     _navigationManager.NavigateTo("/");
                 }
             });
+
             hubConnection.On<string, string>(ApplicationConstants.SignalR.LogoutUsersByRole, async (userId, roleId) =>
             {
                 if (CurrentUserId != userId)
@@ -150,7 +125,7 @@ namespace LaptopStore.Client.Shared
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
 
-             _dialogService.Show<Dialogs.Logout>(localizer["Logout"], parameters, options);
+            _dialogService.Show<Dialogs.Logout>(localizer["Logout"], parameters, options);
         }
 
         private void DrawerToggle()
@@ -162,8 +137,8 @@ namespace LaptopStore.Client.Shared
         {
             bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync();
             _currentTheme = isDarkMode
-                ? BlazorHeroTheme.DefaultTheme
-                : BlazorHeroTheme.DarkTheme;
+                ? Theme.DefaultTheme
+                : Theme.DarkTheme;
         }
 
         public void Dispose()

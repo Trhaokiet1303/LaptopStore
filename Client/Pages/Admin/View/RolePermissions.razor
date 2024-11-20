@@ -17,7 +17,7 @@ else
             var allRoleClaimsInGroup = GroupedRoleClaims[group].ToList();
 
             <MudTabPanel Text="@group" BadgeData="@($"{selectedRoleClaimsInGroup.Count}/{allRoleClaimsInGroup.Count}")" Style="padding-right: 43px;" BadgeColor="@GetGroupBadgeColor(selectedRoleClaimsInGroup.Count, allRoleClaimsInGroup.Count)">
-                <MudTable Hover="true" Elevation="25" Items="@allRoleClaimsInGroup" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<RoleClaimResponse, bool>(Search)" @bind-roleClaims="_roleClaims" CommitEditTooltip="@_localizer["Apply"]" @bind-SelectedItem="_selectedItem">
+                <MudTable Hover="true" Elevation="25" Items="@allRoleClaimsInGroup" Filter="new Func<RoleClaimResponse, bool>(Search)" @bind-roleClaims="_roleClaims" CommitEditTooltip="@_localizer["Apply"]" @bind-SelectedItem="_selectedItem">
                     <ToolBarContent>
                         @if (_canEditRolePermissions)
                         {
@@ -62,11 +62,7 @@ else
                         </MudTd>
                         <MudTd DataLabel="@_localizer["Status"]"><MudCheckBox @bind-Checked="@context.Selected" Disabled="@(!_canEditRolePermissions)" Color="Color.Secondary" /></MudTd>
                     </RowEditingTemplate>
-                    <FooterContent>
-                        <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Dense"]</MudSwitch>
-                        <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@_localizer["Striped"]</MudSwitch>
-                        <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]</MudSwitch>
-                    </FooterContent>
+                    
                     <PagerContent>
                         <TablePager />
                     </PagerContent>

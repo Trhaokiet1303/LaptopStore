@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace LaptopStore.Infrastructure.Contexts
 {
-    public class BlazorHeroContext : AuditableContext
+    public class DBContext : AuditableContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTimeService _dateTimeService;
 
-        public BlazorHeroContext(DbContextOptions<BlazorHeroContext> options, ICurrentUserService currentUserService, IDateTimeService dateTimeService)
+        public DBContext(DbContextOptions<DBContext> options, ICurrentUserService currentUserService, IDateTimeService dateTimeService)
             : base(options)
         {
             _currentUserService = currentUserService;
@@ -71,13 +71,13 @@ namespace LaptopStore.Infrastructure.Contexts
                      .IsRequired() // Đảm bảo không null
                      .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<BlazorHeroUser>(entity =>
+            builder.Entity<User>(entity =>
             {
                 entity.ToTable(name: "Users", "Identity");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
-            builder.Entity<BlazorHeroRole>(entity =>
+            builder.Entity<Role>(entity =>
             {
                 entity.ToTable(name: "Roles", "Identity");
             });
@@ -96,7 +96,7 @@ namespace LaptopStore.Infrastructure.Contexts
                 entity.ToTable("UserLogins", "Identity");
             });
 
-            builder.Entity<BlazorHeroRoleClaim>(entity =>
+            builder.Entity<RoleClaim>(entity =>
             {
                 entity.ToTable(name: "RoleClaims", "Identity");
 

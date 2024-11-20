@@ -8,7 +8,7 @@ namespace LaptopStore.Infrastructure.Mappings
     {
         public UserProfile()
         {
-            CreateMap<UserResponse, BlazorHeroUser>().ReverseMap();
+            CreateMap<UserResponse, User>().ReverseMap();
         }
     }
 }

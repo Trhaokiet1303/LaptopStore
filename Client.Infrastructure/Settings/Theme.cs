@@ -2,7 +2,7 @@
 
 namespace LaptopStore.Client.Infrastructure.Settings
 {
-    public class BlazorHeroTheme
+    public class Theme
     {
         private static Typography DefaultTypography = new Typography()
         {

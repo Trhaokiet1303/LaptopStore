@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LaptopStore.Client.Migrations
 {
-    [DbContext(typeof(BlazorHeroContext))]
-    partial class BlazorHeroContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DBContext))]
+    partial class DBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -251,7 +251,7 @@ namespace LaptopStore.Client.Migrations
                     b.ToTable("AuditTrails");
                 });
 
-            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRole", b =>
+            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -293,7 +293,7 @@ namespace LaptopStore.Client.Migrations
                     b.ToTable("Roles", "Identity");
                 });
 
-            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRoleClaim", b =>
+            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.RoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -335,7 +335,7 @@ namespace LaptopStore.Client.Migrations
                     b.ToTable("RoleClaims", "Identity");
                 });
 
-            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.BlazorHeroUser", b =>
+            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -539,9 +539,9 @@ namespace LaptopStore.Client.Migrations
                     b.Navigation("Brand");
                 });
 
-            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRoleClaim", b =>
+            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.RoleClaim", b =>
                 {
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRole", "Role")
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.Role", "Role")
                         .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,7 +552,7 @@ namespace LaptopStore.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroUser", null)
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -561,7 +561,7 @@ namespace LaptopStore.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroUser", null)
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -570,13 +570,13 @@ namespace LaptopStore.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRole", null)
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroUser", null)
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,7 +585,7 @@ namespace LaptopStore.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.BlazorHeroUser", null)
+                    b.HasOne("LaptopStore.Infrastructure.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -597,7 +597,7 @@ namespace LaptopStore.Client.Migrations
                     b.Navigation("OrderItem");
                 });
 
-            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.BlazorHeroRole", b =>
+            modelBuilder.Entity("LaptopStore.Infrastructure.Models.Identity.Role", b =>
                 {
                     b.Navigation("RoleClaims");
                 });

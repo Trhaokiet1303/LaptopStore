@@ -1,31 +1,22 @@
 ﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<NavMenu> _localizer
 @using System.Security.Claims
 
-<UserCard />
 <MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">@_localizer["Home"]</MudNavLink>
+    <MudListSubheader Class="mt-2 mb-n2">@_localizer["Dashboard"]</MudListSubheader>
+
+    <MudNavLink Href="/admin/dashboard" Icon="@Icons.Material.Outlined.Dashboard">
+        @_localizer["Dashboard"]
+    </MudNavLink>
     <MudNavLink Href="/swagger/index.html" Target="_blank" Icon="@Icons.Material.Outlined.LiveHelp">
         @_localizer["Swagger"]
     </MudNavLink>
-    <MudListSubheader Class="mt-2 mb-n2">@_localizer["Personal"]</MudListSubheader>
-    @if (_canViewDashboards)
-    {
-        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Outlined.Dashboard">
-            @_localizer["Dashboard"]
-        </MudNavLink>
-    }
-    <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.SupervisorAccount">
-        @_localizer["Account"]
+    <MudNavLink Href="/admin/audit" Target="_blank" Icon="@Icons.Material.Outlined.LiveHelp">
+        @_localizer["Audit"]
     </MudNavLink>
-    @if (_canViewOrderPlaced)
-    {
-        <MudNavLink Href="/orderplaced" Icon="@Icons.Material.Outlined.ShoppingCart">
-            @_localizer["OrderPlaced"]
-        </MudNavLink>
-    }
+
     @if (_canViewUsers || _canViewRoles)
     {
-        <MudListSubheader Class="mt-2 mb-n2">@_localizer["Administrator"]</MudListSubheader>
+        <MudListSubheader Class="mt-2 mb-n2">@_localizer["Account Manager"]</MudListSubheader>
         @if (_canViewUsers)
         {
             <MudNavLink Href="/admin/users" Icon="@Icons.Material.Outlined.Person">
@@ -39,7 +30,7 @@
     }
     @if (_canViewProducts || _canViewBrands || _canViewOrders)
     {
-        <MudListSubheader Class="mt-2 mb-n2">@_localizer["Catalog Management"]</MudListSubheader>
+        <MudListSubheader Class="mt-2 mb-n2">@_localizer["WareHouse Management"]</MudListSubheader>
         @if (_canViewProducts)
         {
             <MudNavLink Href="/admin/products" Icon="@Icons.Material.Outlined.CallToAction">
@@ -76,8 +67,6 @@
     protected override async Task OnParametersSetAsync()
     {
         _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
-        _canViewHangfire = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Hangfire.View)).Succeeded;
-        _canViewDashboards = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Dashboards.View)).Succeeded;
         _canViewUsers = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Users.View)).Succeeded;
         _canViewRoles = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Roles.View)).Succeeded;
         _canViewProducts = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Products.View)).Succeeded;

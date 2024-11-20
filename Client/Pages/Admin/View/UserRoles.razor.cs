@@ -20,10 +20,7 @@ namespace LaptopStore.Client.Pages.Admin.View
 
         private UserRoleModel _userRole = new();
         private string _searchString = "";
-        private bool _dense = false;
-        private bool _striped = true;
-        private bool _bordered = false;
-
+       
         private ClaimsPrincipal _currentUser;
         private bool _canEditUsers;
         private bool _canSearchRoles;

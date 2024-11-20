@@ -13,17 +13,17 @@ namespace LaptopStore.Client.Pages.Admin.View
         [Parameter] public string Description { get; set; }
 
         private bool _active;
+        private bool _confirm;
         private char _firstLetterOfName;
         private string _firstName;
         private string _lastName;
         private string _phoneNumber;
         private string _email;
-        private bool _confirm;
         private bool _loaded;
 
         private async Task ToggleUserStatus()
         {
-            var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
+            var request = new ToggleUserStatusRequest { ActivateUser = _active, EmailConfirm = _confirm, UserId = Id };
             var result = await _userManager.ToggleUserStatusAsync(request);
             if (result.Succeeded)
             {

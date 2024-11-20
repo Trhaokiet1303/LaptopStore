@@ -16,20 +16,5 @@ namespace LaptopStore.Server.Controllers.Utilities
         {
             _serverPreferenceManager = serverPreferenceManager;
         }
-
-        /// <summary>
-        /// Change Language Preference
-        /// </summary>
-        /// <param name="languageCode"></param>
-        /// <returns>Status 200 OK</returns>
-        [Authorize(Policy = Permissions.Preferences.ChangeLanguage)]
-        [HttpPost("changeLanguage")]
-        public async Task<IActionResult> ChangeLanguageAsync(string languageCode)
-        {
-            var result = await _serverPreferenceManager.ChangeLanguageAsync(languageCode);
-            return Ok(result);
-        }
-
-        //TODO - add actions
     }
 }

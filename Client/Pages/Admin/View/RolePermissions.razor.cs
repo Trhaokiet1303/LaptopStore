@@ -32,9 +32,6 @@ namespace LaptopStore.Client.Pages.Admin.View
         private RoleClaimResponse _roleClaims = new();
         private RoleClaimResponse _selectedItem = new();
         private string _searchString = "";
-        private bool _dense = false;
-        private bool _striped = true;
-        private bool _bordered = false;
 
         private ClaimsPrincipal _currentUser;
         private bool _canEditRolePermissions;

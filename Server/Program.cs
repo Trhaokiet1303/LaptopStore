@@ -22,7 +22,7 @@ namespace LaptopStore.Server
 
                 try
                 {
-                    var context = services.GetRequiredService<BlazorHeroContext>();
+                    var context = services.GetRequiredService<DBContext>();
 
                     if (context.Database.IsSqlServer())
                     {

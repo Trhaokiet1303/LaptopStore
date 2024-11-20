@@ -7,7 +7,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
         public bool EmailConfirmed { get; set; }
         public int PhoneNumber { get; set; }
         public string ProfilePictureDataUrl { get; set; }

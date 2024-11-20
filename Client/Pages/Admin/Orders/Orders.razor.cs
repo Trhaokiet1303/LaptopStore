@@ -26,10 +26,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
         private List<GetAllOrdersResponse> _orderList = new(); 
         private GetAllOrdersResponse _order = new();
         private string _searchString = "";
-        private bool _dense = false;
-        private bool _striped = true;
-        private bool _bordered = false;
-
+       
         private ClaimsPrincipal _currentUser;
         private bool _canCreateOrders;
         private bool _canEditOrders; 

@@ -20,17 +20,17 @@ namespace LaptopStore.Infrastructure.Services.Identity
 {
     public class RoleService : IRoleService
     {
-        private readonly RoleManager<BlazorHeroRole> _roleManager;
-        private readonly UserManager<BlazorHeroUser> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
         private readonly IRoleClaimService _roleClaimService;
         private readonly IStringLocalizer<RoleService> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
 
         public RoleService(
-            RoleManager<BlazorHeroRole> roleManager,
+            RoleManager<Role> roleManager,
             IMapper mapper,
-            UserManager<BlazorHeroUser> userManager,
+            UserManager<User> userManager,
             IRoleClaimService roleClaimService,
             IStringLocalizer<RoleService> localizer,
             ICurrentUserService currentUserService)
@@ -149,7 +149,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             {
                 var existingRole = await _roleManager.FindByNameAsync(request.Name);
                 if (existingRole != null) return await Result<string>.FailAsync(_localizer["Similar Role already exists."]);
-                var response = await _roleManager.CreateAsync(new BlazorHeroRole(request.Name, request.Description));
+                var response = await _roleManager.CreateAsync(new Role(request.Name, request.Description));
                 if (response.Succeeded)
                 {
                     return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Created."], request.Name));

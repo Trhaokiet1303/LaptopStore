@@ -38,6 +38,7 @@ namespace LaptopStore.Application.Features.Dashboards.Queries.GetData
             {
                 ProductCount = await _unitOfWork.Repository<Product>().Entities.CountAsync(cancellationToken),
                 BrandCount = await _unitOfWork.Repository<Brand>().Entities.CountAsync(cancellationToken),
+                OrderCount = await _unitOfWork.Repository<Order>().Entities.CountAsync(cancellationToken),
                 UserCount = await _userService.GetCountAsync(),
                 RoleCount = await _roleService.GetCountAsync()
             };
@@ -45,9 +46,8 @@ namespace LaptopStore.Application.Features.Dashboards.Queries.GetData
             var selectedYear = DateTime.Now.Year;
             double[] productsFigure = new double[13];
             double[] brandsFigure = new double[13];
-            double[] documentsFigure = new double[13];
-            double[] documentTypesFigure = new double[13];
-            double[] documentExtendedAttributesFigure = new double[13];
+            double[] ordersFigure = new double[13];
+            
             for (int i = 1; i <= 12; i++)
             {
                 var month = i;
@@ -60,9 +60,7 @@ namespace LaptopStore.Application.Features.Dashboards.Queries.GetData
 
             response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Products"], Data = productsFigure });
             response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Brands"], Data = brandsFigure });
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Documents"], Data = documentsFigure });
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Document Types"], Data = documentTypesFigure });
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Document Extended Attributes"], Data = documentExtendedAttributesFigure });
+            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Orders"], Data = ordersFigure });
 
             return await Result<DashboardDataResponse>.SuccessAsync(response);
         }

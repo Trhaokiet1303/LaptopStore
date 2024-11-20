@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using LaptopStore.Application.Features.Brands.Commands.AddEdit;
 using LaptopStore.Application.Features.Brands.Commands.Delete;
-using LaptopStore.Application.Features.Brands.Queries.Export;
 
 namespace LaptopStore.Server.Controllers.v1.Catalog
 {
@@ -41,13 +40,6 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await _mediator.Send(new DeleteBrandCommand { Id = id }));
-        }
-
-        [Authorize(Policy = Permissions.Brands.Export)]
-        [HttpGet("export")]
-        public async Task<IActionResult> Export(string searchString = "")
-        {
-            return Ok(await _mediator.Send(new ExportBrandsQuery(searchString)));
         }
     }
 }

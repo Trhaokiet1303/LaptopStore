@@ -12,7 +12,6 @@ namespace LaptopStore.Shared.Constants.Permission
             public const string Create = "Permissions.Products.Create";
             public const string Edit = "Permissions.Products.Edit";
             public const string Delete = "Permissions.Products.Delete";
-            public const string Export = "Permissions.Products.Export";
             public const string Search = "Permissions.Products.Search";
         }
 
@@ -22,7 +21,6 @@ namespace LaptopStore.Shared.Constants.Permission
             public const string Create = "Permissions.Brands.Create";
             public const string Edit = "Permissions.Brands.Edit";
             public const string Delete = "Permissions.Brands.Delete";
-            public const string Export = "Permissions.Brands.Export";
             public const string Search = "Permissions.Brands.Search";
         }
 
@@ -49,7 +47,6 @@ namespace LaptopStore.Shared.Constants.Permission
             public const string Create = "Permissions.Users.Create";
             public const string Edit = "Permissions.Users.Edit";
             public const string Delete = "Permissions.Users.Delete";
-            public const string Export = "Permissions.Users.Export";
             public const string Search = "Permissions.Users.Search";
         }
 
@@ -71,31 +68,9 @@ namespace LaptopStore.Shared.Constants.Permission
             public const string Search = "Permissions.RoleClaims.Search";
         }
 
-        public static class Communication
-        {
-            public const string Chat = "Permissions.Communication.Chat";
-        }
-
-        public static class Preferences
-        {
-            public const string ChangeLanguage = "Permissions.Preferences.ChangeLanguage";
-
-        }
-
-        public static class Dashboards
-        {
-            public const string View = "Permissions.Dashboards.View";
-        }
-
-        public static class Hangfire
-        {
-            public const string View = "Permissions.Hangfire.View";
-        }
-
         public static class AuditTrails
         {
             public const string View = "Permissions.AuditTrails.View";
-            public const string Export = "Permissions.AuditTrails.Export";
             public const string Search = "Permissions.AuditTrails.Search";
         }
 
