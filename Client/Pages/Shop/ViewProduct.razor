@@ -1,0 +1,78 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<ViewProduct> _localizer
+
+<MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+    <DialogContent>
+        <MudGrid>
+            <!-- Hình ảnh sản phẩm -->
+            <MudItem xs="12" md="6">
+                <img class="img-product" src="@(Product.ImageDataURL)" Square="true" />
+            </MudItem>
+
+            <!-- Thông tin sản phẩm -->
+            <MudItem xs="12" md="6">
+                <MudText Typo="Typo.h5" GutterBottom="true">@Product.Name</MudText>
+                <div class="product-rating">
+                    <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
+                    <MudText Typo="Typo.caption">@Product.Rate</MudText>
+                </div>
+                <MudText Typo="Typo.h6" Color="Color.Error" GutterBottom="true">@Product.Price.ToString("N0") đ</MudText>
+                <!-- Thông tin chi tiết: CPU, GPU, Màn hình, RAM, ROM, Pin, Khối lượng -->
+                <MudText Typo="Typo.body2">@_localizer["CPU"]: @Product.CPU</MudText>
+                <MudText Typo="Typo.body2">@_localizer["GPU"]: @Product.Card</MudText>
+                <MudText Typo="Typo.body2">@_localizer["Screen"]: @Product.Screen</MudText>
+                <MudText Typo="Typo.body2">@_localizer["RAM"]: @Product.Ram</MudText>
+                <MudText Typo="Typo.body2">@_localizer["ROM"]: @Product.Rom</MudText>
+                <MudText Typo="Typo.body2">@_localizer["Battery"]: @Product.Battery</MudText>
+                <MudText Typo="Typo.body2">@_localizer["Weight"]: @Product.Weight kg</MudText>
+
+                <MudNumericField T="int" Label="Số lượng" Value="1" Min="1" Max="10" Class="quantity-field" />
+
+                <!-- Nút thêm vào giỏ hàng -->
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="add-to-cart-btn" OnClick="AddToCart">
+                    @_localizer["Thêm vào giỏ hàng"]
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+
+<style>
+    .original-price {
+        color: #b0b0b0;
+        text-decoration: line-through;
+        margin-bottom: 8px;
+    }
+
+    .quantity-field {
+        margin-top: 16px;
+        width: 50px;
+    }
+
+    .add-to-cart-btn {
+        margin-top: 16px;
+        width: 100%;
+    }
+
+    .img-product {
+        width: 100%;
+        height: 300px;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+        .img-product:hover {
+            transform: scale(1.02);
+        }
+
+    .product-rating {
+        font-size: 14px;
+        color: #ff9800;
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+        .product-rating svg {
+            margin-right: 5px;
+        }
+</style>

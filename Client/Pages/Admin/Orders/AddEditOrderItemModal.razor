@@ -1,0 +1,67 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddEditOrderItemModal> _localizer
+
+<EditForm Model="@AddEditOrderItemModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (AddEditOrderItemModel.Id == 0)
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                        @_localizer["Add Product"]
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                        @_localizer["Update Product"]
+                    </MudText>
+                }
+            }
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" md="8">
+                    <MudText Typo="Typo.subtitle1">@_localizer["General Information"]</MudText>
+                    <MudGrid>
+                        @if (AddEditOrderItemModel.Id != 0)
+                        {
+                            <MudItem xs="12" md="6">
+                                <MudTextField Disabled For="@(() => AddEditOrderItemModel.Id)" @bind-Value="AddEditOrderItemModel.Id" Label="@_localizer["Id"]" />
+                            </MudItem>
+                        }
+                        @if (AddEditOrderItemModel.OrderId != 0)
+                        {
+                            <MudItem xs="12" md="6">
+                                <MudTextField Disabled For="@(() => AddEditOrderItemModel.OrderId)" @bind-Value="AddEditOrderItemModel.OrderId" Label="@_localizer["OrderId"]" />
+                            </MudItem>
+                        }
+
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => AddEditOrderItemModel.ProductId)" @bind-Value="AddEditOrderItemModel.ProductId" Label="@_localizer["Product Id"]" />
+                        </MudItem>
+                       
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => AddEditOrderItemModel.Quantity)" @bind-Value="AddEditOrderItemModel.Quantity" Label="@_localizer["Quantity"]" />
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+            @if (AddEditOrderItemModel.Id != 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">@_localizer["Update"]</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">@_localizer["Save"]</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

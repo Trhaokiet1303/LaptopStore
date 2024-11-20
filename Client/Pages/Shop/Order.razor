@@ -1,0 +1,203 @@
+﻿@page "/order"
+@using LaptopStore.Client.Pages.Shop.Layout;
+@layout ShopLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Order> _localizer
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="pa-4">
+    <MudText Typo="Typo.h6">Thông tin địa chỉ</MudText>
+
+    <MudGrid>
+        <MudItem xs="6">
+            <MudTextField @bind-Value="FirstName" Label="Họ" Required="true" RequiredError="Họ là bắt buộc" />
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField @bind-Value="LastName" Label="Tên" Required="true" RequiredError="Tên là bắt buộc" />
+        </MudItem>
+    </MudGrid>
+
+    <MudTextField @bind-Value="PhoneNumber" Label="Số điện thoại" Required="true" RequiredError="Số điện thoại là bắt buộc" />
+
+    <MudTextField @bind-Value="Street" Label="Số nhà, tên đường" Placeholder="Nhập số nhà, tên đường" />
+
+    <MudText Typo="Typo.body1" Class="mt-4">Vui lòng chọn địa chỉ</MudText>
+
+    <MudGrid Spacing="2">
+        <MudItem xs="4">
+            <div>
+                <select id="city" @onchange="OnCitySelect">
+                    <option value="">Chọn tỉnh thành</option>
+                    @foreach (var city in Cities)
+                    {
+                        <option value="@city.Name">@city.Name</option>
+                    }
+                </select>
+            </div>
+        </MudItem>
+        <MudItem xs="4">
+            <div>
+                <select id="district" @onchange="OnDistrictSelect">
+                    <option value="">Chọn quận huyện</option>
+                    @foreach (var district in Districts)
+                    {
+                        <option value="@district.Name">@district.Name</option>
+                    }
+                </select>
+            </div>
+        </MudItem>
+        <MudItem xs="4">
+            <div>
+                <select id="ward" @onchange="OnWardSelect">
+                    <option value="">Chọn phường xã</option>
+                    @foreach (var ward in Wards)
+                    {
+                        <option value="@ward.Name">@ward.Name</option>
+                    }
+                </select>
+            </div>
+        </MudItem>
+    </MudGrid>
+    <h3>Phương thức thanh toán</h3>
+    <MudPaper Class="payment-methods" Elevation="2" Outlined="true">
+
+        <div class="payment-methods">
+            <label>
+                <input id="payment-method-vnpay" type="radio" name="payment-method" value="VNPAY" @onchange="HandlePaymentMethodChange" />
+                <img class="payment-icon" src="/images/pay/vnpay.png" alt="VNPAY" />
+                Thanh toán online qua cổng VNPAY <br />
+            </label>
+            <label>
+                <input id="payment-method-cod" type="radio" name="payment-method" value="COD" @onchange="HandlePaymentMethodChange" />
+                <img class="payment-icon" src="/images/pay/cod.png" alt="COD" />
+                Thanh toán khi giao hàng (COD)
+            </label>
+            <label>
+                <input id="payment-method-banking" type="radio" name="payment-method" value="Chuyển khoản ngân hàng" @onchange="HandlePaymentMethodChange" />
+                <img class="payment-icon" src="/images/pay/mobile-banking.png" alt="onl-banking" /> Chuyển Khoản ngân hàng<br />
+            </label>
+            <label>
+                <input id="payment-method-creditcard" type="radio" name="payment-method" value="Thẻ Nội địa" @onchange="HandlePaymentMethodChange" />
+                <img class="payment-icon" src="/images/pay/credit-card.png" alt="credit-card" />
+                Thanh toán bằng thẻ nội địa
+                <div class="credit-card-inputs @(SelectedPaymentMethod == "Thẻ Nội địa" ? "" : "hidden")">
+                    <input class="card-style" type="text" name="card-number" placeholder="Số thẻ" />
+                    <input class="card-style-2" type="text" name="ngayhethan" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" maxlength="5" required />
+                </div>
+            </label>
+        </div>
+
+
+    </MudPaper>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Checkout">Đặt hàng</MudButton>
+</MudContainer>
+<style>
+    .pay-container {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        margin: 30px auto;
+        gap: 20px;
+    }
+
+    .payment-methods {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .payment-icon {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+    }
+
+    .qr-code,
+    .credit-card-inputs {
+        margin-top: 10px;
+        width: 150px;
+        height: auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .card-style,
+    .card-style-2 {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .card-style-2 {
+        width: 100px;
+    }
+
+
+    .shipping-info .input-group {
+        margin-bottom: 20px;
+    }
+
+        .shipping-info .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .shipping-info .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+    .delivery-options {
+        margin-bottom: 20px;
+    }
+
+        .delivery-options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .delivery-options input {
+            margin-right: 10px;
+        }
+
+    .delivery-info {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .payment-methods label {
+        display: block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .payment-methods input {
+        margin-right: 10px;
+    }
+
+    .payment-icon {
+        width: 50px;
+        height: auto;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+</style>

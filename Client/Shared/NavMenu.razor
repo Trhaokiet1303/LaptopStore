@@ -1,0 +1,92 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<NavMenu> _localizer
+@using System.Security.Claims
+
+<UserCard />
+<MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">@_localizer["Home"]</MudNavLink>
+    <MudNavLink Href="/swagger/index.html" Target="_blank" Icon="@Icons.Material.Outlined.LiveHelp">
+        @_localizer["Swagger"]
+    </MudNavLink>
+    <MudListSubheader Class="mt-2 mb-n2">@_localizer["Personal"]</MudListSubheader>
+    @if (_canViewDashboards)
+    {
+        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Outlined.Dashboard">
+            @_localizer["Dashboard"]
+        </MudNavLink>
+    }
+    <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.SupervisorAccount">
+        @_localizer["Account"]
+    </MudNavLink>
+    @if (_canViewOrderPlaced)
+    {
+        <MudNavLink Href="/orderplaced" Icon="@Icons.Material.Outlined.ShoppingCart">
+            @_localizer["OrderPlaced"]
+        </MudNavLink>
+    }
+    @if (_canViewUsers || _canViewRoles)
+    {
+        <MudListSubheader Class="mt-2 mb-n2">@_localizer["Administrator"]</MudListSubheader>
+        @if (_canViewUsers)
+        {
+            <MudNavLink Href="/admin/users" Icon="@Icons.Material.Outlined.Person">
+                @_localizer["Users"]
+            </MudNavLink>
+        }
+        @if (_canViewRoles)
+        {
+            <MudNavLink Href="/admin/roles" Icon="@Icons.Material.Outlined.Person">@_localizer["Roles"]</MudNavLink>
+        }
+    }
+    @if (_canViewProducts || _canViewBrands || _canViewOrders)
+    {
+        <MudListSubheader Class="mt-2 mb-n2">@_localizer["Catalog Management"]</MudListSubheader>
+        @if (_canViewProducts)
+        {
+            <MudNavLink Href="/admin/products" Icon="@Icons.Material.Outlined.CallToAction">
+                @_localizer["Products"]
+            </MudNavLink>
+        }
+        @if (_canViewBrands)
+        {
+            <MudNavLink Href="/admin/brands" Icon="@Icons.Material.Outlined.CallToAction">
+                @_localizer["Brands"]
+            </MudNavLink>
+        }
+        @if (_canViewOrders)
+        {
+            <MudNavLink Href="/admin/orders" Icon="@Icons.Material.Outlined.CallToAction">
+                @_localizer["Order"]
+            </MudNavLink>
+        }
+    }
+</MudNavMenu>
+
+@code {
+    private ClaimsPrincipal _authenticationStateProviderUser;
+
+    private bool _canViewHangfire;
+    private bool _canViewDashboards;
+    private bool _canViewUsers;
+    private bool _canViewRoles;
+    private bool _canViewProducts;
+    private bool _canViewBrands;
+    private bool _canViewOrders;
+    private bool _canViewOrderPlaced;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
+        _canViewHangfire = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Hangfire.View)).Succeeded;
+        _canViewDashboards = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Dashboards.View)).Succeeded;
+        _canViewUsers = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Users.View)).Succeeded;
+        _canViewRoles = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Roles.View)).Succeeded;
+        _canViewProducts = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Products.View)).Succeeded;
+        _canViewBrands = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Brands.View)).Succeeded;
+        _canViewOrders = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Orders.View)).Succeeded;
+
+        var userId = _authenticationStateProviderUser.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userRole = _authenticationStateProviderUser.FindFirstValue(ClaimTypes.Role);
+
+        _canViewOrderPlaced = userRole != "Admin";
+    }
+}

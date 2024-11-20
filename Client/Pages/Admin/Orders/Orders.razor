@@ -1,0 +1,120 @@
+﻿@page "/admin/orders"
+@attribute [Authorize(Policy = Permissions.Orders.View)]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Orders> _localizer
+@using LaptopStore.Application.Features.Orders.Queries.GetAll
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<HeroTitle Title="@_localizer["Orders"]" Description="@_localizer["Manage Orders."]" />
+
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" Items="_orderList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<GetAllOrdersResponse, bool>(Search)" @bind-order="_order">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                @if (_canCreateOrders)
+                {
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetOrdersAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@_localizer["Reload"]</MudButton>
+                }
+            </div>
+            <MudToolBarSpacer />
+            @if (_canSearchOrders)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Orders"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.UserId)">@_localizer["UserId"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.UserName)">@_localizer["UserName"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.UserPhone)">@_localizer["UserPhone"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.UserAddress)">@_localizer["UserAddress"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.TotalPrice)">@_localizer["TotalPrice"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.MethodPayment)">@_localizer["MethodPayment"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.StatusOrder)">@_localizer["StatusOrder"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<GetAllOrdersResponse, object>(x => x.IsPayment)">@_localizer["IsPayment"]</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="UserId">
+                <MudHighlighter Text="@context.UserId" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="UserName">
+                <MudHighlighter Text="@context.UserName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="UserPhone">
+                <MudHighlighter Text="@context.UserPhone" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="UserAddress">
+                <MudHighlighter Text="@context.UserAddress" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="TotalPrice">@context.TotalPrice</MudTd>
+            <MudTd DataLabel="MethodPayment">
+                <MudHighlighter Text="@context.MethodPayment" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="StatusOrder">
+                <MudHighlighter Text="@context.StatusOrder" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="IsPayment">
+                @if (context.IsPayment)
+                {
+                    <MudHighlighter Text="True" HighlightedText="@_searchString" />
+                }
+                else
+                {
+                    <MudHighlighter Text="False" HighlightedText="@_searchString" />
+                }
+            </MudTd>
+            <MudTd DataLabel="Actions" Style="text-align: right">
+                @if (_canEditOrders || _canDeleteOrders)
+                {
+                    <MudMenu Label="@_localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+
+                        @if (_canEditOrders)
+                        {
+                            <MudMenuItem @onclick="@(() => InvokeModal(@context.Id))">@_localizer["Edit"]</MudMenuItem>
+                        }
+                        @if (_canDeleteOrders)
+                        {
+                            <MudMenuItem @onclick="@(() => Delete(@context.Id))">@_localizer["Delete"]</MudMenuItem>
+                        }
+                        <MudMenuItem @onclick="@(() => ViewProducts(@context.Id))">@_localizer["View Products"]</MudMenuItem>
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled"
+                               DisableElevation="true"
+                               StartIcon="@Icons.Material.Filled.DoNotTouch"
+                               IconColor="Color.Secondary"
+                               Size="Size.Small"
+                               Color="Color.Surface">
+                        @_localizer["No Allowed Actions"]
+                    </MudButton>
+                }
+            </MudTd>
+
+        </RowTemplate>
+        <FooterContent>
+            <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Dense"]</MudSwitch>
+            <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@_localizer["Striped"]</MudSwitch>
+            <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]</MudSwitch>
+        </FooterContent>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+}

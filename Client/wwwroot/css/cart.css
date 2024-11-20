@@ -1,0 +1,131 @@
+﻿.cart-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Đảm bảo nội dung xuống dòng khi màn hình nhỏ */
+    width: 90%;
+    margin: 30px auto;
+    gap: 20px; /* Thêm khoảng cách giữa các thành phần */
+}
+
+.cart-info {
+    background-color: #fff;
+    width: 65%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease; /* Hiệu ứng khi thay đổi kích thước */
+}
+
+.product-image {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quantity-btn {
+    background-color: #fff;
+    border: 1px solid deepskyblue;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+    .quantity-btn:hover {
+        background-color: #00aaff;
+        color: #fff;
+        border: 1px solid deepskyblue;
+    }
+
+.quantity-value {
+    font-size: 16px;
+    width: 50px;
+    text-align: center;
+}
+
+.remove-product {
+    background: none;
+    color: red;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+    .remove-product:hover {
+        color: #cc0000;
+    }
+
+.thanhtoan {
+    background-color: #fff;
+    width: 30%;
+    padding: 20px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+    .thanhtoan .tienhang,
+    .thanhtoan .giamgia,
+    .thanhtoan .tongtien {
+        margin: 10px 0;
+        color: grey;
+        font-size: 16px;
+    }
+
+.checkout-button {
+    width: 100%;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .checkout-button:hover {
+        background-color: #cc0000;
+    }
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0;
+}
+
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .checkbox-group label a {
+        color: blue;
+        text-decoration: none;
+    }
+
+        .checkbox-group label a:hover {
+            text-decoration: underline;
+        }
+
+/* Định nghĩa Media Query */
+@media (max-width: 1200px) {
+    .cart-info {
+        width: 100%; /* Thu nhỏ table chiếm toàn bộ chiều ngang */
+    }
+
+    .thanhtoan {
+        width: 100%; /* Thanh toán cũng chiếm toàn bộ chiều ngang */
+        margin-left: 0; /* Loại bỏ khoảng cách bên trái */
+        margin-top: 20px; /* Thêm khoảng cách trên cho phần thanh toán */
+    }
+}

@@ -1,0 +1,66 @@
+﻿@page "/cart"
+@using LaptopStore.Client.Pages.Shop.Layout;
+@layout ShopLayout
+@inject IJSRuntime JS
+@using System.Text.Json
+@using System.Collections.Generic
+@using System.Linq
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Cart> _localizer
+<link href="css/cart.css" rel="stylesheet">
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="cart-container">
+    <MudTable Items="cartItems" Elevation="1" Class="cart-info">
+        <HeaderContent>
+            <MudTh>Hình ảnh</MudTh>
+            <MudTh>Sản phẩm</MudTh>
+            <MudTh>Giá</MudTh>
+            <MudTh>Số lượng</MudTh>
+            <MudTh>Tổng cộng</MudTh>
+            <MudTh>Thao tác</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <img src="@context.ProductImage" class="product-image" alt="@context.ProductName" />
+            </MudTd>
+            <MudTd>@context.ProductName</MudTd>
+            <MudTd>@String.Format("{0:N0}đ", context.ProductPrice)</MudTd>
+            <MudTd>
+                <div class="quantity">
+                    <MudIconButton Icon="@Icons.Material.Filled.Remove" Class="quantity-btn"  OnClick="() => UpdateQuantity(context, context.Quantity - 1)" Disabled="IsQuantityLessThanOrEqualToOne(context)" />
+                    <span class="quantity-value">@context.Quantity</span>
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Class="quantity-btn" OnClick="() => UpdateQuantity(context, context.Quantity + 1)" />
+
+                </div>
+            </MudTd>
+            <MudTd>@String.Format("{0:N0}đ", context.ProductPrice * context.Quantity)</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Class="remove-product" OnClick="() => RemoveFromCart(context.ProductId)" />
+
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+    <MudContainer Class="thanhtoan">
+        <MudText Class="tienhang">Tiền Hàng hóa: @String.Format("{0:N0}đ", GetTotalPrice())</MudText>
+        <MudText Class="giamgia">Giảm giá: </MudText>
+        <MudText Class="tongtien">Tổng cộng: @String.Format("{0:N0}đ", GetTotalPrice())</MudText>
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="checkout-button" OnClick="Checkout">
+            Thanh Toán Ngay
+        </MudButton>
+
+        <div Class="checkbox-group">
+            <MudCheckBox T="bool" Required="true" />
+            <MudText>
+                Tôi đã đọc và đồng ý với <MudLink Href="#" Target="_blank">Điều khoản sử dụng</MudLink>
+                và <MudLink Href="#" Target="_blank">Chính sách Thành viên thân thiết My Points</MudLink>.
+            </MudText>
+        </div>
+
+        <MudText>
+            <MudLink Href="./login.html" Target="_self">Đăng nhập</MudLink>
+            <span> hoặc </span>
+            <MudLink Href="./register.html" Target="_self">Đăng ký</MudLink>
+            để mua hàng với nhiều ưu đãi hơn
+        </MudText>
+    </MudContainer>
+</MudContainer>

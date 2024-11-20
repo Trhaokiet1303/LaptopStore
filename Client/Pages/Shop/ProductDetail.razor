@@ -1,0 +1,76 @@
+﻿@page "/product/{productId:int}"
+@using LaptopStore.Client.Pages.Shop.Layout;
+@layout ShopLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ProductDetail> _localizer
+@inject IJSRuntime JS
+
+<MudContainer MaxWidth="MaxWidth.Medium" Style="padding: 16px;">
+    <MudGrid>
+        <!-- Hình ảnh sản phẩm -->
+        <MudItem xs="12" md="6">
+            <img class="img-product" src="@(Product.ImageDataURL)" alt="@Product.Name" />
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <MudText Typo="Typo.h5" GutterBottom="true">@Product.Name</MudText>
+            <div class="product-rating">
+                <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
+                <MudText Typo="Typo.caption">@Product.Rate</MudText>
+            </div>
+            <MudText Typo="Typo.h6" Color="Color.Error" GutterBottom="true">@Product.Price.ToString("N0") đ</MudText>
+
+            <!-- Thông tin chi tiết: CPU, GPU, Màn hình, RAM, ROM, Pin, Khối lượng -->
+            <MudText Typo="Typo.body2">@_localizer["CPU"]: @Product.CPU</MudText>
+            <MudText Typo="Typo.body2">@_localizer["GPU"]: @Product.Card</MudText>
+            <MudText Typo="Typo.body2">@_localizer["Screen"]: @Product.Screen</MudText>
+            <MudText Typo="Typo.body2">@_localizer["RAM"]: @Product.Ram</MudText>
+            <MudText Typo="Typo.body2">@_localizer["ROM"]: @Product.Rom</MudText>
+            <MudText Typo="Typo.body2">@_localizer["Battery"]: @Product.Battery</MudText>
+            <MudText Typo="Typo.body2">@_localizer["Weight"]: @Product.Weight kg</MudText>
+
+            <MudNumericField T="int" Label="Số lượng" Value="1" Min="1" Max="10" Class="quantity-field" />
+
+            <!-- Nút thêm vào giỏ hàng -->
+            <MudButton OnClick="AddToCart">Add to Cart</MudButton>
+
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+<style>
+    .product-detail {
+        padding: 16px;
+    }
+
+    .product-rating {
+        font-size: 14px;
+        color: #ff9800;
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    .star-icon {
+        color: #ff9800;
+        margin-right: 4px;
+    }
+
+    .price {
+        color: red;
+        margin-top: 8px;
+    }
+
+    .add-to-cart-btn {
+        margin-top: 16px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+</style>

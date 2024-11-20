@@ -1,0 +1,125 @@
+﻿
+/* General Styles */
+.header {
+    background-color: deepskyblue;
+    height: 80px;
+    padding-top: 10px ;
+    display: flex;
+    align-items: center;
+}
+
+.header-grid {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo-container {
+    flex: 0 0 auto;
+}
+
+.logo-img {
+    height: 100px;
+    width: auto;
+    display: flex;
+}
+
+.search-container {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: center;
+    min-width: 20%;
+}
+
+.search-bar {
+    width: 100%;
+    border-radius: 30px;
+    background-color: white;
+}
+
+.search-text {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 10px 0px;
+    font-size: medium;
+    flex: 1;
+    padding-left: 10px;
+}
+
+.menu-container {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Căn giữa các mục theo chiều dọc */
+    justify-content: flex-start; /* Căn hàng ngang */
+    flex-wrap: nowrap; /* Ngăn xuống dòng */
+}
+
+.menu-button {
+    border-radius: 25px;
+    background-color: #00aaff;
+    color: white;
+    font-weight: bolder;
+    font-size: 18px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+
+
+.contact-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 70%;
+}
+
+.contact {
+    border-radius: 25px;
+    background-color: #00aaff;
+    color: white;
+    font-weight: bolder;
+    font-size: 18px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.contact-info {
+    border-radius: 25px;
+    background-color: #00aaff;
+    color: white;
+    font-weight: bolder;
+    font-size: 18px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .menu-container,
+    .contact-container .contact-info {
+        display: none; /* Hide "Danh mục", "Thông tin", and "Liên hệ" buttons */
+    }
+
+    .contact-container {
+        justify-content: flex-end;
+    }
+
+    .search-container {
+        flex: 3; /* Increase search bar size */
+    }
+}

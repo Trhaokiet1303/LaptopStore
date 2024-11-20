@@ -1,0 +1,41 @@
+﻿@using Microsoft.Extensions.Localization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> localizer
+@using LaptopStore.Shared.Constants.Localization
+
+<MudAppBar Elevation="25" Color="Color.Primary">
+    <MudIcon Icon="@CustomIcons.BlazorHero" Size="Size.Large" ViewBox="0 0 500 500" />
+    <MudText Typo="Typo.h6" Class="ml-4">Blazor Hero</MudText>
+
+    <MudAppBarSpacer />
+    <MudNavLink Href="/products" Color="Color.Inherit">@localizer["Products"]</MudNavLink>
+    <MudNavLink Href="/brands" Color="Color.Inherit">@localizer["Brands"]</MudNavLink>
+    <MudNavLink Href="/about" Color="Color.Inherit">@localizer["About"]</MudNavLink>
+    <MudNavLink Href="/contact" Color="Color.Inherit">@localizer["Contact"]</MudNavLink>
+
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+        @foreach (var language in LocalizationConstants.SupportedLanguages)
+        {
+            <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language.Code))">@language.DisplayName</MudMenuItem>
+        }
+    </MudMenu>
+</MudAppBar>
+
+@code
+{
+    private async Task ChangeLanguageAsync(string languageCode)
+    {
+        var result = await _clientPreferenceManager.ChangeLanguageAsync(languageCode);
+        if (result.Succeeded)
+        {
+            _snackBar.Add(result.Messages[0], Severity.Success);
+            _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                _snackBar.Add(error, Severity.Error);
+            }
+        }
+    }
+}

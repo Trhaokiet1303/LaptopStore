@@ -1,0 +1,34 @@
+﻿@page "/orderdetail"
+@using LaptopStore.Client.Pages.Shop.Layout;
+@layout ShopLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<OrderDetail> _localizer
+
+<h3>Đơn hàng của bạn</h3>
+
+@if (IsLoading)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else if (Orders == null || !Orders.Any())
+{
+    <p>Bạn chưa có đơn hàng nào!</p>
+}
+else
+{
+    <MudTable Items="Orders" Bordered="true" Striped="true" Hover="true">
+        <HeaderContent>
+            <MudTh>STT</MudTh>
+            <MudTh>Người nhận</MudTh>
+            <MudTh>Địa chỉ</MudTh>
+            <MudTh>Thanh toán</MudTh>
+            <MudTh>Tổng tiền</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.UserName</MudTd>
+            <MudTd>@context.UserAddress</MudTd>
+            <MudTd>@context.MethodPayment</MudTd>
+            <MudTd>@context.TotalPrice</MudTd>
+        </RowTemplate>
+    </MudTable>
+}

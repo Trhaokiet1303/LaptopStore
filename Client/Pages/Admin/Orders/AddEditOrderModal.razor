@@ -1,0 +1,68 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddEditOrderModal> _localizer
+
+<EditForm Model="@AddEditOrderModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @if (AddEditOrderModel.Id == 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                    @_localizer["Add Order"]
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                    @_localizer["Update Order"]
+                </MudText>
+            }
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                @if (AddEditOrderModel.Id != 0)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField Disabled For="@(() => AddEditOrderModel.Id)" @bind-Value="AddEditOrderModel.Id" Label="@_localizer["Id"]" />
+                    </MudItem>
+                }
+                <MudItem xs="12" md="6">
+                    <MudAutocomplete T="string" Label="@_localizer["UserEmail"]" For="@(() => AddEditOrderModel.UserId)" @bind-Value="AddEditOrderModel.UserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUsers" Variant="Variant.Filled" ToStringFunc="@(i => _users.FirstOrDefault(b => b.Id == i)?.Email ?? string.Empty)" OffsetY="true" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditOrderModel.UserName)" @bind-Value="AddEditOrderModel.UserName" Label="@_localizer["UserName"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditOrderModel.UserPhone)" @bind-Value="AddEditOrderModel.UserPhone" Label="@_localizer["UserPhone"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditOrderModel.UserAddress)" @bind-Value="AddEditOrderModel.UserAddress" Label="@_localizer["UserAddress"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => AddEditOrderModel.TotalPrice)" @bind-Value="AddEditOrderModel.TotalPrice" Label="@_localizer["TotalPrice"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditOrderModel.MethodPayment)" @bind-Value="AddEditOrderModel.MethodPayment" Label="@_localizer["MethodPayment"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AddEditOrderModel.StatusOrder)" @bind-Value="AddEditOrderModel.StatusOrder" Label="@_localizer["StatusOrder"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="AddEditOrderModel.IsPayment" Label="@_localizer["Is Payment"]">
+                        <MudSelectItem Value="true">Paid</MudSelectItem>
+                        <MudSelectItem Value="false">Not Paid</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="@((AddEditOrderModel.Id != 0) ? Color.Secondary : Color.Success)">
+                @(AddEditOrderModel.Id != 0 ? @_localizer["Update"] : @_localizer["Save"])
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

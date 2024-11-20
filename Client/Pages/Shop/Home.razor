@@ -1,0 +1,263 @@
+﻿@page "/"
+@page "/home"
+@using LaptopStore.Client.Pages.Shop.Layout;
+@layout ShopLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ListProducts> _localizer
+@using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
+@inject NavigationManager NavigationManager
+<link href="css/home.css" rel="stylesheet">
+
+
+<div class="banner-container">
+    <!-- Nút điều hướng bên trái -->
+    <img class="nav-button left" src="/images/dieuhuong/is-less-than.png" @onclick="ShowPreviousImage" />
+
+    <!-- Banner Images -->
+    <MudPaper Class="banner">
+        <img src="@bannerImages[currentImageIndex]" alt="Banner Image 1" style="width: 100%; height: auto;" />
+        <img src="@bannerImages[secondImageIndex]" alt="Banner Image 2" style="width: 100%; height: auto;" />
+    </MudPaper>
+
+    <!-- Nút điều hướng bên phải -->
+    <img class="nav-button right" src="/images/dieuhuong/is-greater-than.png" @onclick="ShowNextImage" />
+</div>
+<br />
+<MudGrid>
+    <div class="featured-products-section">
+
+        <div class="featured-header">
+            <img src="/images/banner/featureproduct.gif" alt="Alternate Text" />
+        </div>
+
+        <div class="product-slider-container">
+            <!-- Nút điều hướng bên trái -->
+            <MudIconButton Icon="Icons.Material.Filled.ArrowBackIos" Class="slider-control left-control" OnClick="ShowPreviousFeaturedProducts" /> 
+
+            <!-- Danh sách sản phẩm -->
+            <div class="product-list-container">
+                @foreach (var product in GetCurrentFeaturedProducts())
+                {
+                    <MudCard Class="single-product-card" OnClick="() => NavigateToProductDetail(product.Id)" Style="cursor: pointer;">
+                        <MudCardContent>
+                            <!-- Huy hiệu -->
+                            <div class="badge-container">
+                                <MudText Typo="Typo.overline" Class="badge">Trả góp 0%</MudText>
+                                <MudText Typo="Typo.overline" Class="badge">Giá rẻ quá</MudText>
+                            </div>
+
+                            <!-- Ảnh sản phẩm -->
+                            <img src="@product.ImageDataURL" alt="@product.Name" class="product-thumbnail" />
+
+                            <!-- Thông tin sản phẩm -->
+                            <MudText Typo="Typo.h6" Align="Align.Center">@product.Name</MudText>
+                            <div class="product-price-container">
+                                <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") đ</MudText>
+                                <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) đ</MudText>
+                            </div>
+                            <MudRating Value="@product.Rate" MaxValue="5" ReadOnly="true" Class="rate-button" />
+
+                            <!-- Nút yêu thích -->
+                            <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </div>
+
+            <!-- Nút điều hướng bên phải -->
+            <MudIconButton Icon="Icons.Material.Filled.ArrowForwardIos" Class="slider-control right-control" OnClick="ShowNextFeaturedProducts" /> 
+        </div>
+    </div>
+</MudGrid>
+<br />
+<!-- Menu các thương hiệu -->
+<div class="menu-bar">
+    <!-- Filter panel -->
+    <MudChip Class="filter-chip" OnClick="ToggleFilterPanel">
+        <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary" />
+        <MudText Typo="Typo.body2" Class="filter-text">Lọc</MudText>
+    </MudChip>
+
+    <!-- Brand Chips with Logos -->
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/hp-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/asus-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/dell-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/lenovo-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/acer-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/mac-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/msi-icon.png" href="#" />
+    </MudChip>
+    <MudChip Class="brand-chip">
+        <img Class="logo-brand" src="/images/brand/samsung-icon.png" href="#" />
+    </MudChip>
+</div>
+
+
+<MudGrid>
+    <!-- Filter Panel on the Left Side -->
+    <MudItem xs="12" md="3" Class="@GetFilterPanelClass()">
+        <!-- Toggle Button for Filter Panel -->
+       
+        <!-- Conditionally Render Filter Panel -->
+        @if (isFilterPanelVisible )
+        {
+            <MudPaper Class="filter-panel" >
+                <HeroTitle Title="@_localizer["Bộ lọc tìm kiếm"]" />
+                <MudExpansionPanels>
+
+                    <!-- Brand Filter -->
+                    <MudExpansionPanel Text="@_localizer["Brand"]">
+                        @foreach (var brand in _brands)
+                        {
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <MudCheckBox @bind-Checked="brand.IsSelected" />
+                                <img src="@brand.LogoPath" alt="@brand.Name" class="logo-brand" />
+                            </div>
+                        }
+                    </MudExpansionPanel>
+
+                    <!-- Description Filter -->
+                    <MudExpansionPanel Text="@_localizer["Description"]">
+                        @foreach (var description in _descriptions)
+                        {
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <MudCheckBox @bind-Checked="description.IsSelected" Label="@description.Name" />
+                                <img src="@description.DescriptionPath" alt="@description.Name" class="logo-decription" />
+                            </div>
+                        }
+                    </MudExpansionPanel>
+
+                    <!-- Price Filter -->
+                    <MudExpansionPanel Text="@_localizer["Price"]">
+                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedPriceRange">
+                            <MudRadio T="string" Value="all" /><label>Tất cả</label><br>
+                            <MudRadio T="string" Value="under10" /><label>Dưới 10 triệu</label><br>
+                            <MudRadio T="string" Value="10to15" /><label>Từ 10 - 15 triệu</label><br>
+                            <MudRadio T="string" Value="15to20" /><label>Từ 15 - 20 triệu</label><br>
+                            <MudRadio T="string" Value="20to25" /><label>Từ 20 - 25 triệu</label><br>
+                            <MudRadio T="string" Value="25to30" /><label>Từ 25 - 30 triệu</label><br>
+                            <MudRadio T="string" Value="over30" /><label>Trên 30 triệu</label><br>
+                        </MudRadioGroup>
+                    </MudExpansionPanel>
+
+                    <!-- Rate Filter -->
+                    <MudExpansionPanel Text="@_localizer["Rate"]">
+                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedRateRange">
+                            <MudRadio T="string" Value="all" /><label>Tất cả</label> <br>
+                            <MudRadio T="string" Value="4andAbove" /><label>4 sao trở lên</label><br>
+                            <MudRadio T="string" Value="3andAbove" /><label>3 sao trở lên</label><br>
+                            <MudRadio T="string" Value="2andAbove" /><label>2 sao trở lên</label><br>
+                            <MudRadio T="string" Value="1andAbove" /><label>1 sao trở lên</label><br>
+                        </MudRadioGroup>
+                    </MudExpansionPanel>
+
+                </MudExpansionPanels>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
+            </MudPaper>
+        }
+    </MudItem>
+
+    <!-- Product Grid on the Right Side -->
+    <MudItem xs="12" md="9" Class="@GetProductGridContainerClass()">
+        <!-- Featured Products Section -->
+        <HeroTitle Title="@_localizer["Sản phẩm nổi bật"]"/>
+        @if (!_loaded)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="false" />
+        }
+        else if (_featuredProducts.Any())
+        {
+            <MudGrid GutterSpacing="3" Class="product-grid">
+                @foreach (var context in _featuredProducts)
+                {
+                    <MudItem xs="10" sm="4" md="3" lg="3">
+                        <MudCard Class="product-card">
+                            <MudCardContent>
+                                <div class="badge-container">
+                                    <MudText Typo="Typo.overline" Class="badge">Trả góp 0%</MudText>
+                                    <MudText Typo="Typo.overline" Class="badge">Giá rẻ quá</MudText>
+                                </div>
+                                <MudButton Class="product" @onclick="() => InvokeModal(context.Id)">
+                                    <img class="img-product" src="@(context.ImageDataURL)" Square="true" />
+                                </MudButton>
+                                <MudText Typo="Typo.h6" Class="product-name">@context.Name</MudText>
+
+                                <div class="specs">
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() GB</MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() GB</MudText>
+                                </div>
+                                <div class="price-container">
+                                    <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") đ</MudText>
+                                    <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) đ</MudText>
+                                </div>
+                                <MudRating Value="@context.Rate"  ReadOnly="true" Icon="@Icons.Material.Filled.Star" Class="rate" />
+                            </MudCardContent>
+
+                            <MudButton Variant="Variant.Filled" OnClick="() => NavigateToProductDetail(context.Id)" Color="Color.Primary" Class="action-button">
+                                Xem chi tiết
+                            </MudButton>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+
+        }
+        <br />
+        <!-- High Rate Products Section -->
+        <HeroTitle Title="@_localizer["Sản phẩm được đánh giá cao"]"/>
+        @if (!_loaded)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="false" />
+        }
+        else if (_RatedProducts.Any())
+        {
+            <MudGrid GutterSpacing="3" Class="product-grid">
+                @foreach (var context in _RatedProducts)
+                {
+                    <MudItem xs="10" sm="4" md="3" lg="3">
+                        <MudCard Class="product-card">
+                            <MudCardContent>
+                                <div class="badge-container">
+                                    <MudText Typo="Typo.overline" Class="badge">Trả góp 0%</MudText>
+                                    <MudText Typo="Typo.overline" Class="badge">Giá rẻ quá</MudText>
+                                </div>
+                                <MudButton Style="padding: 0; border: none; background: none;" @onclick="() => InvokeModal(context.Id)">
+                                    <img class="img-product" src="@(context.ImageDataURL)" Square="true" />
+                                </MudButton>
+                                <MudText Typo="Typo.h6" Class="product-name">@context.Name</MudText>
+
+                                <div class="specs">
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() GB</MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() GB</MudText>
+                                </div>
+                                <div class="price-container">
+                                    <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") đ</MudText>
+                                    <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) đ </MudText>
+                                </div>
+                                <MudRating Value="@context.Rate" MaxValue="5" ReadOnly="true" Class="rate" />
+                            </MudCardContent>
+
+                            <MudButton Variant="Variant.Filled" OnClick="() => NavigateToProductDetail(context.Id)" Color="Color.Primary" Class="action-button">
+                                Xem chi tiết
+                            </MudButton>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+    </MudItem>
+</MudGrid>
+

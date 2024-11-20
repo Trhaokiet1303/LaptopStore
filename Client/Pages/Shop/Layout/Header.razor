@@ -1,0 +1,46 @@
+﻿@using Microsoft.Extensions.Localization
+<link href="css/header.css" rel="stylesheet">
+
+<MudPaper Class="header" Elevation="0">
+    <div class="header-grid">
+        <!-- Logo -->
+        <MudItem Class="logo-container">
+            <MudNavLink Href="/home">
+                <img src="../images/icon/logo.png" alt="Store Image" class="logo-img" />
+            </MudNavLink>
+        </MudItem>
+
+        <div class="menu-container">
+                <MudNavLink Href="/menu" Class="menu-button">Danh mục</MudNavLink>
+            </div>
+
+        <!-- Search Bar -->
+        <MudItem Class="search-container">
+            <div class="search-bar">
+            <input class="search-text" type="text" name="tukhoa" placeholder="Nhập từ khóa để tìm kiếm"  required />
+            </div>
+        </MudItem>
+        <!-- Contact Icons -->
+        <MudItem Class="contact-container">
+            <MudNavLink Href="/info" Class="contact-info">Thông tin </MudNavLink>
+            <MudNavLink Href="/contact" Class="contact-info">Liên Hệ</MudNavLink>
+            <MudNavLink Href="/orderdetail" Class="contact">Đơn hàng</MudNavLink>
+            <MudNavLink Href="/cart" Class="contact">Giỏ hàng</MudNavLink>
+            <MudNavLink Href="/account" Class="contact-info"> Đăng nhập</MudNavLink>
+        </MudItem>
+    </div>
+</MudPaper>
+
+
+@code {
+    [Inject] private IStringLocalizer<Header> Localizer { get; set; }
+
+    private string _searchString = "";
+
+    private async Task OnSearch(string text)
+    {
+        _searchString = text;
+        // Placeholder for search logic
+        await Task.CompletedTask;
+    }
+}
