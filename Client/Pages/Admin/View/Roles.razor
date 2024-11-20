@@ -10,7 +10,9 @@
     }
 </style>
 
-<HeroTitle Title="@_localizer["Roles"]" Description="@_localizer["Manage Roles."]" />
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Roles"]</MudText>
+<MudText Color="Color.Warning" Class="mb-4">@_localizer["Manage Roles"]</MudText>
+
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />

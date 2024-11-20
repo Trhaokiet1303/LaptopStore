@@ -9,7 +9,9 @@
     }
 </style>
 
-<HeroTitle Title="@_localizer["Products"]" Description="@_localizer["Manage Products."]" />
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Products"]</MudText>
+<MudText Color="Color.Warning" Class="mb-4">@_localizer["Manage Products"]</MudText>
+
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />

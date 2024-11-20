@@ -3,7 +3,9 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<RolePermissions> _localizer
 @attribute [Authorize(Policy = Permissions.RoleClaims.View)]
 
-<HeroTitle Title="@_localizer["Manage Permission"]" Description="@Description" />
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Roles Permission"]</MudText>
+<MudText Color="Color.Warning" Class="mb-4">@_localizer["Manage Roles Permission"]</MudText>
+
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />

@@ -22,8 +22,6 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
 
         private RelatedAuditTrail _trail = new();
         private string _searchString = "";
-        private bool _searchInOldValues = true;
-        private bool _searchInNewValues = true;
         private MudDateRangePicker _dateRangePicker;
         private DateRange _dateRange;
 
@@ -42,13 +40,11 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
                 {
                     result = true;
                 }
-                if (
-                    response.OldValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+                if (response.OldValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     result = true;
                 }
-                if (
-                    response.NewValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+                if (response.NewValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     result = true;
                 }
