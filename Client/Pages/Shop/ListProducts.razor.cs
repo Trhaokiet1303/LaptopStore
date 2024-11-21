@@ -16,6 +16,8 @@ using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -35,13 +37,74 @@ namespace LaptopStore.Client.Pages.Shop
         private string _searchString = "";
         private bool _loaded;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
-            _loaded = false; // Bắt đầu tải dữ liệu
-            await LoadData(0, 10, new TableState());
-            _loaded = true;
+            await UpdateSearchStringAndReload();
         }
 
+        protected override async Task OnInitializedAsync()
+        {
+            NavigationManager.LocationChanged += OnLocationChanged;
+            await UpdateSearchStringAndReload();
+        }
+
+        private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+        {
+            await UpdateSearchStringAndReload();
+        }
+
+        private async Task UpdateSearchStringAndReload()
+        {
+            // Extract the updated search query from the URL
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("search", out var searchQuery))
+            {
+                var newSearchString = searchQuery.ToString();
+                if (_searchString != newSearchString)
+                {
+                    _searchString = newSearchString;
+                    await ReloadDataBasedOnSearch();
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(_searchString))
+                {
+                    _searchString = string.Empty;
+                }
+                await ReloadDataBasedOnSearch();
+            }
+        }
+
+        private async Task ReloadDataBasedOnSearch()
+        {
+            _loaded = false; // Start loading
+            if (string.IsNullOrEmpty(_searchString))
+            {
+                await LoadAllProducts(); 
+            }
+            else
+            {
+                await LoadFilteredProducts(_searchString);
+            }
+            _loaded = true; 
+            StateHasChanged(); 
+        }
+        private async Task LoadAllProducts()
+        {
+            await LoadData(0, 10, new TableState());
+        }
+
+        private async Task LoadFilteredProducts(string searchString)
+        {
+            await LoadData(0, 10, new TableState());
+        }
+        private async Task ReloadPageData()
+        {
+            await LoadData(0, 10, new TableState());
+            StateHasChanged();
+        }
+     
         private async Task<TableData<GetAllPagedProductsResponse>> ServerReload(TableState state)
         {
             if (!string.IsNullOrWhiteSpace(_searchString))

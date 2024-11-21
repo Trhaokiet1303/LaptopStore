@@ -48,7 +48,6 @@
         @if (isFilterPanelVisible )
         {
             <MudPaper Class="filter-panel" >
-                <HeroTitle Title="@_localizer["Bộ lọc tìm kiếm"]" />
                 <MudExpansionPanels>
 
                     <!-- Brand Filter -->
@@ -99,13 +98,12 @@
 
                 </MudExpansionPanels>
 
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
-            </MudPaper>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
+        </MudPaper>
         }
     </MudItem>
 <div class="main-container">
 
-<HeroTitle Title="@_localizer["Products"]" Description="@_localizer["All Products."]" />
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="false" />

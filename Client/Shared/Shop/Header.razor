@@ -1,5 +1,7 @@
-﻿@using LaptopStore.Shared.Constants.Application
+﻿@using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
+@using LaptopStore.Shared.Constants.Application
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.Extensions.Localization
 @using MudBlazor;
 @using System;
@@ -31,9 +33,13 @@
         <!-- Search Bar -->
         <MudItem Class="search-container">
             <div class="search-bar">
-                <input class="search-text" type="text" name="tukhoa" placeholder="Nhập từ khóa để tìm kiếm" required />
+                <MudTextField Class="search-text" T="string" ValueChanged="@(s => OnSearch(s))"
+                              Placeholder="@localizer["Bạn muốn tìm gì..."]"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium" />
             </div>
         </MudItem>
+
 
         <!-- Contact Icons -->
         <MudItem Class="contact-container">
@@ -73,6 +79,7 @@
     private bool isAuthenticated { get; set; }
     private string CurrentUserId { get; set; }
     private HubConnection hubConnection;
+    private MudTable<GetAllPagedProductsResponse> _table;
 
     protected override async Task OnInitializedAsync()
     {
@@ -177,6 +184,31 @@
             _snackBar.Add(localizer["Logout failed."], Severity.Error);
         }
     }
+
+    private void OnSearch(string text)
+    {
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            var currentSearch = QueryHelpers.ParseQuery(uri.Query).TryGetValue("search", out var currentSearchQuery)
+                ? currentSearchQuery.ToString()
+                : string.Empty;
+
+            if (currentSearch != text)
+            {
+                NavigationManager.NavigateTo($"/allproducts?search={text}");
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
+            }
+        }
+        else
+        {
+            _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
+        }
+    }
+
 
 
 }
