@@ -4,7 +4,9 @@
 @using LaptopStore.Application.Responses.Identity
 @using Microsoft.AspNetCore.Components
 
-<HeroTitle Title="@Title" Description="@Description" />
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@Title</MudText>
+<MudText Color="Color.Warning" Class="mb-4">@Description</MudText>
+
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
