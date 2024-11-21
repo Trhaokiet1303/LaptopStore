@@ -85,6 +85,12 @@ namespace LaptopStore.Client.Pages.Shop
         {
             isFilterPanelVisible = !isFilterPanelVisible;
         }
+        private void ToggleBrandSelection(BrandFilter brand)
+        {
+            brand.IsSelected = !brand.IsSelected; // Thay đổi trạng thái chọn
+            ApplyFilters(); // Áp dụng bộ lọc
+        }
+
 
         private class BrandFilter
         {
@@ -128,16 +134,29 @@ namespace LaptopStore.Client.Pages.Shop
         // Filter the product data based on selected filters
         private void ApplyFilters()
         {
+            ApplyBrandFilter();
             if (_pagedData == null) return;
 
             var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
             var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
         }
-        private void OnSearch(string text)
+        private void ApplyBrandFilter()
         {
-            _searchString = text;
-            _table.ReloadServerData();
+            if (_pagedData == null) return;
+
+            // Lọc sản phẩm theo hãng
+            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
+            if (selectedBrands.Any())
+            {
+                _pagedData = _pagedData.Where(p => selectedBrands.Contains(p.Brand)).ToList();
+            }
+            else
+            {
+                // Nếu không chọn hãng nào, hiển thị tất cả sản phẩm
+                _table.ReloadServerData();
+            }
         }
+
         private async Task InvokeModal(int id = 0)
         {
             var parameters = new DialogParameters();

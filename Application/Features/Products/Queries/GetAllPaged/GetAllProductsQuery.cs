@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace LaptopStore.Application.Features.Products.Queries.GetAllPaged
 {
@@ -65,7 +66,9 @@ namespace LaptopStore.Application.Features.Products.Queries.GetAllPaged
                 Quantity = e.Quantity,
                 ImageDataURL = e.ImageDataURL
             };
+
             var productFilterSpec = new ProductFilterSpecification(request.SearchString);
+
             if (request.OrderBy?.Any() != true)
             {
                 var data = await _unitOfWork.Repository<Product>().Entities
@@ -83,8 +86,8 @@ namespace LaptopStore.Application.Features.Products.Queries.GetAllPaged
                    .Select(expression)
                    .ToPaginatedListAsync(request.PageNumber, request.PageSize);
                 return data;
-
             }
         }
     }
+
 }

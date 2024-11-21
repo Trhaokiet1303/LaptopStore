@@ -171,6 +171,7 @@
 }
 
 .product-details {
+    text-align:left;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,6 +182,9 @@
     gap: 5px; /* Khoảng cách giữa các dòng thông tin */
     font-size: 13px;
     color: #666;
+    width: 100%;
+    padding: 10px;
+    background: #f2f4f7;
 }
 
 .price-container {

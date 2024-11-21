@@ -5,6 +5,8 @@
 @inject NavigationManager NavigationManager
 <link href="css/listproducts.css" rel="stylesheet">
 
+
+
 <div class="menu-bar">
     <!-- Filter panel -->
     <MudChip Class="filter-chip" OnClick="ToggleFilterPanel">
@@ -103,6 +105,7 @@
     </MudItem>
 <div class="main-container">
 
+<HeroTitle Title="@_localizer["Products"]" Description="@_localizer["All Products."]" />
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="false" />
