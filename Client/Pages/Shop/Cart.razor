@@ -48,19 +48,25 @@
             Thanh Toán Ngay
         </MudButton>
 
-        <div Class="checkbox-group">
-            <MudCheckBox T="bool" Required="true" />
+        @if (isAuthenticated)
+        {
+            <div Class="checkbox-group">
+                <MudCheckBox T="bool" Required="true" />
+                <MudText>
+                    Tôi đã đọc và đồng ý với <MudLink Href="#" Target="_blank">Điều khoản sử dụng</MudLink>
+                    và <MudLink Href="#" Target="_blank">Chính sách Thành viên thân thiết My Points</MudLink>.
+                </MudText>
+            </div>
+        }
+        else
+        {
             <MudText>
-                Tôi đã đọc và đồng ý với <MudLink Href="#" Target="_blank">Điều khoản sử dụng</MudLink>
-                và <MudLink Href="#" Target="_blank">Chính sách Thành viên thân thiết My Points</MudLink>.
+                <MudLink Href="./login" Target="_self">Đăng nhập</MudLink>
+                <span> hoặc </span>
+                <MudLink Href="./register" Target="_self">Đăng ký</MudLink>
+                để mua hàng với nhiều ưu đãi hơn
             </MudText>
-        </div>
-
-        <MudText>
-            <MudLink Href="./login.html" Target="_self">Đăng nhập</MudLink>
-            <span> hoặc </span>
-            <MudLink Href="./register.html" Target="_self">Đăng ký</MudLink>
-            để mua hàng với nhiều ưu đãi hơn
-        </MudText>
+        }
+        
     </MudContainer>
 </MudContainer>

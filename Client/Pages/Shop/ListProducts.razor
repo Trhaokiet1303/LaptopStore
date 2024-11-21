@@ -41,67 +41,70 @@
     </MudChip>
 </div>
     <!-- Filter Panel on the Left Side -->
-    <MudItem xs="12" md="3" Class="@GetFilterPanelClass()">
-        <!-- Toggle Button for Filter Panel -->
-       
-        <!-- Conditionally Render Filter Panel -->
-        @if (isFilterPanelVisible )
-        {
-            <MudPaper Class="filter-panel" >
-                <MudExpansionPanels>
+<MudItem xs="12" md="3" Class="@GetFilterPanelClass()">
+    <!-- Toggle Button for Filter Panel -->
+    <!-- Conditionally Render Filter Panel -->
+    @if (isFilterPanelVisible)
+    {
+        <MudPaper Class="filter-panel">
+            <MudExpansionPanels>
 
-                    <!-- Brand Filter -->
-                    <MudExpansionPanel Text="@_localizer["Brand"]">
-                        @foreach (var brand in _brands)
-                        {
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <MudCheckBox @bind-Checked="brand.IsSelected" />
-                                <img src="@brand.LogoPath" alt="@brand.Name" class="logo-brand" />
-                            </div>
-                        }
-                    </MudExpansionPanel>
+                <!-- Brand Filter -->
+                <MudExpansionPanel Text="@_localizer["Brand"]">
+                    @foreach (var brand in _brands)
+                    {
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <MudCheckBox Checked="brand.IsSelected" T="bool" Label="@brand.Name"
+                                         OnCheckedChanged="(e) => ToggleBrandSelection(brand)" />
+                            <img src="@brand.LogoPath" alt="@brand.Name" class="logo-brand" />
+                        </div>
+                    }
+                </MudExpansionPanel>
 
-                    <!-- Description Filter -->
-                    <MudExpansionPanel Text="@_localizer["Description"]">
-                        @foreach (var description in _descriptions)
-                        {
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <MudCheckBox @bind-Checked="description.IsSelected" Label="@description.Name" />
-                                <img src="@description.DescriptionPath" alt="@description.Name" class="logo-decription" />
-                            </div>
-                        }
-                    </MudExpansionPanel>
+                <!-- Description Filter -->
+                <MudExpansionPanel Text="@_localizer["Description"]">
+                    @foreach (var description in _descriptions)
+                    {
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <MudCheckBox Checked="description.IsSelected" T="bool" Label="@description.Name"
+                                         OnCheckedChanged="(e) => ToggleDescriptionSelection(description)" />
+                            <img src="@description.DescriptionPath" alt="@description.Name" class="logo-description" />
+                        </div>
+                    }
+                </MudExpansionPanel>
 
-                    <!-- Price Filter -->
-                    <MudExpansionPanel Text="@_localizer["Price"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedPriceRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label><br>
-                            <MudRadio T="string" Value="under10" /><label>Dưới 10 triệu</label><br>
-                            <MudRadio T="string" Value="10to15" /><label>Từ 10 - 15 triệu</label><br>
-                            <MudRadio T="string" Value="15to20" /><label>Từ 15 - 20 triệu</label><br>
-                            <MudRadio T="string" Value="20to25" /><label>Từ 20 - 25 triệu</label><br>
-                            <MudRadio T="string" Value="25to30" /><label>Từ 25 - 30 triệu</label><br>
-                            <MudRadio T="string" Value="over30" /><label>Trên 30 triệu</label><br>
-                        </MudRadioGroup>
-                    </MudExpansionPanel>
+                <!-- Price Filter -->
+                <MudExpansionPanel Text="@_localizer["Price"]">
+                    <MudRadioGroup T="string" @bind-SelectedValue="SelectedPriceRange" OnChange="(e) => ApplyFilters()">
+                        <MudRadio T="string" Value="all">Tất cả</MudRadio><br />
+                        <MudRadio T="string" Value="under10">Dưới 10 triệu</MudRadio><br />
+                        <MudRadio T="string" Value="10to15">Từ 10 - 15 triệu</MudRadio><br />
+                        <MudRadio T="string" Value="15to20">Từ 15 - 20 triệu</MudRadio><br />
+                        <MudRadio T="string" Value="20to25">Từ 20 - 25 triệu</MudRadio><br />
+                        <MudRadio T="string" Value="25to30">Từ 25 - 30 triệu</MudRadio><br />
+                        <MudRadio T="string" Value="over30">Trên 30 triệu</MudRadio><br />
+                    </MudRadioGroup>
+                </MudExpansionPanel>
 
-                    <!-- Rate Filter -->
-                    <MudExpansionPanel Text="@_localizer["Rate"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedRateRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label> <br>
-                            <MudRadio T="string" Value="4andAbove" /><label>4 sao trở lên</label><br>
-                            <MudRadio T="string" Value="3andAbove" /><label>3 sao trở lên</label><br>
-                            <MudRadio T="string" Value="2andAbove" /><label>2 sao trở lên</label><br>
-                            <MudRadio T="string" Value="1andAbove" /><label>1 sao trở lên</label><br>
-                        </MudRadioGroup>
-                    </MudExpansionPanel>
+                <!-- Rate Filter -->
+                <MudExpansionPanel Text="@_localizer["Rate"]">
+                    <MudRadioGroup T="string" @bind-SelectedValue="SelectedRateRange" OnChange="(e) => ApplyFilters()">
+                        <MudRadio T="string" Value="all">Tất cả</MudRadio><br />
+                        <MudRadio T="string" Value="4andAbove">4 sao trở lên</MudRadio><br />
+                        <MudRadio T="string" Value="3andAbove">3 sao trở lên</MudRadio><br />
+                        <MudRadio T="string" Value="2andAbove">2 sao trở lên</MudRadio><br />
+                        <MudRadio T="string" Value="1andAbove">1 sao trở lên</MudRadio><br />
+                    </MudRadioGroup>
+                </MudExpansionPanel>
 
-                </MudExpansionPanels>
+            </MudExpansionPanels>
 
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ClearFilters">Xóa bộ lọc </MudButton>
         </MudPaper>
-        }
-    </MudItem>
+    }
+</MudItem>
+
 <div class="main-container">
 
 @if (!_loaded)

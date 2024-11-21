@@ -1,0 +1,255 @@
+﻿.order-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 30px auto;
+    gap: 20px;
+}
+
+.user-address {
+    background-color: #ffffff;
+    width: 60%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-address {
+    display: flex;
+    flex-wrap: nowrap; /* Đảm bảo không xuống hàng */
+    justify-content: space-between; /* Chia đều khoảng cách */
+    gap: 10px; /* Khoảng cách giữa các dropdown */
+}
+
+.form-info-user {
+    flex: 1;
+    min-width: calc(50% - 10px); /* Đảm bảo hai cột input chia đều */
+}
+
+    .form-info-user input,
+    .form-info-user select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+.form-address label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+.user-address .form-address input {
+    width: 97%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.user-address .form-address select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+#city,
+#district,
+#ward {
+    flex: 1; /* Đảm bảo chia đều không gian */
+    min-width: 0; /* Cho phép co giãn */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#city {
+    margin-right: 10px; /* Thêm khoảng cách bên phải nếu cần */
+}
+
+#district {
+    margin-right: 10px; /* Thêm khoảng cách bên phải nếu cần */
+}
+/* Chỉnh màu hover cho button */
+.form-address button,
+.form-address a {
+    display: inline-block;
+    width: calc(50% - 10px);
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #ff0000;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .form-address button:hover,
+    .user-address button:hover,
+    .user-address a:hover {
+        background-color: #cc0000;
+        opacity: 0.9;
+    }
+
+.form-address select::placeholder,
+.form-address input::placeholder {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Căn chỉnh dropdown tỉnh, huyện, xã */
+#city,
+#district,
+#ward {
+    flex: 1;
+    min-width: calc(33% - 10px);
+}
+
+
+/* Phần thanh toán - Class 'thanhtoan' */
+.thanhtoan {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: calc(60% + 24%); /* Tổng width của user-address và dat-hang + gap */
+    margin-left: auto; /* Căn giữa */
+    margin-right: auto;
+}
+
+    .thanhtoan h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .payment-methods label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+.payment-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.credit-card-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.card-style {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.card-style-2 {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Phần đặt hàng - Class 'dat-hang' */
+.dat-hang {
+    background-color: #ffffff;
+    width: 35%; /* Chiếm 35% không gian */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 0; /* Đảm bảo thẳng hàng với phần địa chỉ */
+}
+
+    .dat-hang .tienhang,
+    .dat-hang .giamgia,
+    .dat-hang .tongtien {
+        margin: 10px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    .dat-hang .tongtien {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .dat-hang .thanhtoan-button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        font-weight:bolder;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .dat-hang .thanhtoan-button:hover {
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+.product {
+    display: flex; /* Chuyển sang hiển thị dạng hàng ngang */
+    align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+    justify-content: flex-start; /* Canh trái các phần tử */
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+    .product img {
+        width: 20%; /* Hình ảnh chiếm 20% chiều rộng */
+        height: auto;
+        object-fit: cover;
+        margin-right: 15px; /* Khoảng cách giữa ảnh và thông tin sản phẩm */
+    }
+
+.product-info {
+    display: flex;
+    flex-direction: column; /* Hiển thị các dòng thông tin theo chiều dọc */
+    padding: 5px;
+}
+
+.product-name {
+    font-size: 16px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.product-quantity,
+.product-price {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.required-fields {
+    color: red;
+    font-size: 20px;
+}

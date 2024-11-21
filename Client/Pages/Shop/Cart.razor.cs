@@ -8,6 +8,8 @@ using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Shared.Constants.Application;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using System;
@@ -24,11 +26,18 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private IProductManager ProductManager { get; set; }
         [Inject] private IOrderManager OrderManager { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        private HubConnection hubConnection;
+        private bool isAuthenticated { get; set; }
 
         private List<OrderItem> cartItems = new();
 
         protected override async Task OnInitializedAsync()
         {
+            // Đăng ký sự kiện LocationChanged
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity.IsAuthenticated;
+
             var cartJson = await JS.InvokeAsync<string>("localStorage.getItem", "cartItems");
             if (!string.IsNullOrEmpty(cartJson))
             {
