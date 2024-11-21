@@ -1,0 +1,59 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using LaptopStore.Client.Shared.Admin
+@using LaptopStore.Client.Shared.Shop
+@using LaptopStore.Application.Responses.Identity
+
+<LayoutView Layout="@LayoutType">
+    @Body
+</LayoutView>
+
+@code {
+    private Type LayoutType { get; set; }
+
+    private bool _isAdminChecked = false;
+
+    private async Task<bool> IsAdmin()
+    {
+        var currentUrl = NavigationManager.Uri.ToLower();
+
+        if (currentUrl.Contains("/admin"))
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == false)
+            {
+                NavigationManager.NavigateTo("/login");
+                return false;
+            }
+
+            if (user.Identity?.IsAuthenticated == true && !user.IsInRole("Administrator"))
+            {
+                StateHasChanged();
+                NavigationManager.NavigateTo("/");
+                return false;
+            }
+            LayoutType = typeof(MainLayout);
+            return true;
+        }
+        LayoutType = typeof(ShopLayout);
+        return true;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await IsAdmin();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_isAdminChecked)
+        {
+            _isAdminChecked = true;
+            await IsAdmin();
+            StateHasChanged();
+        }
+    }
+}

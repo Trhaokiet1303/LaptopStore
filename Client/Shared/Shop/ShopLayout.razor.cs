@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace LaptopStore.Client.Pages.Shop.Layout
+namespace LaptopStore.Client.Shared.Shop
 {
     public partial class ShopLayout : LayoutComponentBase
     {

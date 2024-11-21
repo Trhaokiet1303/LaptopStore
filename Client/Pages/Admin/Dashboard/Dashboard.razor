@@ -2,7 +2,8 @@
 @attribute [Authorize]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Dashboard> _localizer
 
-<HeroTitle Title="@_localizer["Dashboard"]" Description="@_localizer["Admin Manager"]" />
+<MudText Typo="Typo.h5" Color="Color.Surface" Class="mb-2">@_localizer["Dashboard"]</MudText>
+
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />

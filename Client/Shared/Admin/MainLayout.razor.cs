@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using LaptopStore.Client.Infrastructure.Managers.Identity.Roles;
 
-namespace LaptopStore.Client.Shared
+namespace LaptopStore.Client.Shared.Admin
 {
     public partial class MainLayout : IDisposable
     {

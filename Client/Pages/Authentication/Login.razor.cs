@@ -16,11 +16,12 @@ namespace LaptopStore.Client.Pages.Authentication
         protected override async Task OnInitializedAsync()
         {
             var state = await _stateProvider.GetAuthenticationStateAsync();
-            if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
+            if (state?.User?.Identity?.IsAuthenticated != true)
             {
-                _navigationManager.NavigateTo("/");
+                _navigationManager.NavigateTo("/login");
             }
         }
+
 
         private async Task SubmitAsync()
         {
