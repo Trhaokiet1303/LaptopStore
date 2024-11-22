@@ -203,6 +203,7 @@ namespace LaptopStore.Client.Pages.Shop
                     parameters.Add(nameof(ViewProduct.Product), new GetProductByIdResponse
                     {
                         ImageDataURL = product.ImageDataURL,
+                        Id = product.Id,
                         Name = product.Name,
                         Price = product.Price,
                         CPU = product.CPU,

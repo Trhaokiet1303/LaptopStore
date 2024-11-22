@@ -28,7 +28,7 @@
             <MudText Typo="Typo.body2">@_localizer["Battery"]: @Product.Battery</MudText>
             <MudText Typo="Typo.body2">@_localizer["Weight"]: @Product.Weight kg</MudText>
 
-            <MudNumericField T="int" Label="Số lượng" Value="1" Min="1" Max="10" Class="quantity-field" />
+            <MudNumericField T="int" Label="Số lượng" @bind-Value="quantity" Min="1" Max="10" Class="quantity-field" />
 
             <!-- Nút thêm vào giỏ hàng -->
             <MudButton OnClick="AddToCart">Add to Cart</MudButton>

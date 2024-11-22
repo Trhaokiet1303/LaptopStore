@@ -32,11 +32,6 @@ namespace LaptopStore.Client.Infrastructure.Routes
             return $"api/v1/products/image/{productId}";
         }
 
-        public static string ExportFiltered(string searchString)
-        {
-            return $"{Export}?searchString={searchString}";
-        }
-
         internal static string GetProductById(GetProductByIdResponse product)
         {
             throw new NotImplementedException();
@@ -44,7 +39,6 @@ namespace LaptopStore.Client.Infrastructure.Routes
 
         public static string Save = "api/v1/products";
         public static string Delete = "api/v1/products";
-        public static string Export = "api/v1/products/export";
         public static string ChangePassword = "api/identity/account/changepassword";
         public static string UpdateProfile = "api/identity/account/updateprofile";
     }

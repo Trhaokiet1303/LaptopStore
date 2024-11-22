@@ -104,7 +104,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
-                    if (AddEditOrderItemModel.Quantity <= existingOrderItem.Quantity)
+                    if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
                     {
                         var updateCommand = new AddEditOrderItemCommand
                         {

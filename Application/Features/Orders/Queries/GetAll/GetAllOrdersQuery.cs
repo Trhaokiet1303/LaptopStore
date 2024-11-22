@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static LaptopStore.Shared.Constants.Permission.Permissions;
 
 namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 {
@@ -59,8 +60,9 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                         {
                             item.ProductName = product.Name;
                             item.ProductPrice = product.Price;
-                            item.Quantity = product.Quantity;
-                            item.ProductImage=product.ImageDataURL;
+                            item.Quantity = item.Quantity;
+                            item.Instock = product.Quantity;
+                            item.ProductImage = product.ImageDataURL;
                         }
                         else
                         {

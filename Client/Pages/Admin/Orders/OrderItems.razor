@@ -7,7 +7,7 @@
     </TitleContent>
 
     <DialogContent>
-        @if (_canEditOrderItems)
+        @if (_canCreateOrderItems)
         {
             <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeAddModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
             <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetOrderItemsAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@_localizer["Reload"]</MudButton>
@@ -27,10 +27,10 @@
             <RowTemplate>
                 <MudTd><img class="img-product" src="@(context.ProductImage)" alt="Product Image" /></MudTd>
                 <MudTd>@context.ProductName</MudTd>
-                <MudTd>@context.QuantityOrdered</MudTd>
                 <MudTd>@context.Quantity</MudTd>
+                <MudTd>@context.Instock</MudTd>
                 <MudTd>@context.ProductPrice</MudTd>
-                <MudTd>@(context.QuantityOrdered * context.ProductPrice)</MudTd>
+                <MudTd>@(context.Quantity * context.ProductPrice)</MudTd>
 
                 <MudTd DataLabel="Actions" Style="text-align: right">
                     @if (_canEditOrderItems || _canDeleteOrderItems)

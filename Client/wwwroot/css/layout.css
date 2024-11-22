@@ -1,0 +1,19 @@
+﻿.mud-overlay {
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.mud-snackbar-container {
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.mud-dialog-container {
+    z-index: 1050;
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+.mud-dialog-content {
+    background-color: white;
+    color: black;
+}

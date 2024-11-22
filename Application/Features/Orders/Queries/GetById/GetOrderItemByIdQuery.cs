@@ -27,7 +27,7 @@ namespace LaptopStore.Application.Features.OrderItems.Queries.GetById
 
         public async Task<Result<GetOrderItemByIdResponse>> Handle(GetOrderItemByIdQuery query, CancellationToken cancellationToken)
         {
-            var order = await _unitOfWork.Repository<Domain.Entities.Catalog.OrderItem>().GetByIdAsync(query.Id);
+            var order = await _unitOfWork.Repository<OrderItem>().GetByIdAsync(query.Id);
             var mappedOrder = _mapper.Map<GetOrderItemByIdResponse>(order);
             return await Result<GetOrderItemByIdResponse>.SuccessAsync(mappedOrder);
         }

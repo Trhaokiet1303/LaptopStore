@@ -103,7 +103,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                     Id = orderItemToEdit.Id,
                     OrderId = orderItemToEdit.OrderId,
                     ProductId = orderItemToEdit.ProductId,
-                    Quantity = orderItemToEdit.QuantityOrdered
+                    Quantity = orderItemToEdit.Quantity
                 }
             }
         };

@@ -19,7 +19,7 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private IProductManager ProductManager { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
-
+        private int quantity = 1; 
         [Parameter] public int productId { get; set; }
         public GetProductByIdResponse Product { get; set; } = new();
 
@@ -85,7 +85,7 @@ namespace LaptopStore.Client.Pages.Shop
                 ProductName = Product.Name,
                 ProductPrice = Product.Price,
                 ProductImage = Product.ImageDataURL,
-                Quantity = 1
+                Quantity = quantity
             };
 
             // Lấy giỏ hàng từ localStorage

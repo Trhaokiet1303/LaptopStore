@@ -21,12 +21,13 @@ using Microsoft.JSInterop;
 
 namespace LaptopStore.Client.Pages.Shop
 {
-    public partial class ViewProduct : ComponentBase
+    public partial class ViewProduct
     {
         [Inject] private IProductManager ProductManager { get; set; }
         [Inject] private IBrandManager BrandManager { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private IJSRuntime JSRuntime { get; set; }
+        private int quantity = 1;
 
         [Parameter] public GetProductByIdResponse Product { get; set; } = new();
         [CascadingParameter] private HubConnection HubConnection { get; set; }
@@ -75,7 +76,7 @@ namespace LaptopStore.Client.Pages.Shop
                 ProductName = Product.Name,
                 ProductPrice = Product.Price,
                 ProductImage = Product.ImageDataURL,
-                Quantity = 1
+                Quantity = quantity
             };
 
             // Lấy giỏ hàng từ localStorage

@@ -35,7 +35,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 
         public async Task<Result<List<GetAllOrderItemsResponse>>> Handle(GetAllOrderItemsQuery request, CancellationToken cancellationToken)
         {
-            Func<Task<List<Domain.Entities.Catalog.OrderItem>>> getAllOrderItems = () => _unitOfWork.Repository<Domain.Entities.Catalog.OrderItem>().GetAllAsync();
+            Func<Task<List<OrderItem>>> getAllOrderItems = () => _unitOfWork.Repository<OrderItem>().GetAllAsync();
             var orderList = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllOrderItemsCacheKey, getAllOrderItems);
             var mappedOrders = _mapper.Map<List<GetAllOrderItemsResponse>>(orderList);
             return await Result<List<GetAllOrderItemsResponse>>.SuccessAsync(mappedOrders);

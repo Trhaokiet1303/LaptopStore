@@ -53,8 +53,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
                     {
                         item.ProductName = product.Name;
                         item.ProductPrice = product.Price;
-                        item.Quantity = product.Quantity;
-                        item.QuantityOrdered = orderItems.FirstOrDefault(c => c.ProductId == item.ProductId)?.Quantity ?? 0; 
+                        item.Quantity = orderItems.FirstOrDefault(c => c.ProductId == item.ProductId)?.Quantity ?? 0;
+                        item.Instock = product.Quantity;
                         item.ProductImage=product.ImageDataURL;
                     }
                     else
@@ -62,7 +62,6 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
                         item.ProductName = "Unknown Product";
                         item.ProductPrice = 0;
                         item.Quantity = 0;
-                        item.QuantityOrdered = 0;
                     }
                 }
             }

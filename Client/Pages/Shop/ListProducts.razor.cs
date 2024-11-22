@@ -16,8 +16,6 @@ using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.AspNetCore.Components.Routing;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -27,7 +25,7 @@ namespace LaptopStore.Client.Pages.Shop
 
         [CascadingParameter] private HubConnection HubConnection { get; set; }
 
-        private IEnumerable<GetAllPagedProductsResponse> _pagedData = new List<GetAllPagedProductsResponse>();
+        private IEnumerable<GetAllPagedProductsResponse> _pagedData;
         private MudTable<GetAllPagedProductsResponse> _table;
 
         private bool isFilterPanelVisible = false;
@@ -37,7 +35,63 @@ namespace LaptopStore.Client.Pages.Shop
         private string _searchString = "";
         private bool _loaded;
 
-        /**/
+        protected override async Task OnInitializedAsync()
+        {
+            _loaded = false; // Bắt đầu tải dữ liệu
+            await LoadData(0, 10, new TableState());
+            _loaded = true;
+        }
+
+        private async Task<TableData<GetAllPagedProductsResponse>> ServerReload(TableState state)
+        {
+            if (!string.IsNullOrWhiteSpace(_searchString))
+            {
+                state.Page = 0;
+            }
+            await LoadData(state.Page, state.PageSize, state);
+            return new TableData<GetAllPagedProductsResponse> { TotalItems = _totalItems, Items = _pagedData };
+        }
+
+        private async Task LoadData(int pageNumber, int pageSize, TableState state)
+        {
+            string[] orderings = null;
+            if (!string.IsNullOrEmpty(state.SortLabel))
+            {
+                orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
+            }
+
+            var request = new GetAllPagedProductsRequest
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber + 1,
+                SearchString = _searchString,
+                Orderby = orderings
+            };
+
+            var response = await ProductManager.GetProductsAsync(request);
+            if (response.Succeeded && response.Data != null && response.Data.Any())
+            {
+                _totalItems = response.TotalCount;
+                _pagedData = response.Data;
+            }
+            else
+            {
+                _pagedData = new List<GetAllPagedProductsResponse>();
+                _totalItems = 0;
+                _snackBar.Add("Không tìm thấy sản phẩm nào.", Severity.Info);
+            }
+        }
+        private void ToggleFilterPanel()
+        {
+            isFilterPanelVisible = !isFilterPanelVisible;
+        }
+        private void ToggleBrandSelection(BrandFilter brand)
+        {
+            brand.IsSelected = !brand.IsSelected; // Thay đổi trạng thái chọn
+            ApplyFilters(); // Áp dụng bộ lọc
+        }
+
+
         private class BrandFilter
         {
             public string Name { get; set; }
@@ -51,18 +105,17 @@ namespace LaptopStore.Client.Pages.Shop
             public bool IsSelected { get; set; }
             public string DescriptionPath { get; set; }
         }
-        private List<BrandFilter> _brands = new()
-            {
-                new BrandFilter { Name = "Apple", LogoPath = "/images/brand/mac-icon.png" },
-                new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
-                new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
-                new BrandFilter { Name = "MSI", LogoPath = "/images/brand/msi-icon.png" },
-                new BrandFilter { Name = "HP", LogoPath = "/images/brand/hp-icon.png" },
-                new BrandFilter { Name = "Acer", LogoPath = "/images/brand/acer-icon.png" },
-                new BrandFilter { Name = "Samsung", LogoPath = "/images/brand/samsung-icon.png" },
-                new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
-            };
-
+        private List<BrandFilter> _brands = new List<BrandFilter>
+{
+            new BrandFilter { Name = "Apple", LogoPath = "/images/brand/mac-icon.png" },
+            new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
+            new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
+            new BrandFilter { Name = "MSI", LogoPath = "/images/brand/msi-icon.png" },
+            new BrandFilter { Name = "HP", LogoPath = "/images/brand/hp-icon.png" },
+            new BrandFilter { Name = "Acer", LogoPath = "/images/brand/acer-icon.png" },
+            new BrandFilter { Name = "Samsung", LogoPath = "/images/brand/samsung-icon.png" },
+            new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
+        };
 
         private List<DescriptionFilter> _descriptions = new List<DescriptionFilter>
         {
@@ -77,118 +130,32 @@ namespace LaptopStore.Client.Pages.Shop
         private int CustomPriceRangeStart;
         private int CustomPriceRangeEnd;
         private string SelectedRateRange = "all";
-       
-        /**/
-        protected override async Task OnParametersSetAsync()
-        {
-            await UpdateSearchStringAndReload();
-        }
-        /*Xử lý tìm kiếm*/
-        protected override async Task OnInitializedAsync()
-        {
-            NavigationManager.LocationChanged += OnLocationChanged;
-            await UpdateSearchStringAndReload();
-        }
 
-        private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+        // Filter the product data based on selected filters
+        private void ApplyFilters()
         {
-            await UpdateSearchStringAndReload();
-        }
+            ApplyBrandFilter();
+            if (_pagedData == null) return;
 
-        private async Task UpdateSearchStringAndReload()
-        {
-            // Extract the updated search query from the URL
-            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("search", out var searchQuery))
-            {
-                var newSearchString = searchQuery.ToString();
-                if (_searchString != newSearchString)
-                {
-                    _searchString = newSearchString;
-                    await ReloadDataBasedOnSearch();
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(_searchString))
-                {
-                    _searchString = string.Empty;
-                }
-                await ReloadDataBasedOnSearch();
-            }
-        }
-
-        private async Task ReloadDataBasedOnSearch()
-        {
-            _loaded = false; // Start loading
-            if (string.IsNullOrEmpty(_searchString))
-            {
-                await LoadAllProducts(); 
-            }
-            else
-            {
-                await LoadFilteredProducts(_searchString);
-            }
-            _loaded = true; 
-            StateHasChanged(); 
-        }
-        private async Task LoadAllProducts()
-        {
-            await LoadData(0, 10, new TableState());
-        }
-
-        private async Task LoadFilteredProducts(string searchString)
-        {
-            await LoadData(0, 10, new TableState());
-        }
-        private async Task ReloadPageData()
-        {
-            await LoadData(0, 10, new TableState());
-            StateHasChanged();
-        }
-        /*Load dữ liệu chung*/
-        private async Task<TableData<GetAllPagedProductsResponse>> ServerReload(TableState state)
-        {
-            if (!string.IsNullOrWhiteSpace(_searchString))
-            {
-                state.Page = 0;
-            }
-            await LoadData(state.Page, state.PageSize, state);
-            return new TableData<GetAllPagedProductsResponse> { TotalItems = _totalItems, Items = _pagedData };
-        }
-        private async Task LoadData(int pageNumber, int pageSize, TableState state)
-        {
             var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
             var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
+        }
+        private void ApplyBrandFilter()
+        {
+            if (_pagedData == null) return;
 
-            var request = new GetAllPagedProductsRequest
+            // Lọc sản phẩm theo hãng
+            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
+            if (selectedBrands.Any())
             {
-                PageSize = pageSize,
-                PageNumber = pageNumber + 1,
-                SearchString = _searchString,
-                BrandFilter = selectedBrands.Any() ? selectedBrands : null,
-                DescriptionFilter = selectedDescriptions.Any() ? selectedDescriptions : null,
-                PriceRange = SelectedPriceRange,
-                RateRange = SelectedRateRange
-            };
-
-            var response = await ProductManager.GetProductsAsync(request);
-
-            if (response.Succeeded && response.Data != null && response.Data.Any())
-            {
-                _pagedData = response.Data;
-                _totalItems = response.TotalCount;
+                _pagedData = _pagedData.Where(p => selectedBrands.Contains(p.Brand)).ToList();
             }
             else
             {
-                _pagedData = new List<GetAllPagedProductsResponse>();
-                _totalItems = 0;
-                _snackBar.Add("Không tìm thấy sản phẩm nào với bộ lọc hiện tại.", Severity.Info);
+                // Nếu không chọn hãng nào, hiển thị tất cả sản phẩm
+                _table.ReloadServerData();
             }
         }
-
-
-
 
         private async Task InvokeModal(int id = 0)
         {
@@ -201,6 +168,7 @@ namespace LaptopStore.Client.Pages.Shop
                     parameters.Add(nameof(ViewProduct.Product), new GetProductByIdResponse
                     {
                         ImageDataURL = product.ImageDataURL,
+                        Id = product.Id,
                         Name = product.Name,
                         Price = product.Price,
                         CPU = product.CPU,
@@ -228,42 +196,9 @@ namespace LaptopStore.Client.Pages.Shop
             var dialog = _dialogService.Show<ViewProduct>("Thông tin sản phẩm", parameters, options);
             var result = await dialog.Result;
         }
-        /*Xử lý bộ lọc*/
-
-
-
-        // Filter the product data based on selected filters
-        private async Task ApplyFilters()
-        {
-
-            _loaded = false;
-            await ReloadDataBasedOnSearch(); // Sử dụng phương thức đã hỗ trợ lọc
-            _loaded = true;
-            StateHasChanged();
-        }
-
-        private void ToggleFilterPanel()
-        {
-            isFilterPanelVisible = !isFilterPanelVisible;
-        }
-    
-
-      
-        private void ClearFilters()
-        {
-            foreach (var brand in _brands) brand.IsSelected = false;
-            foreach (var description in _descriptions) description.IsSelected = false;
-            SelectedPriceRange = "all";
-            SelectedRateRange = "all";
-
-            ApplyFilters();
-        }
-
-        /*Ẩn hiện bộ lọc*/
         private string GetFilterPanelClass() =>
             isFilterPanelVisible ? "filter-panel-visible" : "filter-panel-hidden";
-        
-        /*chuyển sang trang productdetail*/
+
         private void NavigateToProductDetail(int productId)
         {
             NavigationManager.NavigateTo($"/product/{productId}");
