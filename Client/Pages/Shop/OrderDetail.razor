@@ -2,8 +2,10 @@
 @using LaptopStore.Client.Shared.Shop
 @layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<OrderDetail> _localizer
+<link href="css/orderdetail.css" rel="stylesheet">
 
-<h3>Đơn hàng của bạn</h3>
+
+<h1 class="orderdetail-container">Đơn hàng của bạn</h1>
 
 @if (IsLoading)
 {
@@ -11,24 +13,51 @@
 }
 else if (Orders == null || !Orders.Any())
 {
-    <p>Bạn chưa có đơn hàng nào!</p>
+    <p id="status">Bạn chưa có đơn hàng nào!</p>
 }
 else
 {
-    <MudTable Items="Orders" Bordered="true" Striped="true" Hover="true">
-        <HeaderContent>
-            <MudTh>STT</MudTh>
-            <MudTh>Người nhận</MudTh>
-            <MudTh>Địa chỉ</MudTh>
-            <MudTh>Thanh toán</MudTh>
-            <MudTh>Tổng tiền</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.Id</MudTd>
-            <MudTd>@context.UserName</MudTd>
-            <MudTd>@context.UserAddress</MudTd>
-            <MudTd>@context.MethodPayment</MudTd>
-            <MudTd>@context.TotalPrice</MudTd>
-        </RowTemplate>
-    </MudTable>
+    @foreach (var order in Orders)
+    {
+        <MudPaper Class="order-item mb-4 p-3" Elevation="3">
+            <MudText Typo="Typo.h5">Đơn hàng #@order.Id</MudText>
+            <MudText>Trạng thái: <span class="order-status">@order.StatusOrder</span> </MudText>
+
+            <MudDivider Class="my-2" />
+
+            <MudText Class="subtitle">Thông tin người nhận</MudText>
+            <MudText Typo="Typo.body2">@order.UserName | @order.UserPhone</MudText>
+            <MudText Typo="Typo.body2">@order.UserAddress</MudText>
+            <MudText Typo="Typo.body2">Phương thức thanh toán: @order.MethodPayment</MudText>
+
+            <MudDivider Class="my-2" />
+
+            <div class="orderdetail-products">
+                @foreach (var item in order.OrderItem)
+                {
+                    <MudItem Class="orderdetail-product">
+                        <img src="@item.ProductImage" alt="@item.ProductName" class="orderdetail-product-img" />
+                        <div class="product-info">
+                            <MudText Class="productname">@item.ProductName</MudText>
+                            <MudText Class="productinfo" >Giá: @($"{item.ProductPrice:C}")</MudText>
+                            <MudText Class="productinfo">Số lượng: @item.Quantity</MudText>
+                        </div>
+                    </MudItem>
+                }
+            </div>
+
+            <MudDivider Class="my-2" />
+
+            <MudGrid>
+                <MudItem xs="6"><MudText Typo="Typo.body2">Tiền hàng hóa:</MudText></MudItem>
+                <MudItem xs="6"><MudText Typo="Typo.body2">Giảm giá:</MudText></MudItem>
+                <MudItem xs="6"><MudText Typo="Typo.body2">Vận chuyển:</MudText></MudItem>
+                <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
+               
+            </MudGrid>
+            <MudButton Class="remove-order mt-2" Color="Color.Error" Variant="Variant.Filled" OnClick="@(() => ConfirmCancelOrder(order.Id))">
+                Hủy đơn hàng
+            </MudButton>
+        </MudPaper>
+    }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LaptopStore.Client.Infrastructure.Settings;
 using LaptopStore.Shared.Constants.Localization;
 using LaptopStore.Application.Interfaces.Common;
+using MudBlazor.Services;
 
 namespace LaptopStore.Client
 {
@@ -26,6 +27,7 @@ namespace LaptopStore.Client
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IProductManager, ProductManager>();
             builder.Services.AddScoped<ProductManager>();
+            builder.Services.AddMudServices();
 
             var host = builder.Build();
             var storageService = host.Services.GetRequiredService<ClientPreferenceManager>();

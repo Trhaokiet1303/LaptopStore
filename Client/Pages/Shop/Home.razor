@@ -65,7 +65,8 @@
             <div class="product-list-container">
                 @foreach (var product in GetCurrentFeaturedProducts())
                 {
-                    <MudCard Class="single-product-card" OnClick="() => NavigateToProductDetail(product.Id)" Style="cursor: pointer;">
+                    <MudButton OnClick="() => NavigateToProductDetail(product.Id)" Style="cursor: pointer;">
+                    <MudCard Class="single-product-card" >
                         <MudCardContent>
                             <!-- Huy hiệu -->
                             <div class="badge-container">
@@ -88,6 +89,7 @@
                             <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
                         </MudCardContent>
                     </MudCard>
+                    </MudButton>
                 }
             </div>
 
@@ -102,7 +104,6 @@
     <!-- Product Grid on the Right Side -->
     <MudItem xs="12" md="9">
         <!-- Featured Products Section -->
-        <HeroTitle Title="@_localizer["Sản phẩm nổi bật"]"/>
         @if (!_loaded)
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate="false" />
@@ -146,7 +147,6 @@
         }
         <br />
         <!-- High Rate Products Section -->
-        <HeroTitle Title="@_localizer["Sản phẩm được đánh giá cao"]"/>
         @if (!_loaded)
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate="false" />

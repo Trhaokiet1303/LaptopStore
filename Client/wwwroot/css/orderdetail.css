@@ -1,0 +1,84 @@
+﻿.orderdetail-container {
+    flex: 1;
+    max-width: 65%;
+    margin-left: 5%;
+}
+
+.subtitle {
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.orderdetail-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.product-info {
+    flex: 1;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.productname {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.productinfo {
+    font-size: 16px;
+    color: #ff0000;
+}
+
+.remove-order {
+    background-color: #ff0000;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    text-align: center;
+}
+
+    .remove-order:hover {
+        background-color: #cc0000;
+        color: whitesmoke;
+    }
+/* san pham*/
+.order-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.orderdetail-product {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.orderdetail-product-img {
+    width: 10%;
+    height: auto;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.orderdetail-products {
+    margin-top: 10px;
+}
+
+.order-status {
+    font-weight:bold;
+    color: #ff0000;
+    font-style: italic;
+}

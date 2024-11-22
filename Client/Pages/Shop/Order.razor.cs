@@ -25,6 +25,8 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private HttpClient Http { get; set; }
         [Inject] private IOrderManager OrderManager { get; set; }
         [Inject] private IJSRuntime JS { get; set; }
+        [Inject] NavigationManager NavigationManager { get; set; }
+
 
         private List<OrderItem> cartItems = new();
 
@@ -238,6 +240,7 @@ namespace LaptopStore.Client.Pages.Shop
             await JS.InvokeVoidAsync("alert", "Đặt hàng thành công!");
 
             await JS.InvokeVoidAsync("localStorage.removeItem", "cartItems");
+            NavigationManager.NavigateTo($"/orderdetail");
         }
 
         private void HandlePaymentMethodChange(ChangeEventArgs e)
