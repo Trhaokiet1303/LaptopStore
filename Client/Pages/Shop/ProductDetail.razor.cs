@@ -116,6 +116,64 @@ namespace LaptopStore.Client.Pages.Shop
 
             Snackbar.Add("Sản phẩm đã được thêm vào giỏ hàng!", Severity.Success);
         }
+        private async Task InvokeModal(int id = 0)
+        {
+            var parameters = new DialogParameters();
+
+            if (id != 0)
+            {
+                // Lấy dữ liệu sản phẩm từ API
+                var result = await ProductManager.GetProductByIdAsync(id);
+
+                if (result != null && result.Succeeded && result.Data != null)
+                {
+                    var product = result.Data;
+
+                    // Thêm dữ liệu sản phẩm vào parameters
+                    parameters.Add(nameof(ViewProduct.Product), new GetProductByIdResponse
+                    {
+                        ImageDataURL = product.ImageDataURL,
+                        Id = product.Id,
+                        Name = product.Name,
+                        Price = product.Price,
+                        CPU = product.CPU,
+                        Screen = product.Screen,
+                        Card = product.Card,
+                        Ram = product.Ram,
+                        Rom = product.Rom,
+                        Battery = product.Battery,
+                        Weight = product.Weight,
+                        Description = product.Description,
+                        Rate = product.Rate,
+                        Barcode = product.Barcode,
+                    });
+                }
+                else
+                {
+                    Snackbar.Add("Không thể tải dữ liệu sản phẩm.", Severity.Error);
+                    return;
+                }
+            }
+
+            // Cấu hình modal
+            var options = new DialogOptions
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+                DisableBackdropClick = true
+            };
+
+            // Hiển thị modal
+            var dialog = _dialogService.Show<ViewProduct>("Thông tin sản phẩm", parameters, options);
+            var resultDialog = await dialog.Result;
+
+            if (!resultDialog.Cancelled)
+            {
+                Snackbar.Add("Đã đóng modal.", Severity.Info);
+            }
+        }
+
 
         private async Task LoadAllProducts()
         {

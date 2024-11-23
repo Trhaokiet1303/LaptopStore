@@ -50,7 +50,10 @@
     justify-content: flex-start;
     gap: 8px;
 }
-
+.product-info-name {
+    font-weight:bolder;
+    font-size:20px;
+}
 
 .product-rating {
     display: flex;

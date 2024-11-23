@@ -18,7 +18,7 @@
         </MudItem>
         <!-- Phần bên phải: Chi tiết sản phẩm -->
         <MudItem xs="12" md="6" Class="product-info-section">
-            <MudText Typo="Typo.h5" GutterBottom="true">@Product.Name</MudText>
+            <MudText Class="product-info-name">@Product.Name</MudText>
 
             <!-- Giá và đánh giá -->
             <div class="product-rating">
@@ -51,7 +51,7 @@
                     <MudText Typo="Typo.body1"><strong>Kích thước màn hình:</strong> @Product.Screen</MudText>
                 </MudItem>
             </MudGrid>
-            <MudLink Href="/details" Class="spec-link">Tất cả thông số &gt;</MudLink>
+            <MudButton Class="spec-link" @onclick="() => InvokeModal(Product.Id)"> Thông số chi tiết</MudButton>
         </MudPaper>
     </MudGrid>
     <MudPaper Class="product-policy-container" Elevation="1">
