@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
+using MediatR;
 
 
 namespace LaptopStore.Client.Pages.Shop
@@ -22,7 +24,11 @@ namespace LaptopStore.Client.Pages.Shop
         private int quantity = 1; 
         [Parameter] public int productId { get; set; }
         public GetProductByIdResponse Product { get; set; } = new();
-
+        private List<GetAllPagedProductsResponse> AllProducts { get; set; } = new();
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadAllProducts();
+        }
         protected override async Task OnParametersSetAsync()
         {
             Console.WriteLine("Đang tải sản phẩm với ID: " + productId); // Ghi log giá trị productId
@@ -36,7 +42,6 @@ namespace LaptopStore.Client.Pages.Shop
                 NavigationManager.NavigateTo("/not-found");
             }
         }
-
 
         private async Task LoadProduct(int id)
         {
@@ -110,6 +115,45 @@ namespace LaptopStore.Client.Pages.Shop
             await JS.InvokeVoidAsync("localStorage.setItem", "cartItems", JsonSerializer.Serialize(cartItems));
 
             Snackbar.Add("Sản phẩm đã được thêm vào giỏ hàng!", Severity.Success);
+        }
+
+        private async Task LoadAllProducts()
+        {
+            try
+            {
+                Console.WriteLine("Đang tải tất cả sản phẩm...");
+                var request = new Application.Requests.Catalog.GetAllPagedProductsRequest
+                {
+                    PageNumber = 1, // Bạn có thể thay đổi theo yêu cầu
+                    PageSize = 10,  // Số lượng sản phẩm cần hiển thị
+                    SearchString = string.Empty,
+                    Orderby = new[] { "Name ascending" }
+                };
+
+                var result = await ProductManager.GetProductsAsync(request);
+
+                if (result != null && result.Succeeded)
+                {
+                    AllProducts = result.Data.ToList();
+                    Console.WriteLine($"Đã tải {AllProducts.Count} sản phẩm.");
+                    StateHasChanged();
+                }
+                else
+                {
+                    Console.WriteLine("Không thể tải danh sách sản phẩm.");
+                    Snackbar.Add("Không thể tải danh sách sản phẩm.", Severity.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Đã xảy ra lỗi khi tải danh sách sản phẩm: {ex.Message}");
+                Snackbar.Add($"Đã xảy ra lỗi khi tải danh sách sản phẩm: {ex.Message}", Severity.Error);
+            }
+        }
+
+        private void NavigateToProductDetail(int productId)
+        {
+            NavigationManager.NavigateTo($"/product/{productId}");
         }
 
     }
