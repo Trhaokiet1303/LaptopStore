@@ -1,8 +1,9 @@
-﻿.product-detail-container {
+﻿
+.product-detail-container {
     padding: 16px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-detail {
@@ -10,6 +11,76 @@
     gap: 16px;
     align-items: flex-start;
 }
+.price-card {
+    padding: 16px;
+    background-color: #fff8e1b3;
+    border-radius: 10px;
+    width: 100%;
+    margin: auto;
+}
+.promotion {
+    padding: 8px;
+    background-color: #F9F9F9;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+.points {
+    background-color: #fefbabe3;
+    color: rgb(217 119 6);
+    width: 35%;
+    border-radius: 10px;
+}
+.student-discount {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #fff5f5; /* Màu hồng nhạt */
+    border-radius: 8px;
+    border: 1px solid #ffd6d6; /* Đường viền hồng nhạt */
+    gap: 16px;
+}
+
+.student-tag {
+    background-color: #ff7f7f; /* Màu đỏ nhạt */
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.discount-info {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.extra-discount {
+    font-size: 1.5rem;
+    color: #d32f2f; /* Màu đỏ đậm */
+    font-weight: bold;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+.giam-gia-btn {
+    background-color: #d32f2f !important; /* Màu đỏ đậm */
+    color: white !important;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: none;
+}
+
+    .giam-gia-btn:hover {
+        background-color: #b71c1c !important; /* Màu đỏ tối hơn khi hover */
+    }
+
 
 .product-images-section {
     flex: 1;
@@ -59,6 +130,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    color: gold;
 }
 
 .price {
@@ -72,13 +144,66 @@
     color: #888;
 }
 
+
+/* CSS cho nút Giỏ hàng */
+.cart-button {
+    width: 48px;
+    height: 45px;
+    border-radius: 8px;
+    border: 2px solid #d32f2f;
+    color: #d32f2f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+}
+    .cart-button:hover {
+        background-color: #b71c1c69;
+    }
+    /* CSS cho nút Mua ngay */
+.buy-now-button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #d32f2f; /* Màu đỏ */
+}
+
+    .buy-now-button:hover {
+        background-color: #b71c1c; /* Màu đỏ tối hơn khi hover */
+    }
+
+/* CSS cho nút Trả góp */
+.installment-button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #212121; /* Màu đen */
+    text-align: center;
+}
+
+    .installment-button:hover {
+        background-color: #000000; /* Đen đậm hơn khi hover */
+    }
+
+.installment-info {
+    font-size: 8px;
+    color: #cfcfcf;
+    padding-left: 5px;
+}
+
 /*thong so ky thuat*/
 .product-specs-container {
     padding: 16px;
     margin-bottom: 16px;
     border-radius: 8px;
     background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
 .product-specs {
@@ -104,7 +229,7 @@
     margin-bottom: 12px;
     border-radius: 8px;
     background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
     margin-top: 12px;
 }
 .product-policy-h3 {
@@ -151,6 +276,17 @@
 
 
 /*other-product*/
+.all-products-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 5px;
+    background-color: #ffffffff;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
 .product-slider-container {
     display: flex;
     align-items: center;
@@ -159,6 +295,13 @@
     position: relative;
     overflow: hidden;
     padding: 10px 0;
+}
+.products-header {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 25px;
+    padding-left: 20px;
+    color: #007bff;
 }
 
 .slider-control {
@@ -313,3 +456,5 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+/*test*/

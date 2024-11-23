@@ -25,13 +25,64 @@
                 <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
                 <MudText Typo="Typo.caption">@Product.Rate</MudText>
             </div>
-            <MudText Typo="Typo.h5" Class="price">@Product.Price.ToString("N0") đ</MudText>
-            <MudText Typo="Typo.caption" Class="old-price">@((Product.Price * 1.1).ToString("N0")) đ</MudText>
-            <MudText Typo="Typo.body1" Class="product-option">@_localizer["Color"]: Silver</MudText>  
-            
+            <MudPaper Elevation="1" Class="price-card">
+                <MudGrid Spacing="3">
+                    <MudItem xs="12">
+                        <h5 class="text-bold">Mua ngay với giá</h5>
+                        <MudText Typo="Typo.h5" Class="price">@Product.Price.ToString("N0") đ</MudText>
+                        <MudText Typo="Typo.caption" Class="old-price">@((Product.Price * 1.1).ToString("N0")) đ</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <p class="points"> +@((Product.Price / 10000).ToString("N0")) Điểm thưởng</p>
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <MudPaper Outlined Class="promotion">
+                            <p style="font-weight:bold">Khuyến mãi nổi bật</p>
+                            <ul>
+                                <li>Giảm ngay 2,500,000đ áp dụng đến 25/11</li>
+                                <li>Trả góp 0%</li>
+                            </ul>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <span class="student-tag">Đặc quyền HSSV - Giáo viên</span>
+                        <MudPaper Outlined Class="student-discount">
+                            <p class="discount-info"> Giảm thêm 3%  </p>
+                            <span class="extra-discount">@((Product.Price * 0.03).ToString("N0")) đ</span>
+                            <MudButton Class="giam-gia-btn">Xác thực ngay</MudButton>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>            
             <MudNumericField T="int" Label="Số lượng" @bind-Value="quantity" Min="1" Max="10" Class="quantity-field" />
-            <MudButton Class="add-to-cart-btn" OnClick="AddToCart">Mua ngay</MudButton>
+            <MudGrid Justify="Justify.Center" AlignItems="center" Class="button-group">
+                <!-- Nút Giỏ hàng -->
+                <MudItem>
+                    <MudButton Class="cart-button" OnClick="AddToCart">
+                        <MudIcon Icon="@Icons.Material.Filled.AddShoppingCart" Size="Size.Large" />
+                    </MudButton>
+                </MudItem>
+
+                <!-- Nút Mua ngay -->
+                <MudItem>
+                    <MudLink Href="/order">
+                    <MudButton Class="buy-now-button" OnClick="AddToCart" >
+                        Mua ngay
+                    </MudButton>
+                    </MudLink>
+                </MudItem>
+
+                <!-- Nút Trả góp -->
+                <MudItem>
+                    <MudButton Class="installment-button">
+                        Trả góp
+                        <span class="installment-info">@((Product.Price / 12).ToString("N0")) đ/tháng</span>
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
         </MudItem>
+       
         <MudPaper Class="product-specs-container" Elevation="1">
             <MudText Typo="Typo.h6" Class="product-policy-h3">Thông số nổi bật</MudText>
             <MudGrid Class="product-specs">
@@ -91,10 +142,7 @@
 <MudGrid>
     <div class="all-products-section">
 
-        <div class="products-header">
-            <MudText Typo="Typo.h5" Align="Align.Center">Các sản phẩm khác</MudText>
-        </div>
-
+        <MudText Class="products-header">Các sản phẩm khác</MudText>
         <div class="product-slider-container">
             <!-- Danh sách sản phẩm -->
             <div class="product-list-container">
@@ -103,12 +151,6 @@
                     <MudButton OnClick="() => NavigateToProductDetail(product.Id)" Style="cursor: pointer;">
                         <MudCard Class="single-product-card">
                             <MudCardContent>
-                                <!-- Huy hiệu -->
-                                <div class="badge-container">
-                                    <MudText Typo="Typo.overline" Class="badge">Trả góp 0%</MudText>
-                                    <MudText Typo="Typo.overline" Class="badge">Giá rẻ quá</MudText>
-                                </div>
-
                                 <!-- Ảnh sản phẩm -->
                                 <img src="@product.ImageDataURL" alt="@product.Name" class="product-thumbnail" />
 
@@ -130,3 +172,4 @@
         </div>
     </div>
 </MudGrid>
+
