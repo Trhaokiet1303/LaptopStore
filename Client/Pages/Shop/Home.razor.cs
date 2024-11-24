@@ -281,5 +281,17 @@ namespace LaptopStore.Client.Pages.Shop
                 ?? Enumerable.Empty<GetAllPagedProductsResponse>();
         }
 
+        /*thong tin*/
+        private bool IsExpanded { get; set; } = false;
+
+        private string ButtonLabel => IsExpanded ? "Ẩn bớt nội dung" : "Xem thêm nội dung";
+        private string ContentClass => IsExpanded ? "" : "content-hidden";
+        private string AdditionalContentClass => IsExpanded ? "" : "content-hidden";
+
+        private void ToggleContent()
+        {
+            IsExpanded = !IsExpanded;
+        }
+
     }
 }

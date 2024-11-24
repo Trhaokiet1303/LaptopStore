@@ -498,3 +498,62 @@
     transform: translateX(-50%);
 }
 
+/*thong tin ben duoi*/
+.content-container {
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin: 0 auto; /* Đặt container ở giữa theo chiều ngang */
+    position: relative;
+    top: 50%;
+    margin-top: 15px;
+}
+
+.images-gioithieu {
+    width: 100%; /* Đặt chiều rộng của ảnh bằng container */
+    height: auto; /* Đảm bảo ảnh giữ nguyên tỉ lệ */
+    padding: 10px;
+}
+
+.content-title {
+    font-weight: bold;
+    font-size: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.button-content {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #59a9fff9;
+    display: block; /* Đặt nút thành block để căn giữa dễ dàng */
+    margin: 5px auto; /* Căn giữa theo chiều ngang */
+    text-align: center; /* Đảm bảo chữ ở giữa nút */
+}
+ .button-content:hover {
+        background-color: skyblue;
+    }
+.content-hidden {
+    max-height: 0; /* Ẩn hoàn toàn nội dung */
+    overflow: hidden;
+    transition: max-height 0.5s ease-out; /* Hiệu ứng mở rộng */
+}
+
+    .content-hidden:not(.content-hidden) {
+        max-height: 500px; /* Độ cao tối đa khi hiển thị */
+        overflow: visible;
+    }
+.images-anh {
+    width: 50%;
+    height: auto;
+    margin-left: 25%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.content-bold {
+    font-weight: bold;
+}
