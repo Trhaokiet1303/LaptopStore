@@ -187,7 +187,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 400px; /* Đặt chiều cao cố định */
+    height: 500px;
     padding: 16px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
@@ -195,6 +195,7 @@
     overflow: hidden;
     background-color: #fff;
 }
+
 .product {
     position: relative;
     flex: 0 0 auto;
@@ -202,10 +203,11 @@
     flex-direction: column;
     align-items: center;
 }
-.product:hover {
-    transition: box-shadow 0.3s ease-in-out;
-    transform: scale(1.2);
-}
+
+    .product:hover {
+        transition: box-shadow 0.3s ease-in-out;
+        transform: scale(1.02);
+    }
 
 .img-product {
     width: 70%;
@@ -233,30 +235,35 @@
     text-align: center;
 }
 
+
 .product-name {
-    font-size: 14px;
+    position: absolute;
+    top: 235px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     margin-bottom: 10px;
+    left: 50%; /* Căn giữa theo chiều ngang */
+    transform: translateX(-50%);
 }
 
 .specs {
     display: flex;
     gap: 8px;
     justify-content: center;
-    position: absolute; /* Đặt vị trí tuyệt đối */
-    bottom: 120px; /* Đặt specs nằm trên price-container 10px */
+    position: absolute;
+    top: 200px; /* Đặt vị trí specs trên thông tin kỹ thuật */
     left: 50%;
     transform: translateX(-50%);
-    height: 25px; /* Chiều cao cố định */
-    margin-bottom: 0; /* Loại bỏ khoảng cách bên ngoài không cần thiết */
+    height: 25px;
+    margin-bottom: 0;
 }
 
 .spec {
-    font-size: 18px; 
+    font-size: 18px;
     font-weight: bold;
     background-color: #f2f2f2;
     padding: 4px 8px;
@@ -266,19 +273,36 @@
     text-align: center;
 }
 
+.product-details {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 120px; /* Đặt chi tiết sản phẩm giữa specs và price */
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 5px; /* Khoảng cách giữa các dòng thông tin */
+    font-size: 13px;
+    color: #666;
+    width: 100%;
+    padding: 10px;
+    background: #f2f4f7;
+}
+
 .price-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    bottom: 65px; 
+    bottom: 65px;
     left: 50%;
     transform: translateX(-50%);
-    height: 50px; /* Chiều cao cố định để đồng bộ */
+    height: 50px;
 }
 
 .price {
-    font-size: 20px; /* Tăng kích thước giá chính */
+    font-size: 19px;
     font-weight: bold;
     color: red;
     margin-bottom: 5px;
@@ -297,20 +321,19 @@
     justify-content: center;
     gap: 2px;
     position: absolute;
-    bottom: 40px; /* Đặt ngôi sao cố định cách đáy 60px */
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .action-button {
     position: absolute;
-    bottom: 10px; /* Nút cố định sát cạnh dưới */
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%; /* Nút chiếm toàn bộ chiều rộng khung */
+    width: 90%;
     text-align: center;
 }
-
 
 
 
