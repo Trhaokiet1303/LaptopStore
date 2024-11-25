@@ -208,6 +208,16 @@ namespace LaptopStore.Client.Pages.Shop
                 Snackbar.Add($"Đã xảy ra lỗi khi tải danh sách sản phẩm: {ex.Message}", Severity.Error);
             }
         }
+        private async Task HandleBuyNow()
+        {
+            await AddToCart();
+
+            // Chờ 0.5 giây trước khi chuyển sang trang "order"
+            await Task.Delay(500);
+
+            // Chuyển hướng sang trang "order"
+            NavigationManager.NavigateTo("/order");
+        }
 
         private void NavigateToProductDetail(int productId)
         {
