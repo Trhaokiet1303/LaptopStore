@@ -18,6 +18,7 @@ using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -42,8 +43,14 @@ namespace LaptopStore.Client.Pages.Shop
         protected override async Task OnInitializedAsync()
         {
             _loaded = false;
-            await LoadData(0, 10, new TableState()); // Example page size of 10
-            ApplyFilters(); // Call ApplyFilters to initialize filtered lists
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            var query = QueryHelpers.ParseQuery(uri.Query);
+            if (query.TryGetValue("search", out var searchValue))
+            {
+                _searchString = searchValue.ToString();
+            }
+            await LoadData(0, 10, new TableState());
+            ApplyFilters(); 
             _loaded = true;
 
             // Initialize and start the timer for automatic rotation
@@ -51,21 +58,7 @@ namespace LaptopStore.Client.Pages.Shop
             bannerTimer.Elapsed += (s, e) => InvokeAsync(ShowNextImage);
             bannerTimer.Start();
         }
-        private void ToggleFilterPanel()
-        {
-            isFilterPanelVisible = !isFilterPanelVisible;
-        }
-
-        private async Task<TableData<GetAllPagedProductsResponse>> ServerReload(TableState state)
-        {
-            if (!string.IsNullOrWhiteSpace(_searchString))
-            {
-                state.Page = 0;
-            }
-            await LoadData(state.Page, state.PageSize, state);
-            return new TableData<GetAllPagedProductsResponse> { TotalItems = _totalItems, Items = _pagedData };
-        }
-
+        
         private async Task LoadData(int pageNumber, int pageSize, TableState state)
         {
             var request = new GetAllPagedProductsRequest
@@ -81,22 +74,6 @@ namespace LaptopStore.Client.Pages.Shop
                 _totalItems = response.TotalCount;
             }
         }
-
-        private async Task LoadImageAsync()
-        {
-            var data = await ProductManager.GetProductImageAsync(ProductIMG.Id);
-            if (data.Succeeded)
-            {
-                var imageData = data.Data;
-                if (!string.IsNullOrEmpty(imageData))
-                {
-                    ProductIMG.ImageDataURL = imageData;
-                }
-            }
-        }
-
-      
-
         // Define filter classes for Brand and Description
         private class BrandFilter
         {

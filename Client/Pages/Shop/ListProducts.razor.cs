@@ -17,6 +17,7 @@ using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
 using LaptopStore.Application.Specifications.Catalog;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -39,6 +40,12 @@ namespace LaptopStore.Client.Pages.Shop
         protected override async Task OnInitializedAsync()
         {
             _loaded = false; // Bắt đầu tải dữ liệu
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            var query = QueryHelpers.ParseQuery(uri.Query);
+            if (query.TryGetValue("search", out var searchValue))
+            {
+                _searchString = searchValue.ToString();
+            }
             await LoadData(0, 10, new TableState());
             _loaded = true;
         }
