@@ -17,7 +17,6 @@
 @inject IDialogService DialogService
 @inject IJSRuntime JS
 <link href="css/header.css" rel="stylesheet">
-
 <MudPaper Class="header" Elevation="0">
     <div class="header-grid">
         <!-- Logo -->
@@ -48,7 +47,7 @@
             <MudNavLink Href="/contact" Class="contact-info" Icon="@Icons.Material.Filled.Contacts">Liên Hệ</MudNavLink>
             <MudNavLink Href="/orderdetail" Class="contact" Icon="@Icons.Material.Filled.CardGiftcard">Đơn hàng</MudNavLink>
             <MudNavLink Href="/cart" Class="contact" Icon="@Icons.Material.Filled.AddShoppingCart">
-                Giỏ hàng 
+                Giỏ hàng
             </MudNavLink>
 
 
@@ -77,6 +76,7 @@
 </MudPaper>
 
 @code {
+    [Inject] private IJSRuntime JSRuntime { get; set; }
     [Inject] private IRoleManager RoleManager { get; set; }
     private string CurrentPage { get; set; } = "Trang chủ";
     private bool IsHomePage { get; set; } = true;
@@ -87,7 +87,8 @@
     private int cartItemCount = 0;
     protected override async Task OnInitializedAsync()
     {
-
+        await LoadCartItemCountFromLocalStorage();
+        
         hubConnection = hubConnection.TryInitialize(_navigationManager);
         await hubConnection.StartAsync();
         NavigationManager.LocationChanged += OnLocationChanged;
@@ -164,6 +165,19 @@
         else
         {
             _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
+        }
+    }
+    private async Task LoadCartItemCountFromLocalStorage()
+    {
+        var cartJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "cartItems");
+        if (!string.IsNullOrEmpty(cartJson))
+        {
+            var cartItems = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
+            cartItemCount = cartItems.Sum(item => item.Quantity);
+        }
+        else
+        {
+            cartItemCount = 0; // Nếu giỏ hàng rỗng, đặt về 0
         }
     }
 
