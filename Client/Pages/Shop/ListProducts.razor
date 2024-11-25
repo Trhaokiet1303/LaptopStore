@@ -2,7 +2,6 @@
 @using LaptopStore.Client.Shared.Shop;
 @layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ListProducts> _localizer
-@inject NavigationManager NavigationManager
 <link href="css/listproducts.css" rel="stylesheet">
 
 
@@ -14,31 +13,13 @@
         <MudText Typo="Typo.body2" Class="filter-text">Lọc</MudText>
     </MudChip>
 
-    <!-- Brand Chips with Logos -->
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/hp-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/asus-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/dell-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/lenovo-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/acer-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/mac-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/msi-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand-chip">
-        <img Class="logo-brand" src="/images/brand/samsung-icon.png" href="#" />
-    </MudChip>
+    <!-- Brand Chips with Logos (có thể nhấn vào biểu tượng để lọc theo một thương hiệu duy nhất) -->
+    @foreach (var brand in _brands)
+    {
+        <MudChip Class="brand-chip" OnClick="@(() => ToggleBrandSelection(brand))">
+            <img Class="logo-brand" src="@brand.LogoPath" />
+        </MudChip>
+    }
 </div>
     <!-- Filter Panel on the Left Side -->
     <MudItem xs="12" md="3" Class="@GetFilterPanelClass()">
@@ -74,31 +55,29 @@
 
                     <!-- Price Filter -->
                     <MudExpansionPanel Text="@_localizer["Price"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedPriceRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label><br>
-                            <MudRadio T="string" Value="under10" /><label>Dưới 10 triệu</label><br>
-                            <MudRadio T="string" Value="10to15" /><label>Từ 10 - 15 triệu</label><br>
-                            <MudRadio T="string" Value="15to20" /><label>Từ 15 - 20 triệu</label><br>
-                            <MudRadio T="string" Value="20to25" /><label>Từ 20 - 25 triệu</label><br>
-                            <MudRadio T="string" Value="25to30" /><label>Từ 25 - 30 triệu</label><br>
-                            <MudRadio T="string" Value="over30" /><label>Trên 30 triệu</label><br>
-                        </MudRadioGroup>
+                        @foreach (var priceRange in _priceRanges)
+                        {
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <MudCheckBox @bind-Checked="priceRange.IsSelected" Label="@priceRange.Name" />
+                            </div>
+                        }
                     </MudExpansionPanel>
 
-                    <!-- Rate Filter -->
+
+                        <!-- Rate Filter -->
                     <MudExpansionPanel Text="@_localizer["Rate"]">
-                        <MudRadioGroup T="string" @bind-SelectedValue="SelectedRateRange">
-                            <MudRadio T="string" Value="all" /><label>Tất cả</label> <br>
-                            <MudRadio T="string" Value="4andAbove" /><label>4 sao trở lên</label><br>
-                            <MudRadio T="string" Value="3andAbove" /><label>3 sao trở lên</label><br>
-                            <MudRadio T="string" Value="2andAbove" /><label>2 sao trở lên</label><br>
-                            <MudRadio T="string" Value="1andAbove" /><label>1 sao trở lên</label><br>
-                        </MudRadioGroup>
+                        @foreach (var rateRange in _rateRanges)
+                        {
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <MudCheckBox @bind-Checked="rateRange.IsSelected" Label="@rateRange.Name" />
+                            </div>
+                        }
                     </MudExpansionPanel>
+
 
                 </MudExpansionPanels>
 
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Áp dụng lọc</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFiltersAndRedirect">Áp dụng lọc</MudButton>
             </MudPaper>
         }
     </MudItem>

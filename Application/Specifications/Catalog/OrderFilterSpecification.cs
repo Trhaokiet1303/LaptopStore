@@ -10,11 +10,9 @@ namespace LaptopStore.Application.Specifications.Catalog
             if (!string.IsNullOrEmpty(searchString))
             {
                 Criteria = p => p.UserId.Contains(searchString) || p.UserAddress != null && (p.UserAddress.Contains(searchString) ||
-
-                 p.UserName.Contains(searchString) ||
-                  p.UserPhone.Contains(searchString) ||
-                p.MethodPayment.Contains(searchString) ||
-                p.StatusOrder.Contains(searchString) || p.IsPayment.ToString().Contains(searchString));
+                p.UserName.Contains(searchString) || p.UserPhone.Contains(searchString) ||
+                p.MethodPayment.Contains(searchString) || p.StatusOrder.Contains(searchString) ||
+                p.IsPayment.ToString().Contains(searchString));
             }
             else
             {

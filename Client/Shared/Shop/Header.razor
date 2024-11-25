@@ -143,28 +143,21 @@
 
     private void OnSearch(string text)
     {
-        if (!string.IsNullOrWhiteSpace(text))
-        {
-            if (NavigationManager.Uri.Contains("/allproducts"))
-            {
-                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
-
-            }
-            else if (NavigationManager.Uri.Contains("/home"))
-            {
-                NavigationManager.NavigateTo($"/home?search={text}", forceLoad: true);
-
-            }
-            else if (NavigationManager.Uri.Contains("/"))
-            {
-                NavigationManager.NavigateTo($"/?search={text}", forceLoad: true);
-
-            }
-        }
-        else
+        if (string.IsNullOrWhiteSpace(text))
         {
             _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
+            return;
         }
+
+        string newUrl = NavigationManager.Uri switch
+        {
+            var uri when uri.Contains("/allproducts") => $"/allproducts?search={text}",
+            var uri when uri.Contains("/home") => $"/home?search={text}",
+            _ => $"/?search={text}"
+        };
+
+        NavigationManager.NavigateTo(newUrl, forceLoad: true);
     }
+
 
 }
