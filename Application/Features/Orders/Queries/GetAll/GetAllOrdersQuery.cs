@@ -38,18 +38,18 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 
         public async Task<Result<List<GetAllOrdersResponse>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            Func<Task<List<Order>>> getAllOrders = () => _unitOfWork.Repository<Order>().GetAllAsync();
-            var orderList = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllOrdersCacheKey, getAllOrders);
+            // Truy vấn trực tiếp từ cơ sở dữ liệu, bỏ qua cache
+            var orders = await _unitOfWork.Repository<Order>().GetAllAsync();
 
-            var mappedOrders = _mapper.Map<List<GetAllOrdersResponse>>(orderList);
+            var mappedOrders = _mapper.Map<List<GetAllOrdersResponse>>(orders);
 
             foreach (var order in mappedOrders)
             {
                 var cartItems = await _unitOfWork.Repository<OrderItem>().Entities
-                    .Where(c => c.OrderId == order.Id) 
-                    .ToListAsync(); 
+                    .Where(c => c.OrderId == order.Id)
+                    .ToListAsync();
 
-                if (cartItems.Any()) 
+                if (cartItems.Any())
                 {
                     order.OrderItem = _mapper.Map<List<GetAllOrderItemsResponse>>(cartItems);
 
@@ -76,6 +76,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 
             return await Result<List<GetAllOrdersResponse>>.SuccessAsync(mappedOrders);
         }
+
     }
 
 

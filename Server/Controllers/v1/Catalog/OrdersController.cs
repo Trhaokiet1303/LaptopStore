@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Linq;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using LaptopStore.Application.Features.Brands.Queries.GetById;
+using LaptopStore.Application.Features.Orders.Commands.Update;
 
 namespace LaptopStore.Server.Controllers.v1.Catalog
 {
@@ -76,5 +77,14 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         {
             return Ok(await _mediator.Send(new DeleteOrderCommand { Id = id }));
         }
+
+        [HttpPost("update-status")]
+        public async Task<IActionResult> UpdateStatus(UpdateOrderStatusCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
     }
 }

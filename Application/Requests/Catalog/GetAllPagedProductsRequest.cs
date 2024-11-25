@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LaptopStore.Application.Specifications.Catalog;
+using System.Collections.Generic;
 
 namespace LaptopStore.Application.Requests.Catalog
 {
@@ -9,5 +10,8 @@ namespace LaptopStore.Application.Requests.Catalog
         public string RateRange { get; set; }
         public List<string> DescriptionFilter { get; set; }
         public List<string> BrandFilter { get; set; }
+        public string[] Orderby { get; set; }
+        public ProductFilterSpecification Filters { get; set; }
+
     }
 }

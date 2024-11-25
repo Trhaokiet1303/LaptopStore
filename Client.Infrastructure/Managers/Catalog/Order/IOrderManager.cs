@@ -6,6 +6,7 @@ using LaptopStore.Application.Features.Orders.Commands.AddEdit;
 using LaptopStore.Domain.Entities.Catalog;
 using LaptopStore.Application.Requests.Catalog;
 using LaptopStore.Application.Features.Orders.Queries.GetById;
+using LaptopStore.Application.Features.Orders.Commands.Update;
 
 namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
 {
@@ -19,5 +20,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
         Task<IResult<int>> DeleteAsync(int id);
 
         Task<IResult> CreateOrderAsync(Domain.Entities.Catalog.Order orderRequest);
+        Task<IResult> UpdateOrderStatusAsync(UpdateOrderStatusCommand command);
+
     }
 }

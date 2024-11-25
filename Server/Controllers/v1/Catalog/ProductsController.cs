@@ -50,5 +50,13 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         {
             return Ok(await _mediator.Send(new DeleteProductCommand { Id = id }));
         }
+
+        [HttpPost("GetAllPaged")]
+        public async Task<IActionResult> GetAllPaged([FromBody] GetAllProductsQuery request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
     }
 }

@@ -16,6 +16,7 @@ using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
+using LaptopStore.Application.Specifications.Catalog;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -54,33 +55,38 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task LoadData(int pageNumber, int pageSize, TableState state)
         {
-            string[] orderings = null;
-            if (!string.IsNullOrEmpty(state.SortLabel))
-            {
-                orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
-            }
+            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
+            var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
 
             var request = new GetAllPagedProductsRequest
             {
-                PageSize = pageSize,
                 PageNumber = pageNumber + 1,
+                PageSize = pageSize,
                 SearchString = _searchString,
-                Orderby = orderings
+                Filters = new ProductFilterSpecification(
+                    searchString: _searchString,
+                    brands: selectedBrands,
+                    descriptions: selectedDescriptions,
+                    priceRange: SelectedPriceRange,
+                    rateRange: SelectedRateRange
+                )
             };
 
             var response = await ProductManager.GetProductsAsync(request);
-            if (response.Succeeded && response.Data != null && response.Data.Any())
+
+            if (response.Succeeded && response.Data != null)
             {
-                _totalItems = response.TotalCount;
                 _pagedData = response.Data;
+                _totalItems = response.TotalCount;
             }
             else
             {
                 _pagedData = new List<GetAllPagedProductsResponse>();
-                _totalItems = 0;
-                _snackBar.Add("Không tìm thấy sản phẩm nào.", Severity.Info);
+                _snackBar.Add("Không tìm thấy sản phẩm nào.", Severity.Warning);
             }
         }
+
+
         private void ToggleFilterPanel()
         {
             isFilterPanelVisible = !isFilterPanelVisible;
@@ -132,14 +138,12 @@ namespace LaptopStore.Client.Pages.Shop
         private string SelectedRateRange = "all";
 
         // Filter the product data based on selected filters
-        private void ApplyFilters()
+        private async void ApplyFilters()
         {
-            ApplyBrandFilter();
-            if (_pagedData == null) return;
-
-            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
-            var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
+            await LoadData(0, _table?.RowsPerPage ?? 10, new TableState());
         }
+
+
         private void ApplyBrandFilter()
         {
             if (_pagedData == null) return;

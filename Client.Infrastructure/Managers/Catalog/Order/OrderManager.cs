@@ -9,6 +9,8 @@ using LaptopStore.Application.Features.Orders.Commands.AddEdit;
 using LaptopStore.Application.Requests.Catalog;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using LaptopStore.Application.Features.Orders.Queries.GetById;
+using LaptopStore.Application.Features.Orders.Commands.Update;
+using LaptopStore.Client.Infrastructure.Routes;
 
 namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
 {
@@ -50,5 +52,11 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
             var response = await _httpClient.PostAsJsonAsync(Routes.OrdersEndpoints.Save, request);
             return await response.ToResult();
         }
+        public async Task<IResult> UpdateOrderStatusAsync(UpdateOrderStatusCommand command)
+        {
+            var response = await _httpClient.PostAsJsonAsync(OrdersEndpoints.UpdateStatus, command);
+            return await response.ToResult();
+        }
+
     }
 }

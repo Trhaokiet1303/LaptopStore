@@ -15,7 +15,7 @@ namespace LaptopStore.Client.Infrastructure.Routes
                 {
                     url += $"{orderByPart},";
                 }
-                url = url[..^1]; // loose training ,
+                url = url[..^1]; // Xóa dấu phẩy cuối cùng
             }
             return url;
         }
@@ -32,14 +32,8 @@ namespace LaptopStore.Client.Infrastructure.Routes
             return $"api/v1/products/image/{productId}";
         }
 
-        internal static string GetProductById(GetProductByIdResponse product)
-        {
-            throw new NotImplementedException();
-        }
-
         public static string Save = "api/v1/products";
         public static string Delete = "api/v1/products";
-        public static string ChangePassword = "api/identity/account/changepassword";
-        public static string UpdateProfile = "api/identity/account/updateprofile";
     }
+
 }

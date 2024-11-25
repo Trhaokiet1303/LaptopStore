@@ -6,6 +6,7 @@ using LaptopStore.Application.Requests.Catalog;
 using LaptopStore.Client.Extensions;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
+using LaptopStore.Infrastructure.Services;
 using LaptopStore.Shared.Constants.Application;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -23,6 +24,7 @@ namespace LaptopStore.Client.Pages.Shop
 {
     public partial class Cart
     {
+        [Parameter] public EventCallback OnCartUpdated { get; set; }
         [Inject] private IProductManager ProductManager { get; set; }
         [Inject] private IOrderManager OrderManager { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
@@ -42,7 +44,6 @@ namespace LaptopStore.Client.Pages.Shop
             if (!string.IsNullOrEmpty(cartJson))
             {
                 cartItems = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
-
                 // Tải hình ảnh cho từng sản phẩm
                 foreach (var item in cartItems)
                 {
@@ -50,7 +51,17 @@ namespace LaptopStore.Client.Pages.Shop
                 }
             }
         }
+        private async Task UpdateCart()
+        {
+            // Logic cập nhật giỏ hàng (ví dụ: thay đổi số lượng)
+            await SaveCartToLocalStorage();
 
+            // Gọi EventCallback để thông báo cho Header
+            if (OnCartUpdated.HasDelegate)
+            {
+                await OnCartUpdated.InvokeAsync();
+            }
+        }
         private bool IsQuantityLessThanOrEqualToOne(OrderItem item) => item.Quantity <= 1;
 
         private async Task UpdateQuantity(OrderItem item, int newQuantity)

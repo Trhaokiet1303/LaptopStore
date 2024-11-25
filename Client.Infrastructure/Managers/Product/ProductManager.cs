@@ -39,9 +39,21 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
 
         public async Task<PaginatedResult<GetAllPagedProductsResponse>> GetProductsAsync(GetAllPagedProductsRequest request)
         {
-            var response = await _httpClient.GetAsync(Routes.ProductsEndpoints.GetAllPaged(request.PageNumber, request.PageSize, request.SearchString, request.Orderby));
+            // Gọi phương thức GetAllPaged để tạo URL động
+            var response = await _httpClient.GetAsync(
+                Routes.ProductsEndpoints.GetAllPaged(
+                    request.PageNumber,
+                    request.PageSize,
+                    request.SearchString,
+                    request.Orderby
+                )
+            );
+
             return await response.ToPaginatedResult<GetAllPagedProductsResponse>();
         }
+
+
+
 
         public async Task<IResult<int>> SaveAsync(AddEditProductCommand request)
         {

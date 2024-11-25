@@ -13,6 +13,7 @@ using LaptopStore.Shared.Constants.Localization;
 using LaptopStore.Application.Interfaces.Common;
 using MudBlazor.Services;
 using MediatR;
+using LaptopStore.Infrastructure.Services;
 namespace LaptopStore.Client
 {
     public static class Program

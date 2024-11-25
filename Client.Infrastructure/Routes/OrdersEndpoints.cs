@@ -12,5 +12,6 @@
         public static string Delete = "api/v1/orders";
         public static string Save = "api/v1/orders/add-edit";
         public static string GetCount = "api/v1/orders/count";
+        public static string UpdateStatus = "api/v1/orders/update-status";
     }
 }

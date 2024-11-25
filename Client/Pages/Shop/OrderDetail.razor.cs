@@ -1,6 +1,5 @@
-﻿using LaptopStore.Application.Features.Orders.Commands.AddEdit;
+﻿using LaptopStore.Application.Features.Orders.Commands.Update;
 using LaptopStore.Application.Features.Orders.Queries.GetAll;
-using LaptopStore.Application.Features.Orders.Queries.GetById;
 using LaptopStore.Client.Extensions;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 using LaptopStore.Client.Shared.Dialogs;
@@ -18,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace LaptopStore.Client.Pages.Shop
 {
-    public partial class OrderDetail : ComponentBase // Đảm bảo lớp kế thừa từ ComponentBase
+    public partial class OrderDetail : ComponentBase
     {
         [Inject] private IOrderManager OrderManager { get; set; }
         [Inject] private AuthenticationStateProvider AuthenticationProvider { get; set; }
@@ -33,6 +32,7 @@ namespace LaptopStore.Client.Pages.Shop
             await LoadOrdersAsync();
             IsLoading = false;
         }
+
         private async Task LoadOrdersAsync()
         {
             var state = await AuthenticationProvider.GetAuthenticationStateAsync();
@@ -48,65 +48,72 @@ namespace LaptopStore.Client.Pages.Shop
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
+                Console.WriteLine($"Orders loaded from server: {result.Data.Count} items.");
                 Orders = result.Data.Where(o => o.UserId == userId).ToList();
             }
             else
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Không thể tải danh sách đơn hàng!");
             }
-
         }
+
 
         private async Task ConfirmCancelOrder(int orderId)
         {
-            var orderToCancel = Orders.FirstOrDefault(o => o.Id == orderId);
-            if (orderToCancel == null)
-            {
-                _snackBar.Add("Đơn hàng không tồn tại!", Severity.Error);
-                return;
-            }
+            // Hiển thị trạng thái đang xử lý
+            IsLoading = true;
 
-            // Tạo đối tượng AddEditOrderCommand với đầy đủ thông tin
-            var command = new AddEditOrderCommand
+            // Gửi yêu cầu cập nhật trạng thái hủy đơn hàng tới server
+            var response = await OrderManager.UpdateOrderStatusAsync(new UpdateOrderStatusCommand
             {
-                Id = orderToCancel.Id,
-                UserId = orderToCancel.UserId,
-                UserName = orderToCancel.UserName,
-                UserPhone = orderToCancel.UserPhone,
-                UserAddress = orderToCancel.UserAddress,
-                TotalPrice = orderToCancel.TotalPrice,
-                MethodPayment = orderToCancel.MethodPayment,
-                StatusOrder = "Đã Hủy", // Cập nhật trạng thái
-                IsPayment = orderToCancel.IsPayment,
-                OrderItem = orderToCancel.OrderItem.Select(item => new OrderItem
-                {
-                    ProductId = item.ProductId,
-                    ProductName = item.ProductName,
-                    ProductImage = item.ProductImage,
-                    ProductPrice = item.ProductPrice,
-                    Quantity = item.Quantity
-                }).ToList()
-            };
-
-            // Gửi yêu cầu cập nhật tới API
-            var response = await OrderManager.SaveAsync(command);
+                OrderId = orderId,
+                NewStatus = "Đã Hủy"
+            });
 
             if (response.Succeeded)
             {
                 _snackBar.Add("Đơn hàng đã được hủy thành công!", Severity.Success);
+                Orders.Clear();
+                // Tải lại toàn bộ danh sách đơn hàng từ server
+                await LoadOrdersAsync();
+                StateHasChanged();
+            }
+            else
+            {
+                _snackBar.Add($"Không thể hủy đơn hàng. Lỗi: {response.Messages[0]}", Severity.Error);
+            }
 
-                // Cập nhật danh sách hiển thị
+            // Kết thúc trạng thái đang xử lý
+            IsLoading = false;
+        }
+
+
+        private async Task UpdateOrderStatus(int orderId, string newStatus)
+        {
+            // Hiển thị trạng thái đang xử lý
+            IsLoading = true;
+
+            // Gửi yêu cầu cập nhật trạng thái tới server
+            var response = await OrderManager.UpdateOrderStatusAsync(new UpdateOrderStatusCommand
+            {
+                OrderId = orderId,
+                NewStatus = newStatus
+            });
+
+            if (response.Succeeded)
+            {
+                _snackBar.Add("Trạng thái đơn hàng đã được cập nhật thành công!", Severity.Success);
+
+                // Tải lại toàn bộ danh sách đơn hàng từ server
                 await LoadOrdersAsync();
             }
             else
             {
-                _snackBar.Add("Không thể hủy đơn hàng. Vui lòng thử lại!", Severity.Error);
+                _snackBar.Add($"Không thể cập nhật trạng thái đơn hàng. Lỗi: {response.Messages[0]}", Severity.Error);
             }
+
+            // Kết thúc trạng thái đang xử lý
+            IsLoading = false;
         }
-
-
-
-
-
     }
 }
