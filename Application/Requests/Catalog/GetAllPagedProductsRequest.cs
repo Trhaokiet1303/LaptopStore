@@ -6,12 +6,9 @@ namespace LaptopStore.Application.Requests.Catalog
     public class GetAllPagedProductsRequest : PagedRequest
     {
         public string SearchString { get; set; }
-        public string PriceRange { get; set; }
-        public string RateRange { get; set; }
-        public List<string> DescriptionFilter { get; set; }
-        public List<string> BrandFilter { get; set; }
-        public string[] Orderby { get; set; }
-        public ProductFilterSpecification Filters { get; set; }
-
+        public List<string> DescriptionFilter { get; set; } = new();
+        public List<string> BrandFilter { get; set; } = new();
+        public List<string> PriceRangeFilter { get; set; } = new();
+        public List<string> RateRangeFilter { get; set; } = new();
     }
 }
