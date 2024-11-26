@@ -39,6 +39,7 @@ namespace LaptopStore.Client.Pages.Shop
         private int _currentPage;
         private string _searchString = "";
         private bool _loaded;
+        private List<Product> allProducts = new List<Product>();
 
         public List<BrandFilter> _brands = new List<BrandFilter>
         {
@@ -85,6 +86,14 @@ namespace LaptopStore.Client.Pages.Shop
             var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
             var query = QueryHelpers.ParseQuery(uri.Query);
 
+            ApplyFiltersFromQuery(query);
+
+            await LoadData(0, 12, new TableState());
+            _loaded = true;
+        }
+
+        private void ApplyFiltersFromQuery(Dictionary<string, Microsoft.Extensions.Primitives.StringValues> query)
+        {
             if (query.TryGetValue("search", out var searchValue))
             {
                 _searchString = searchValue.ToString();
@@ -125,52 +134,69 @@ namespace LaptopStore.Client.Pages.Shop
                     rate.IsSelected = selectedRateRanges.Contains(rate.Name);
                 }
             }
+        }
 
-
-            await LoadData(0, 10, new TableState());
-            _loaded = true;
+        private async Task LoadMoreProducts()
+        {
+            _currentPage++;
+            await LoadData(_currentPage, 12, new TableState());
         }
 
 
         private async Task LoadData(int pageNumber, int pageSize, TableState state)
         {
-            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
-            var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
-            var selectedPriceRanges = _priceRanges.Where(p => p.IsSelected).ToList();
-            var selectedRateRanges = _rateRanges.Where(r => r.IsSelected).ToList(); 
-            var request = new GetAllPagedProductsRequest
+            // Kiểm tra nếu chưa tải dữ liệu tất cả sản phẩm
+            if (allProducts.Count == 0)
             {
-                PageNumber = pageNumber + 1,
-                PageSize = pageSize,
-                SearchString = _searchString,
-                BrandFilter = selectedBrands,
-                DescriptionFilter = selectedDescriptions,
-                PriceRangeFilter = selectedPriceRanges.Select(p => p.Name).ToList(), 
-                RateRangeFilter = selectedRateRanges.Select(r => r.Name).ToList()
-            };
+                var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
+                var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
+                var selectedPriceRanges = _priceRanges.Where(p => p.IsSelected).ToList();
+                var selectedRateRanges = _rateRanges.Where(r => r.IsSelected).ToList();
 
-            var response = await ProductManager.GetProductsAsync(request);
+                var request = new GetAllPagedProductsRequest
+                {
+                    PageNumber = 1,  
+                    PageSize = int.MaxValue, 
+                    SearchString = _searchString,
+                    BrandFilter = selectedBrands,
+                    DescriptionFilter = selectedDescriptions,
+                    PriceRangeFilter = selectedPriceRanges.Select(p => p.Name).ToList(),
+                    RateRangeFilter = selectedRateRanges.Select(r => r.Name).ToList()
+                };
 
-            if (response.Succeeded && response.Data != null)
+                var response = await ProductManager.GetProductsAsync(request);
+
+                if (response.Succeeded && response.Data != null)
+                {
+                    allProducts = ConvertToProductList(response.Data);
+                    _totalItems = response.TotalCount;
+                }
+                else
+                {
+                    allProducts = new List<Product>();
+                    _snackBar.Add("No products found.", Severity.Warning);
+                }
+            }
+
+            // Áp dụng bộ lọc lên tất cả sản phẩm
+            var filteredProducts = ApplyFilters(allProducts);
+
+            var newPagedData = ConvertToPagedData(filteredProducts.Skip(pageNumber * pageSize).Take(pageSize).ToList());
+
+            // Nếu đã có dữ liệu trước đó, thì kết hợp chúng lại
+            if (_pagedData != null)
             {
-                _pagedData = response.Data;  
-
-                var productList = ConvertToProductList(_pagedData);
-
-                productList = FilterByBrand(productList);
-                productList = FilterByDescription(productList);
-                productList = FilterByPrice(productList);  
-                productList = FilterByRating(productList);
-
-                _pagedData = ConvertToPagedData(productList);
-                _totalItems = response.TotalCount;
+                _pagedData = _pagedData.Concat(newPagedData).ToList();
             }
             else
             {
-                _pagedData = new List<GetAllPagedProductsResponse>();
-                _snackBar.Add("No products found.", Severity.Warning);
+                _pagedData = newPagedData.ToList();
             }
+
+            _currentPage = pageNumber;
         }
+
+
 
         private List<Product> ConvertToProductList(IEnumerable<GetAllPagedProductsResponse> responseData)
         {
@@ -240,6 +266,8 @@ namespace LaptopStore.Client.Pages.Shop
         // Filter the product data based on selected filters
         private void ApplyFiltersAndRedirect()
         {
+
+
             var queryParams = new List<string>();
 
             // Apply filters as usual
@@ -263,6 +291,17 @@ namespace LaptopStore.Client.Pages.Shop
                 queryParams.Add($"{paramName}={string.Join(",", selectedItems)}");
             }
         }
+
+        private List<Product> ApplyFilters(List<Product> products)
+        {
+            products = FilterByBrand(products);
+            products = FilterByDescription(products);
+            products = FilterByPrice(products);
+            products = FilterByRating(products);
+
+            return products;
+        }
+
 
         private List<Product> FilterByBrand(List<Product> products)
         {
@@ -348,6 +387,8 @@ namespace LaptopStore.Client.Pages.Shop
             var dialog = _dialogService.Show<ViewProduct>("Thông tin sản phẩm", parameters, options);
             var result = await dialog.Result;
         }
+
+
         private string GetFilterPanelClass() =>
             isFilterPanelVisible ? "filter-panel-visible" : "filter-panel-hidden";
 

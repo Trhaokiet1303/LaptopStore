@@ -89,18 +89,6 @@ namespace LaptopStore.Client.Pages.Admin.Products
             }
         }
 
-        private async Task LoadImageAsync()
-        {
-            var data = await ProductManager.GetProductImageAsync(ProductIMG.Id);
-            if (data.Succeeded)
-            {
-                var imageData = data.Data;
-                if (!string.IsNullOrEmpty(imageData))
-                {
-                    ProductIMG.ImageDataURL = imageData;
-                }
-            }
-        }
         private void OnSearch(string text)
         {
             _searchString = text;

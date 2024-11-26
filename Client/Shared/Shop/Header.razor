@@ -201,7 +201,7 @@
 
             if (currentSearch != text)
             {
-                NavigationManager.NavigateTo($"/allproducts?search={text}");
+                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
             }
             else
             {
@@ -213,6 +213,7 @@
             _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
         }
     }
+
 
 
 }

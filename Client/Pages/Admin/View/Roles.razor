@@ -89,7 +89,7 @@ else
             <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]</MudSwitch>
         </FooterContent>
         <PagerContent>
-            <TablePager />
+            <MudTablePager RowsPerPageString="@_localizer["RowsPerPageString"]" InfoFormat="@_localizer["InfoFormat"]" />
         </PagerContent>
     </MudTable>
 }
