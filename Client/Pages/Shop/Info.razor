@@ -1,0 +1,234 @@
+﻿@page "/info"
+@using LaptopStore.Client.Shared.Shop;
+@layout ShopLayout
+<link href="css/info.css" rel="stylesheet">
+
+<MudPaper>
+
+    <nav class="info-nav">
+        <ul>
+            <li><a @onclick='() => ScrollToSection("gioithieu")'>Giới Thiệu</a></li>
+            <li><a @onclick='() => ScrollToSection("sanpham")'>Sản Phẩm</a></li>
+            <li><a @onclick='() => ScrollToSection("chucnang")'>Chức Năng Trang Web</a></li>
+            <li><a @onclick='() => ScrollToSection("lienhe")'>Liên Hệ</a></li>
+            <li><a @onclick='() => ScrollToSection("header")'>Đầu trang</a></li>
+        </ul>
+    </nav>
+
+
+    <MudContainer Class="info-title">
+        <MudText Typo="Typo.h1">Chào Mừng Đến Với LaptopStore</MudText>
+    </MudContainer>
+
+    <MudContainer Class="main-info">
+        <section id="gioithieu">
+            <MudText Class="title-h2">Giới Thiệu</MudText>
+            <MudText Class="info-p">
+                <p>Chào mừng bạn đến với <strong>LaptopStore</strong>, nơi mà công nghệ hiện đại và sự tiện lợi được đặt lên hàng đầu. Chúng tôi tự hào là một trong những cửa hàng laptop hàng đầu tại Việt Nam, cung cấp một loạt sản phẩm đa dạng và chất lượng cao, phù hợp với mọi nhu cầu từ học tập, làm việc đến giải trí.</p> <br />
+
+                <p>Với sứ mệnh mang đến những trải nghiệm công nghệ tối ưu và đáng tin cậy, chúng tôi luôn chú trọng đến việc lựa chọn các sản phẩm từ những thương hiệu laptop uy tín trên toàn cầu. Mỗi sản phẩm tại LaptopStore đều được kiểm tra kỹ lưỡng về chất lượng và hiệu suất, đảm bảo mang lại sự yên tâm và hài lòng cho khách hàng.</p> <br />
+
+                <p>Không chỉ cung cấp các dòng laptop hiện đại, chúng tôi còn cam kết hỗ trợ khách hàng xây dựng giải pháp công nghệ toàn diện, từ phụ kiện, phần mềm đến các dịch vụ hỗ trợ kỹ thuật. Các sản phẩm của chúng tôi bao gồm laptop cho sinh viên, laptop chơi game, laptop doanh nhân, và nhiều dòng sản phẩm khác đáp ứng mọi nhu cầu đa dạng.</p><br />
+
+                <p>Đội ngũ nhân viên của chúng tôi luôn sẵn sàng hỗ trợ và tư vấn chuyên sâu, giúp bạn tìm được sản phẩm phù hợp nhất với yêu cầu của mình. Ngoài ra, chúng tôi thường xuyên tổ chức các chương trình khuyến mãi và sự kiện công nghệ đặc biệt để mang lại giá trị cao nhất cho khách hàng.</p> <br />
+
+                <p>Hãy đến với <strong>LaptopStore</strong> để khám phá thế giới công nghệ hiện đại và đa dạng. Chúng tôi cam kết mang đến cho bạn những trải nghiệm mua sắm tuyệt vời, chất lượng và đáng nhớ.</p>
+            </MudText>
+        </section>
+
+        <section id="sanpham">
+            <h2>Thế giới laptop hiện đại, đáp ứng mọi nhu cầu của bạn</h2>
+            <p>
+                Bạn đang tìm kiếm một chiếc laptop phù hợp để học tập, làm việc hay giải trí? Hãy để <strong>LaptopStore</strong> đồng hành cùng bạn! Với đa dạng các dòng sản phẩm, từ Laptop Gaming, Laptop Văn phòng, Laptop Đồ họa đến Laptop AI, chúng tôi cam kết mang đến sự lựa chọn tốt nhất cho nhu cầu của bạn.
+            </p>
+
+            <div class="store-info-container">
+                <div class="store-info-item">
+                    <h3>Laptop Gaming</h3>
+                    <div class="store-info info1">
+                        <img src="/images/info/gaming.png" alt="Laptop Gaming" />
+                        <ul>
+                            <li>
+                                Hiệu suất vượt trội: Trang bị các vi xử lý và card đồ họa mạnh mẽ, đảm bảo trải nghiệm chơi game mượt mà.
+                            </li>
+                            <li>
+                                Màn hình sắc nét: Hỗ trợ tần số quét cao, giúp bạn không bỏ lỡ bất kỳ chi tiết nào trong trò chơi.
+                            </li>
+                            <li>
+                                Thiết kế tản nhiệt tối ưu: Hệ thống làm mát hiện đại, giữ cho laptop luôn hoạt động ổn định.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="store-info-item">
+                    <h3>Laptop Văn phòng</h3>
+                    <div class="store-info info2">
+                        <img src="/images/info/office.png" alt="Laptop Văn phòng" />
+                        <ul>
+                            <li>
+                                Thiết kế gọn nhẹ: Dễ dàng mang theo trong công việc hàng ngày hoặc đi công tác
+                            </li>
+                            <li>
+                                Thời lượng pin dài: Đảm bảo làm việc cả ngày mà không lo ngắt quãng
+                            </li>
+                            <li>
+                                Đầy đủ cổng kết nối: Hỗ trợ kết nối linh hoạt với các thiết bị ngoại vi
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="store-info-item">
+                    <h3>Laptop Đồ họa</h3>
+                    <div class="store-info info3">
+                        <img src="/images/info/graphic.png" alt="Laptop Đồ họa" />
+                        <ul>
+                            <li>
+                                Hiệu năng đồ họa mạnh mẽ: Phù hợp cho các phần mềm thiết kế như Photoshop, Illustrator, AutoCAD.
+                            </li>
+                            <li>
+                                Màn hình chất lượng cao: Độ phân giải cao, hỗ trợ màu sắc chính xác, lý tưởng cho công việc sáng tạo.
+                            </li>
+                            <li>
+                                Bộ nhớ lớn: Đáp ứng tốt nhu cầu lưu trữ các dự án lớn và render video.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <h3 class="col-name">Các dòng Laptop AI và phụ kiện</h3>
+                <div class="col">
+                    <div class="store-info info4">
+                        <img src="/images/info/AI.png" alt="Laptop AI" />
+                        <ul>
+                            <li>
+                                Cấu hình vượt trội: Hỗ trợ các ứng dụng AI/ML với CPU, GPU mạnh mẽ còn có NPU.
+                            </li>
+                            <li>
+                                Hỗ trợ các framework AI: Tối ưu cho TensorFlow, PyTorch và các công cụ phát triển AI khác.
+                            </li>
+                            <li>
+                                Khả năng mở rộng: Hỗ trợ nâng cấp RAM và ổ cứng dễ dàng để xử lý các dự án lớn.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="store-info info5">
+                        <img src="/images/info/phukien.png" alt="Phụ kiện Laptop" />
+                        <ul>
+                            <li>
+                                Phụ kiện đa dạng: Túi đựng laptop, chuột không dây, đế tản nhiệt, và nhiều hơn nữa.
+                            </li>
+                            <li>
+                                Đảm bảo chất lượng: Phụ kiện chính hãng, bảo hành đầy đủ.
+                            </li>
+                            <li>
+                                Tăng hiệu suất làm việc: Giúp bạn tối ưu hóa trải nghiệm sử dụng laptop hàng ngày.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                Và còn rất nhiều dòng sản phẩm và phụ kiện thú vị khác đang chờ bạn khám phá! Hãy để <strong>LaptopStore</strong> giúp bạn tìm được chiếc laptop hoàn hảo nhất để phát triển sự nghiệp và tận hưởng cuộc sống.
+            </p>
+        </section>
+
+
+        <section id="chucnang">
+            <MudText Class="title-h2">Chức Năng Trang Web</MudText>
+            <MudList>
+                <MudListItem>
+                    <MudText>
+                        <strong>Đăng nhập:</strong> Người dùng có thể đăng nhập vào tài khoản của mình để truy cập các tính năng cá nhân hóa...
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Xem thông tin sản phẩm:</strong> Người dùng có thể xem chi tiết về các sản phẩm, bao gồm mô tả, giá cả và hình ảnh sản phẩm.
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Thêm vào giỏ hàng:</strong> Người dùng có thể thêm sản phẩm vào giỏ hàng và tiếp tục mua sắm hoặc tiến hành thanh toán.
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Xem thông tin cá nhân:</strong> Người dùng có thể xem và cập nhật thông tin cá nhân, bao gồm địa chỉ giao hàng, số điện thoại và  email.
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Thanh toán sản phẩm:</strong> Người dùng có thể tiến hành thanh toán cho các sản phẩm đã chọn trong giỏ hàng qua các phương thức thanh toán khác nhau.
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Quản lý sản phẩm (Admin):</strong> Quản trị viên có thể quản lý sản phẩm trên trang web, bao gồm thêm mới, xóa, và chỉnh sửa thông tin sản phẩm.
+                    </MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText>
+                        <strong>Quản lý đơn hàng (Admin):</strong> Quản trị viên có thể theo dõi và quản lý các đơn hàng, bao gồm thay đổi trạng thái đơn hàng như "Đã giao," "Đang giao," hoặc "Hủy đơn hàng."
+                    </MudText>
+                </MudListItem>
+            </MudList>
+        </section>
+
+         <section id="lienhe">
+            <MudText Class="title-h2">Liên Hệ</MudText>
+            <MudList>
+                <MudListItem><MudText><strong>Họ và tên sinh viên:</strong> Trần Hào Kiệt - 2151150042</MudText></MudListItem>
+                <MudListItem><MudText><strong>Họ và tên sinh viên:</strong> Thái Văn Tĩnh - 2151150063</MudText></MudListItem>
+                <MudListItem>
+                    <MudText><strong>Địa chỉ:</strong> 70 Tô Ký, Phường Tân Chánh Hiệp, Quận 12, TP. Hồ Chí Minh</MudText>
+                    <div class="info-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.279711618045!2d106.6168634184111!3d10.866317181911114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b2a11844fb9%3A0xbed3d5f0a6d6e0fe!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyBHaWFvIFRow7RuZyBW4bqtbiBU4bqjaSBUaMOgbmggUGjhu5EgSOG7kyBDaMOtIE1pbmggKFVUSCkgLSBDxqEgc-G7nyAz!5e0!3m2!1svi!2s!4v1723792256462!5m2!1svi!2s"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </MudListItem>
+            </MudList>
+        </section>
+    </MudContainer>
+</MudPaper>
+@code {
+    [Inject] IJSRuntime JSRuntime { get; set; }
+
+    private async Task ScrollToSection(string sectionId)
+    {
+        if (!string.IsNullOrEmpty(sectionId))
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToSection", sectionId);
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Gọi hàm JavaScript để cuộn đến phần tử nếu có #id trong URL
+            await JSRuntime.InvokeVoidAsync("scrollToSectionOnLoad");
+        }
+    }
+}
+
+<script>
+    window.scrollToSectionOnLoad = () => {
+        const hash = window.location.hash.substring(1); // Lấy phần #id từ URL
+        if (hash) {
+            const targetElement = document.getElementById(hash);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    };
+
+    window.scrollToSection = (sectionId) => {
+        const targetElement = document.getElementById(sectionId);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+
+</script>
