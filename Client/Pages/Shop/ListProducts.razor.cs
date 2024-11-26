@@ -40,6 +40,44 @@ namespace LaptopStore.Client.Pages.Shop
         private string _searchString = "";
         private bool _loaded;
 
+        public List<BrandFilter> _brands = new List<BrandFilter>
+        {
+            new BrandFilter { Name = "Macbook", LogoPath = "/images/brand/mac-icon.png" },
+            new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
+            new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
+            new BrandFilter { Name = "MSI", LogoPath = "/images/brand/msi-icon.png" },
+            new BrandFilter { Name = "HP", LogoPath = "/images/brand/hp-icon.png" },
+            new BrandFilter { Name = "Acer", LogoPath = "/images/brand/acer-icon.png" },
+            new BrandFilter { Name = "Samsung", LogoPath = "/images/brand/samsung-icon.png" },
+            new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
+        };
+
+        public List<DescriptionFilter> _descriptions = new List<DescriptionFilter>
+        {
+            new DescriptionFilter { Name = "Gaming",DescriptionPath="/images/description/Gaming-Lap.png" },
+            new DescriptionFilter { Name = "Office",DescriptionPath="/images/description/Office-Lap.png" },
+            new DescriptionFilter { Name = "Ultrabook",DescriptionPath="/images/description/Book-Lap.png" },
+            new DescriptionFilter { Name = "AI",DescriptionPath="/images/description/AI-Lap.png" },
+            new DescriptionFilter { Name = "Graphic",DescriptionPath="/images/description/Graphic-Lap.png" },
+        };
+
+        public List<PriceFilter> _priceRanges = new List<PriceFilter>
+        {
+            new PriceFilter { Name = "Dưới 10Tr", MinPrice = 0, MaxPrice = 10000000 },
+            new PriceFilter { Name = "10Tr - 15Tr", MinPrice = 10000000, MaxPrice = 15000000 },
+            new PriceFilter { Name = "15Tr - 20Tr", MinPrice = 15000000, MaxPrice = 20000000 },
+            new PriceFilter { Name = "20Tr - 25Tr", MinPrice = 20000000, MaxPrice = 25000000 },
+            new PriceFilter { Name = "25Tr - 30Tr", MinPrice = 25000000, MaxPrice = 30000000 },
+            new PriceFilter { Name = "Trên 30Tr", MinPrice = 30000000, MaxPrice = int.MaxValue }
+        };
+
+        public List<RateFilter> _rateRanges = new List<RateFilter>
+        {
+            new RateFilter { Name = "4 sao trở lên", MinRate = 4 },
+            new RateFilter { Name = "3 sao trở lên", MinRate = 3 },
+            new RateFilter { Name = "2 sao trở lên", MinRate = 2 },
+            new RateFilter { Name = "1 sao trở lên", MinRate = 1 }
+        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -192,74 +230,7 @@ namespace LaptopStore.Client.Pages.Shop
             ApplyFiltersAndRedirect();
         }
 
-        private class BrandFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public string LogoPath { get; set; }
-        }
-
-        private class DescriptionFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public string DescriptionPath { get; set; }
-        }
-
-        private class PriceFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public int MinPrice { get; set; }
-            public int MaxPrice { get; set; }
-        }
-
-        private class RateFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public decimal MinRate { get; set; }
-        }
-
-
-        private List<BrandFilter> _brands = new List<BrandFilter>
-        {
-            new BrandFilter { Name = "Apple", LogoPath = "/images/brand/mac-icon.png" },
-            new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
-            new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
-            new BrandFilter { Name = "MSI", LogoPath = "/images/brand/msi-icon.png" },
-            new BrandFilter { Name = "HP", LogoPath = "/images/brand/hp-icon.png" },
-            new BrandFilter { Name = "Acer", LogoPath = "/images/brand/acer-icon.png" },
-            new BrandFilter { Name = "Samsung", LogoPath = "/images/brand/samsung-icon.png" },
-            new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
-        };
-
-        private List<DescriptionFilter> _descriptions = new List<DescriptionFilter>
-        {
-            new DescriptionFilter { Name = "Gaming",DescriptionPath="/images/description/Gaming-Lap.png" },
-            new DescriptionFilter { Name = "Office",DescriptionPath="/images/description/Office-Lap.png" },
-            new DescriptionFilter { Name = "Ultrabook",DescriptionPath="/images/description/Book-Lap.png" },
-            new DescriptionFilter { Name = "AI",DescriptionPath="/images/description/AI-Lap.png" },
-            new DescriptionFilter { Name = "Graphic",DescriptionPath="/images/description/Graphic-Lap.png" },
-        };
-
-        private List<PriceFilter> _priceRanges = new List<PriceFilter>
-        {
-            new PriceFilter { Name = "Under 10M", MinPrice = 0, MaxPrice = 10000000 },
-            new PriceFilter { Name = "10M to 15M", MinPrice = 10000000, MaxPrice = 15000000 },
-            new PriceFilter { Name = "15M to 20M", MinPrice = 15000000, MaxPrice = 20000000 },
-            new PriceFilter { Name = "20M to 25M", MinPrice = 20000000, MaxPrice = 25000000 },
-            new PriceFilter { Name = "25M to 30M", MinPrice = 25000000, MaxPrice = 30000000 },
-            new PriceFilter { Name = "Over 30M", MinPrice = 30000000, MaxPrice = int.MaxValue }
-        };
-
-        private List<RateFilter> _rateRanges = new List<RateFilter>
-        {
-            new RateFilter { Name = "4 and Above", MinRate = 4 },
-            new RateFilter { Name = "3 and Above", MinRate = 3 },
-            new RateFilter { Name = "2 and Above", MinRate = 2 },
-            new RateFilter { Name = "1 and Above", MinRate = 1 }
-        };
+        
 
         private string SelectedPriceRange = "all";
         private int CustomPriceRangeStart;

@@ -1,5 +1,7 @@
 ﻿using LaptopStore.Application.Specifications.Base;
 using LaptopStore.Domain.Entities.Catalog;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LaptopStore.Application.Specifications.Catalog
 {
@@ -24,5 +26,33 @@ namespace LaptopStore.Application.Specifications.Catalog
                 Criteria = p => p.Barcode != null;
             }
         }
+    }
+    public class BrandFilter
+    {
+        public string Name { get; set; }
+        public bool IsSelected { get; set; }
+        public string LogoPath { get; set; }
+    }
+
+    public class DescriptionFilter
+    {
+        public string Name { get; set; }
+        public bool IsSelected { get; set; }
+        public string DescriptionPath { get; set; }
+    }
+
+    public class PriceFilter
+    {
+        public string Name { get; set; }
+        public bool IsSelected { get; set; }
+        public int MinPrice { get; set; }
+        public int MaxPrice { get; set; }
+    }
+
+    public class RateFilter
+    {
+        public string Name { get; set; }
+        public bool IsSelected { get; set; }
+        public decimal MinRate { get; set; }
     }
 }
