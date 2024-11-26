@@ -43,12 +43,7 @@ namespace LaptopStore.Client.Pages.Shop
         protected override async Task OnInitializedAsync()
         {
             _loaded = false;
-            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-            var query = QueryHelpers.ParseQuery(uri.Query);
-            if (query.TryGetValue("search", out var searchValue))
-            {
-                _searchString = searchValue.ToString();
-            }
+            
             await LoadData(0, 10, new TableState());
             ApplyFilters(); 
             _loaded = true;

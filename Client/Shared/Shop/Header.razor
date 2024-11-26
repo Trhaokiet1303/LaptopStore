@@ -202,7 +202,7 @@
 
             if (currentSearch != text)
             {
-                NavigationManager.NavigateTo($"/allproducts?search={text}");
+                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
             }
             else
             {
@@ -214,6 +214,7 @@
             _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
         }
     }
+<<<<<<< HEAD
     private async Task LoadCartItemCountFromLocalStorage()
     {
         var cartJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "cartItems");
@@ -227,4 +228,9 @@
             cartItemCount = 0; // Nếu giỏ hàng rỗng, đặt về 0
         }
     }
+=======
+
+
+
+>>>>>>> fix filter, load more products
 }
