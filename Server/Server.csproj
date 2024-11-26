@@ -51,9 +51,6 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\Client\Client.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\Images\Products\" />
-  </ItemGroup>
 
 
 </Project>

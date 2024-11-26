@@ -91,6 +91,55 @@
         
         hubConnection = hubConnection.TryInitialize(_navigationManager);
         await hubConnection.StartAsync();
+
+        hubConnection.On(ApplicationConstants.SignalR.ReceiveRegenerateTokens, async () =>
+        {
+            try
+            {
+                var token = await _authenticationManager.TryForceRefreshToken();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _snackBar.Add(localizer["Refreshed Token."], Severity.Success);
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                _snackBar.Add(localizer["You are Logged Out."], Severity.Error);
+                await _authenticationManager.Logout();
+                _navigationManager.NavigateTo("/");
+            }
+        });
+
+        hubConnection.On<string, string>(ApplicationConstants.SignalR.LogoutUsersByRole, async (userId, roleId) =>
+        {
+            if (CurrentUserId != userId)
+            {
+                var rolesResponse = await RoleManager.GetRolesAsync();
+                if (rolesResponse.Succeeded)
+                {
+                    var role = rolesResponse.Data.FirstOrDefault(x => x.Id == roleId);
+                    if (role != null)
+                    {
+                        var currentUserRolesResponse = await _userManager.GetRolesAsync(CurrentUserId);
+                        if (currentUserRolesResponse.Succeeded && currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
+                        {
+                            _snackBar.Add(localizer["You are logged out because the Permissions of one of your Roles have been updated."], Severity.Error);
+                            await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
+                            await _authenticationManager.Logout();
+                            _navigationManager.NavigateTo("/login");
+                        }
+                    }
+                }
+            }
+        });
+
+
+        // Đăng ký sự kiện LocationChanged
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity.IsAuthenticated;
+
         NavigationManager.LocationChanged += OnLocationChanged;
         UpdateBreadcrumb();
     }
@@ -144,20 +193,26 @@
 
     private void OnSearch(string text)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            var currentSearch = QueryHelpers.ParseQuery(uri.Query).TryGetValue("search", out var currentSearchQuery)
+                ? currentSearchQuery.ToString()
+                : string.Empty;
+
+            if (currentSearch != text)
+            {
+                NavigationManager.NavigateTo($"/allproducts?search={text}");
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
+            }
+        }
+        else
         {
             _snackBar.Add("Vui lòng nhập từ khóa tìm kiếm.", Severity.Warning);
-            return;
         }
-
-        string newUrl = NavigationManager.Uri switch
-        {
-            var uri when uri.Contains("/allproducts") => $"/allproducts?search={text}",
-            var uri when uri.Contains("/home") => $"/home?search={text}",
-            _ => $"/?search={text}"
-        };
-
-        NavigationManager.NavigateTo(newUrl, forceLoad: true);
     }
     private async Task LoadCartItemCountFromLocalStorage()
     {
