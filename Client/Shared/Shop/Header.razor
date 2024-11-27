@@ -1,4 +1,4 @@
-﻿@using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
+﻿﻿@using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
 @using LaptopStore.Domain.Entities.Catalog
 @using LaptopStore.Shared.Constants.Application
 @using Microsoft.AspNetCore.SignalR.Client
@@ -88,7 +88,7 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadCartItemCountFromLocalStorage();
-        
+
         hubConnection = hubConnection.TryInitialize(_navigationManager);
         await hubConnection.StartAsync();
 
@@ -181,8 +181,8 @@
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
-            await _authenticationManager.Logout();
-            await JSRuntime.InvokeVoidAsync("location.reload");
+            await _authenticationManager.Logout(); // Đảm bảo gọi phương thức logout ở đây
+            NavigationManager.NavigateTo("/login"); // Điều hướng người dùng đến trang login sau khi đăng xuất
         }
         catch (Exception ex)
         {
@@ -202,7 +202,7 @@
 
             if (currentSearch != text)
             {
-                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
+                NavigationManager.NavigateTo($"/allproducts?search={text}");
             }
             else
             {
