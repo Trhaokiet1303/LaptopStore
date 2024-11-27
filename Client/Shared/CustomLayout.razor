@@ -29,7 +29,7 @@
                 return false;
             }
 
-            if (user.Identity?.IsAuthenticated == true && !user.IsInRole("Administrator"))
+            if (user.Identity?.IsAuthenticated == true && user.IsInRole("Basic"))
             {
                 StateHasChanged();
                 NavigationManager.NavigateTo("/");

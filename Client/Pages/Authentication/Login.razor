@@ -1,7 +1,6 @@
 ﻿@page "/login"
-@using LaptopStore.Client.Shared.Admin
-@layout MainLayout
-@attribute [AllowAnonymous]
+@using LaptopStore.Client.Shared.Shop
+@layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
 
 <EditForm Model="@_tokenModel" OnValidSubmit="SubmitAsync">
@@ -45,9 +44,6 @@
         </MudItem>
         <MudItem xs="12">
             <MudButton OnClick="FillAdministratorCredentials">@_localizer["Fill Administrator Credentials"]</MudButton>
-        </MudItem>
-        <MudItem xs="12">
-            <MudButton OnClick="FillBasicUserCredentials">@_localizer["Fill Basic User Credentials"]</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>

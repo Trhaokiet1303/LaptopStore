@@ -181,8 +181,8 @@
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
-            await _authenticationManager.Logout(); // Đảm bảo gọi phương thức logout ở đây
-            NavigationManager.NavigateTo("/login"); // Điều hướng người dùng đến trang login sau khi đăng xuất
+            await _authenticationManager.Logout();
+            await JSRuntime.InvokeVoidAsync("location.reload");
         }
         catch (Exception ex)
         {

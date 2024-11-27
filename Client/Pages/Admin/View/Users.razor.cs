@@ -22,6 +22,7 @@ namespace LaptopStore.Client.Pages.Admin.View
         private ClaimsPrincipal _currentUser;
         private bool _canCreateUsers;
         private bool _canSearchUsers;
+        private bool _canDeleteUsers;
         private bool _canViewRoles;
         private bool _loaded;
 
@@ -30,6 +31,7 @@ namespace LaptopStore.Client.Pages.Admin.View
             _currentUser = await _authenticationManager.CurrentUser();
             _canCreateUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Create)).Succeeded;
             _canSearchUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Search)).Succeeded;
+            _canDeleteUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Delete)).Succeeded;
             _canViewRoles = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.View)).Succeeded;
 
             await GetUsersAsync();
@@ -95,10 +97,65 @@ namespace LaptopStore.Client.Pages.Admin.View
             _navigationManager.NavigateTo($"/user-profile/{userId}");
         }
 
-        private void ManageRoles(string userId, string email)
+        private async void ManageRoles(string userId)
         {
-            if (email == "mukesh@blazorhero.com") _snackBar.Add(_localizer["Not Allowed."], Severity.Error);
-            else _navigationManager.NavigateTo($"/admin/user-roles/{userId}");
+            // Kiểm tra nếu người dùng hiện tại có quyền quản lý vai trò
+            var canManageRoles = await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit);
+
+            if (!canManageRoles.Succeeded)
+            {
+                // Nếu không có quyền, hiển thị thông báo lỗi
+                _snackBar.Add(_localizer["You do not have permission to manage roles."], Severity.Error);
+                return;
+            }
+
+            // Lấy email của người dùng hiện tại từ ClaimsPrincipal
+            var currentUserEmail = _currentUser?.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(currentUserEmail))
+            {
+                _snackBar.Add(_localizer["Could not retrieve your email."], Severity.Error);
+                return;
+            }
+
+            // Kiểm tra nếu người dùng có email không cho phép quản lý vai trò
+            if (currentUserEmail == "mukesh@blazorhero.com")
+            {
+                _snackBar.Add(_localizer["Not Allowed."], Severity.Error);
+                return;
+            }
+
+            // Nếu có quyền và không phải admin, chuyển hướng đến trang quản lý vai trò
+            _navigationManager.NavigateTo($"/admin/user-roles/{userId}");
         }
+
+
+        private async Task DeleteUserAsync(string userId)
+        {
+            var confirmDelete = await _dialogService.ShowMessageBox(
+                _localizer["Confirm Deletion"],
+                _localizer["Are you sure you want to delete this user?"],
+                yesText: _localizer["Yes"],
+                cancelText: _localizer["No"]
+            );
+
+            if (confirmDelete == true)
+            {
+                var response = await _userManager.DeleteUserAsync(userId);
+                if (response.Succeeded)
+                {
+                    _snackBar.Add(_localizer["User deleted successfully"], Severity.Success);
+                    await GetUsersAsync();
+                }
+                else
+                {
+                    foreach (var message in response.Messages)
+                    {
+                        _snackBar.Add(message, Severity.Error);
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -60,10 +60,10 @@ namespace LaptopStore.Infrastructure
                 //Check if User Exists
                 var superUser = new User
                 {
-                    FirstName = "Mukesh",
-                    LastName = "Murugan",
-                    Email = "mukesh@blazorhero.com",
-                    UserName = "mukesh",
+                    FirstName = "Admin",
+                    LastName = "",
+                    Email = "admin@gmail.com",
+                    UserName = "admin",
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
                     CreatedOn = DateTime.Now,
@@ -105,25 +105,7 @@ namespace LaptopStore.Infrastructure
                     await _roleManager.CreateAsync(basicRole);
                     _logger.LogInformation(_localizer["Seeded Basic Role."]);
                 }
-                //Check if User Exists
-                var basicUser = new User
-                {
-                    FirstName = "John",
-                    LastName = "Doe",
-                    Email = "john@blazorhero.com",
-                    UserName = "johndoe",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    CreatedOn = DateTime.Now,
-                    IsActive = true
-                };
-                var basicUserInDb = await _userManager.FindByEmailAsync(basicUser.Email);
-                if (basicUserInDb == null)
-                {
-                    await _userManager.CreateAsync(basicUser, UserConstants.DefaultPassword);
-                    await _userManager.AddToRoleAsync(basicUser, RoleConstants.BasicRole);
-                    _logger.LogInformation(_localizer["Seeded User with Basic Role."]);
-                }
+                
             }).GetAwaiter().GetResult();
         }
     }

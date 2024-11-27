@@ -85,5 +85,18 @@ namespace LaptopStore.Server.Controllers.Identity
         {
             return Ok(await _userService.ResetPasswordAsync(request));
         }
+
+        [Authorize(Policy = Permissions.Users.Delete)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            var result = await _userService.DeleteUserAsync(id);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

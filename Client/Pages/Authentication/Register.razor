@@ -1,7 +1,6 @@
 ﻿@page "/register"
-@using LaptopStore.Client.Shared.Admin
-@layout MainLayout
-@attribute [AllowAnonymous]
+@using LaptopStore.Client.Shared.Shop
+@layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Register> _localizer
 
 <EditForm Model="@_registerUserModel" OnValidSubmit="SubmitAsync">
