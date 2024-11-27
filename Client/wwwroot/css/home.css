@@ -187,7 +187,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 500px;
+    height: 580px;
     padding: 16px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
@@ -242,7 +242,6 @@
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     margin-bottom: 10px;
@@ -288,6 +287,8 @@
     width: 100%;
     padding: 10px;
     background: #f2f4f7;
+    justify-content: center;
+    height: 150px;
 }
 
 .price-container {
@@ -458,13 +459,12 @@
     }
 }
 
-.product-name {
+.product-name-feat {
     font-size: 16px;
     font-weight: bold;
     color: #333;
     margin: 8px 0;
     text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
 }
 

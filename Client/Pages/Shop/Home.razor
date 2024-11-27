@@ -66,6 +66,7 @@
                 @foreach (var product in GetCurrentFeaturedProducts())
                 {
                     <MudCard Class="single-product-card">
+                        <MudButton OnClick="() => NavigateToProductDetail(product.Id)">
                         <MudCardContent>
                             <!-- Huy hiệu -->
                             <div class="badge-container">
@@ -77,7 +78,7 @@
                             <img src="@product.ImageDataURL" alt="@product.Name" class="product-thumbnail" />
 
                             <!-- Thông tin sản phẩm -->
-                            <MudText Typo="Typo.h6" Align="Align.Center">@product.Name</MudText>
+                                <MudText Class="product-name-feat">@product.Name</MudText>
                             <div class="product-price-container">
                                 <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") đ</MudText>
                                 <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) đ</MudText>
@@ -87,6 +88,7 @@
                             <!-- Nút yêu thích -->
                             <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
                         </MudCardContent>
+                        </MudButton>
                     </MudCard>
                 }
             </div>
@@ -124,8 +126,8 @@
                                 <MudText Typo="Typo.h6" Class="product-name">@context.Name</MudText>
 
                                 <div class="specs">
-                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() GB</MudText>
-                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() GB</MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() </MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() </MudText>
                                 </div>
                                 <MudText Typo="Typo.body2" Class="product-details">
                                     Màn hình: @context.Screen<br />
@@ -175,8 +177,8 @@
                                 <MudText Typo="Typo.h6" Class="product-name">@context.Name</MudText>
 
                                 <div class="specs">
-                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() GB</MudText>
-                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() GB</MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Ram.Split(' ').FirstOrDefault() </MudText>
+                                    <MudText Typo="Typo.body2" Class="spec">@context.Rom.Split(' ').FirstOrDefault() </MudText>
                                 </div>
                                 <MudText Typo="Typo.body2" Class="product-details">
                                     Màn hình: @context.Screen<br />
