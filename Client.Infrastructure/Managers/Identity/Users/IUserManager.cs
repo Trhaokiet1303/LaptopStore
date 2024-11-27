@@ -24,5 +24,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Identity.Users
 
         Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);
 
+        Task<IResult> DeleteUserAsync(string userId); 
+
     }
 }

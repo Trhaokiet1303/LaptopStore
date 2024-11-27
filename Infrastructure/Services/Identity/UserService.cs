@@ -273,5 +273,34 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var count = await _userManager.Users.CountAsync();
             return count;
         }
+
+        public async Task<IResult> DeleteUserAsync(string userId)
+        {
+            // Check if the user exists
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return await Result.FailAsync(_localizer["User not found."]);
+            }
+
+            // Prevent deletion of administrators (if necessary)
+            var isAdmin = await _userManager.IsInRoleAsync(user, RoleConstants.AdministratorRole);
+            if (isAdmin)
+            {
+                return await Result.FailAsync(_localizer["Administrators cannot be deleted."]);
+            }
+
+            // Delete the user
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return await Result.SuccessAsync(_localizer["User deleted successfully."]);
+            }
+            else
+            {
+                return await Result.FailAsync(result.Errors.Select(a => a.Description).ToList());
+            }
+        }
+
     }
 }

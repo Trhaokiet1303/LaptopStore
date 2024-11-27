@@ -1,6 +1,7 @@
 ﻿using LaptopStore.Application.Requests.Identity;
 using LaptopStore.Application.Responses.Identity;
 using LaptopStore.Client.Infrastructure.Extensions;
+using LaptopStore.Client.Infrastructure.Routes;
 using LaptopStore.Shared.Wrapper;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -65,5 +66,12 @@ namespace LaptopStore.Client.Infrastructure.Managers.Identity.Users
             var response = await _httpClient.PostAsJsonAsync(Routes.UserEndpoints.ResetPassword, request);
             return await response.ToResult();
         }
+
+        public async Task<IResult> DeleteUserAsync(string userId)
+        {
+            var response = await _httpClient.DeleteAsync(Routes.UserEndpoints.Delete(userId));
+            return await response.ToResult();
+        }
+
     }
 }

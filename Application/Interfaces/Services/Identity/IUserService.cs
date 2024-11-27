@@ -29,5 +29,6 @@ namespace LaptopStore.Application.Interfaces.Services.Identity
 
         Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
 
+        Task<IResult> DeleteUserAsync(string userId);
     }
 }
