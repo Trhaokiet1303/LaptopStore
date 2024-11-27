@@ -185,10 +185,9 @@ namespace LaptopStore.Client.Pages.Shop
             if (_featuredProducts == null || !_featuredProducts.Any())
                 return Enumerable.Empty<GetAllPagedProductsResponse>();
 
-            // Danh sách sản phẩm cần hiển thị
             var result = new List<GetAllPagedProductsResponse>();
 
-            // Bắt đầu từ chỉ số hiện tại và lấy sản phẩm tuần hoàn
+            // Lấy 8 sản phẩm từ chỉ số hiện tại, tuần hoàn nếu cần
             for (int i = 0; i < featuredProductsPerPage; i++)
             {
                 var index = (featuredProductCurrentIndex + i) % _featuredProducts.Count();
@@ -198,22 +197,26 @@ namespace LaptopStore.Client.Pages.Shop
             return result;
         }
 
+
         // Hàm chuyển tới trang tiếp theo
         private void ShowNextFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                featuredProductCurrentIndex = (featuredProductCurrentIndex + featuredProductsPerPage) % _featuredProducts.Count();
+                // Chuyển sang sản phẩm kế tiếp
+                featuredProductCurrentIndex = (featuredProductCurrentIndex + 1) % _featuredProducts.Count();
                 StateHasChanged();
             }
         }
+
 
         // Hàm quay lại trang trước đó
         private void ShowPreviousFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                featuredProductCurrentIndex = (featuredProductCurrentIndex - featuredProductsPerPage + _featuredProducts.Count()) % _featuredProducts.Count();
+                // Quay lại sản phẩm trước đó, tuần hoàn về cuối nếu cần
+                featuredProductCurrentIndex = (featuredProductCurrentIndex - 1 + _featuredProducts.Count()) % _featuredProducts.Count();
                 StateHasChanged();
             }
         }
