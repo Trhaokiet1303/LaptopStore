@@ -59,14 +59,13 @@
 
         <div class="product-slider-container">
             <!-- Nút điều hướng bên trái -->
-            <MudIconButton Icon="Icons.Material.Filled.ArrowBackIos" Class="slider-control left-control" OnClick="ShowPreviousFeaturedProducts" /> 
+            <MudIconButton Icon="Icons.Material.Filled.ArrowBackIos" Class="slider-control left-control" OnClick="ShowPreviousFeaturedProducts" />
 
             <!-- Danh sách sản phẩm -->
             <div class="product-list-container">
                 @foreach (var product in GetCurrentFeaturedProducts())
                 {
-                    <MudButton OnClick="() => NavigateToProductDetail(product.Id)" Style="cursor: pointer;">
-                    <MudCard Class="single-product-card" >
+                    <MudCard Class="single-product-card">
                         <MudCardContent>
                             <!-- Huy hiệu -->
                             <div class="badge-container">
@@ -89,12 +88,11 @@
                             <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
                         </MudCardContent>
                     </MudCard>
-                    </MudButton>
                 }
             </div>
 
             <!-- Nút điều hướng bên phải -->
-            <MudIconButton Icon="Icons.Material.Filled.ArrowForwardIos" Class="slider-control right-control" OnClick="ShowNextFeaturedProducts" /> 
+            <MudIconButton Icon="Icons.Material.Filled.ArrowForwardIos" Class="slider-control right-control" OnClick="ShowNextFeaturedProducts" />
         </div>
     </div>
 </MudGrid>
