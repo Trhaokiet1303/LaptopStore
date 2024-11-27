@@ -1,0 +1,43 @@
+﻿.register-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.img-login {
+    width: 250px;
+    height: auto;
+}
+
+.title-container h1 {
+    text-align: center;
+    color: darkblue;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.mud-input{
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+}
+.regisster-button {
+    background-color: #007bfff9;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+}
+    .regisster-button:hover {
+        background-color: #0263ccf9;
+    }
