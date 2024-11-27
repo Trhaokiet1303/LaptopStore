@@ -2,48 +2,45 @@
 @using LaptopStore.Client.Shared.Shop
 @layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
+<link href="css/login.css" rel="stylesheet">
 
 <EditForm Model="@_tokenModel" OnValidSubmit="SubmitAsync">
     <FluentValidationValidator @ref="_fluentValidationValidator" />
-    <MudGrid>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudIcon Icon="@CustomIcons.BlazorHero" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;" />
-            </div>
+    <MudGrid Class="login-container">
+        <MudItem xs="12" Class="logo-container">
+            <img class="img-login" src="/images/icon/logo.png" />
         </MudItem>
         <DataAnnotationsValidator />
-        <MudItem xs="12">
+        <MudItem xs="12" Class="title-container">
             <div class="d-flex justify-center">
-                <MudText Typo="Typo.h4">@_localizer["Title"]</MudText>
+                <h1 class="h1-title">Đăng Nhập</h1>
             </div>
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="text-container">
             <div class="d-flex justify-center">
-                <MudText>@_localizer["Description"]</MudText>
+                <MudText>@_localizer["Bạn chưa có tài khoản"] <MudLink Href="/register" Class="register-link">@_localizer["Đăng ký ngay"]</MudLink></MudText>
             </div>
         </MudItem>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudText>@_localizer["Don't have an account?"] <MudLink Href="/register">@_localizer["Register here"]</MudLink></MudText>
-            </div>
-        </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="input-container">
             <MudTextField T="string" Label="@_localizer["E-mail"]" Variant="Variant.Outlined"
-                          @bind-Value="_tokenModel.Email" For="@(() => _tokenModel.Email)" />
+                          @bind-Value="_tokenModel.Email" For="@(() => _tokenModel.Email)" Class="email-input" />
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="input-container">
             <MudTextField Label="@_localizer["Password"]" Variant="Variant.Outlined"
                           @bind-Value="_tokenModel.Password" For="@(() => _tokenModel.Password)"
-                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon"
+                          OnAdornmentClick="TogglePasswordVisibility" Class="password-input" />
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-space-between align-center">
-            <MudCheckBox T="bool" Label="@_localizer["Remember me?"]" Color="Color.Primary" Class="ml-n1"></MudCheckBox> <MudLink Href="/account/forgot-password">@_localizer["Forgot password?"]</MudLink>
+        <MudItem xs="12" Class="checkbox-link-container d-flex justify-space-between align-center">
+            <MudCheckBox T="bool" Label="@_localizer["Lưu đăng nhập?"]" Color="Color.Primary" Class="remember-checkbox" />
+            <MudLink Href="/account/forgot-password" Class="forgot-password-link">@_localizer["Quên mật khẩu?"]</MudLink>
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-center">
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Sign In"]</MudButton>
+        <MudItem xs="12" Class="button-container d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Disabled="@(!Validated)"
+                        Class="login-button">@_localizer["Đăng nhập"]</MudButton>
         </MudItem>
         <MudItem xs="12">
-            <MudButton OnClick="FillAdministratorCredentials">@_localizer["Fill Administrator Credentials"]</MudButton>
+            <MudButton OnClick="FillAdministratorCredentials">@_localizer["Đăng nhập bằng tài khoản admin"]</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>

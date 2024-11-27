@@ -183,7 +183,7 @@ namespace LaptopStore.Client.Pages.Shop
                 var request = new Application.Requests.Catalog.GetAllPagedProductsRequest
                 {
                     PageNumber = 1, // Bạn có thể thay đổi theo yêu cầu
-                    PageSize = 10,  // Số lượng sản phẩm cần hiển thị
+                    PageSize = 6,  // Số lượng sản phẩm cần hiển thị
                     SearchString = string.Empty,
                     Orderby = new[] { "Name ascending" }
                 };

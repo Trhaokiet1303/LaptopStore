@@ -1,22 +1,29 @@
 ﻿.main-container {
     display: flex;
+    flex-direction: row; /* Đặt các phần tử con theo hàng ngang */
+    align-items: flex-start; /* Căn các phần tử con theo chiều dọc */
+    justify-content: flex-start; /* Căn các phần tử con theo chiều ngang */
 }
 
 .filter-panel-container {
-    width: 260px;
+    width: 260px; /* Đặt chiều rộng cố định cho panel */
     padding: 16px;
     background-color: #f5f5f5;
-    transition: transform 0.3s ease;
+    position: relative; /* Giữ vị trí panel cố định */
+    z-index: 1; /* Đặt panel trên cùng nếu cần */
 }
 
 .filter-panel-hidden {
-    display: none; /* Hide the filter panel */
+    display: none; /* Ẩn panel nếu không hiển thị */
 }
 
 .product-section {
-    flex-grow: 1;
-    padding-left: 16px; /* Spacing between filter and products */
-    transition: margin-left 0.3s ease;
+    flex-grow: 1; /* Cho phép phần sản phẩm chiếm không gian còn lại */
+    padding-left: 16px; /* Tạo khoảng cách giữa filter panel và sản phẩm */
+    transition: margin-left 0.3s ease; /* Hiệu ứng khi mở filter */
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các sản phẩm gói gọn khi không đủ không gian */
+    gap: 16px; /* Khoảng cách giữa các sản phẩm */
 }
 
 .menu-bar {
