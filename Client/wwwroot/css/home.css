@@ -188,6 +188,7 @@
     justify-content: space-between;
     align-items: center;
     height: 580px;
+    max-width:350px;
     padding: 16px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
@@ -419,12 +420,13 @@
     }
 
 .product-list-container {
-    display: flex; /* Sử dụng flexbox thay vì grid */
+    display: flex; 
     flex-wrap: nowrap; /* Không cho sản phẩm xuống dòng */
-    overflow-x: auto; /* Cuộn ngang nếu không đủ không gian */
+    overflow-x: hidden; /* Cuộn ngang nếu không đủ không gian */
     overflow-y: hidden; /* Loại bỏ cuộn dọc */
     gap: 16px; /* Khoảng cách giữa các card */
     padding: 15px; /* Khoảng cách trong container */
+    margin: 0 auto;
 }
 
 

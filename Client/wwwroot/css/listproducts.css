@@ -92,6 +92,7 @@
     justify-content: space-between;
     align-items: center;
     height: 580px;
+    max-width: 350px;
     padding: 16px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
