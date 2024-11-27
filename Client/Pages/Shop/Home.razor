@@ -24,30 +24,13 @@
 <br />
 <MudGrid Class="logo-container">
     <!-- Brand Chips with Logos -->
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/hp-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/asus-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/dell-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/lenovo-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/acer-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/mac-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/msi-icon.png" href="#" />
-    </MudChip>
-    <MudChip Class="brand">
-        <img Class="logo-brand-img" src="/images/brand/samsung-icon.png" href="#" />
-    </MudChip>
+    @foreach (var brand in _brands)
+    {
+        <MudChip Class="brand" @onclick="() => NavigateToAllProducts(brand.Name)">
+            <img Class="logo-brand-img" src="@brand.LogoPath" alt="@brand.Name" title="@brand.Name" />
+        </MudChip>
+    }
+
 </MudGrid>
 <br />
 <MudGrid>

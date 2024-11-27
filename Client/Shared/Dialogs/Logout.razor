@@ -31,13 +31,15 @@
 
     [Parameter] public string CurrentUserId { get; set; }
 
+    [Inject] private IJSRuntime JSRuntime { get; set; }
+
     async Task Submit()
     {
         await JS.InvokeVoidAsync("localStorage.removeItem", "cartItems");
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
         await _authenticationManager.Logout();
-        _navigationManager.NavigateTo("/login");
+        await JSRuntime.InvokeVoidAsync("location.reload");
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();

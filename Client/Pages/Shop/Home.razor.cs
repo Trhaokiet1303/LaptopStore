@@ -97,18 +97,7 @@ namespace LaptopStore.Client.Pages.Shop
             new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
         };
 
-        private List<DescriptionFilter> _descriptions = new List<DescriptionFilter>
-        {
-            new DescriptionFilter { Name = "Gaming",DescriptionPath="/images/description/Gaming-Lap.png" },
-            new DescriptionFilter { Name = "Office",DescriptionPath="/images/description/Office-Lap.png" },
-            new DescriptionFilter { Name = "Ultrabook",DescriptionPath="/images/description/Book-Lap.png" },
-            new DescriptionFilter { Name = "AI",DescriptionPath="/images/description/AI-Lap.png" },
-            new DescriptionFilter { Name = "Graphic",DescriptionPath="/images/description/Graphic-Lap.png" },
-        };
 
-        private string SelectedPriceRange = "all";
-        private int CustomPriceRangeStart;
-        private int CustomPriceRangeEnd;
         private string SelectedRateRange = "all";
 
         // Filter the product data based on selected filters
@@ -117,12 +106,10 @@ namespace LaptopStore.Client.Pages.Shop
             if (_pagedData == null) return;
 
             var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
-            var selectedDescriptions = _descriptions.Where(d => d.IsSelected).Select(d => d.Name).ToList();
 
             _featuredProducts = _pagedData.Where(p =>
                 p.Featured == true && // Chỉ lấy sản phẩm có Feature = true
                 (selectedBrands.Count == 0 || selectedBrands.Contains(p.Brand)) &&
-                (selectedDescriptions.Count == 0 || selectedDescriptions.Contains(p.Description)) &&
                 (SelectedRateRange == "all" ||
                  (SelectedRateRange == "4andAbove" && p.Rate >= 4) ||
                  (SelectedRateRange == "3andAbove" && p.Rate >= 3) ||
@@ -203,11 +190,12 @@ namespace LaptopStore.Client.Pages.Shop
             var dialog = _dialogService.Show<ViewProduct>("Thông tin sản phẩm", parameters, options);
             var result = await dialog.Result;
         }
-        private string GetProductGridContainerClass() =>
-        isFilterPanelVisible ? "product-grid-container with-filter" : "product-grid-container full-screen";
+        private void NavigateToAllProducts(string brand)
+        {
+            // Chuyển hướng tới trang /allproducts với tham số lọc thương hiệu
+            NavigationManager.NavigateTo($"/allproducts?brands={Uri.EscapeDataString(brand)}");
+        }
 
-        private string GetFilterPanelClass() =>
-            isFilterPanelVisible ? "filter-panel-visible" : "filter-panel-hidden";
         private void NavigateToProductDetail(int productId)
         {
             NavigationManager.NavigateTo($"/product/{productId}");
