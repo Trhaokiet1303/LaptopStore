@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 using LaptopStore.Client.Pages.Admin.Products;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using Microsoft.AspNetCore.WebUtilities;
+using LaptopStore.Application.Specifications.Catalog;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -44,7 +45,7 @@ namespace LaptopStore.Client.Pages.Shop
         {
             _loaded = false;
             
-            await LoadData(0, 10, new TableState());
+            await LoadData(0, int.MaxValue, new TableState());
             ApplyFilters(); 
             _loaded = true;
 
@@ -69,22 +70,8 @@ namespace LaptopStore.Client.Pages.Shop
                 _totalItems = response.TotalCount;
             }
         }
-        // Define filter classes for Brand and Description
-        private class BrandFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public string LogoPath { get; set; }
-        }
 
-        private class DescriptionFilter
-        {
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
-            public string DescriptionPath { get; set; }
-        }
-
-        // Initialize filter options for brands and descriptions
+        // Initialize filter options for brands
         private List<BrandFilter> _brands = new List<BrandFilter>
 {
             new BrandFilter { Name = "Apple", LogoPath = "/images/brand/mac-icon.png" },
@@ -105,20 +92,8 @@ namespace LaptopStore.Client.Pages.Shop
         {
             if (_pagedData == null) return;
 
-            var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
-
-            _featuredProducts = _pagedData.Where(p =>
-                p.Featured == true && // Chỉ lấy sản phẩm có Feature = true
-                (selectedBrands.Count == 0 || selectedBrands.Contains(p.Brand)) &&
-                (SelectedRateRange == "all" ||
-                 (SelectedRateRange == "4andAbove" && p.Rate >= 4) ||
-                 (SelectedRateRange == "3andAbove" && p.Rate >= 3) ||
-                 (SelectedRateRange == "2andAbove" && p.Rate >= 2) ||
-                 (SelectedRateRange == "1andAbove" && p.Rate >= 1))
-            ).ToList();
-
-            // Lọc _RatedProducts chỉ lấy các sản phẩm có Rate >= 4
-            _RatedProducts = _pagedData.Where(p => p.Rate >= 4).ToList();
+            _featuredProducts = _pagedData.Where(p => p.Featured == true).ToList();
+            _RatedProducts = _pagedData.Where(p => p.Rate >= 4.2m).ToList();
         }
 
         // List of banner images
@@ -132,7 +107,7 @@ namespace LaptopStore.Client.Pages.Shop
         };
 
         private int currentImageIndex = 0;
-        private int secondImageIndex => (currentImageIndex + 1) % bannerImages.Count; // Lấy chỉ số ảnh thứ hai
+        private int secondImageIndex => (currentImageIndex + 1) % bannerImages.Count; 
         private Timer bannerTimer;
 
         private void ShowNextImage()
@@ -202,44 +177,59 @@ namespace LaptopStore.Client.Pages.Shop
         }
 
         private int featuredProductCurrentIndex = 0; // Index hiện tại của danh sách Featured Products
-        private int featuredProductsPerPage = 5;    // Số lượng sản phẩm hiển thị mỗi lần
+        private int featuredProductsPerPage = 8;    // Số lượng sản phẩm hiển thị mỗi lần
 
         // Hàm chuyển qua danh sách sản phẩm tiếp theo
         private void ShowNextFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                featuredProductCurrentIndex += featuredProductsPerPage;
+                // Tăng chỉ số lên 1 để chuyển sang sản phẩm tiếp theo
+                featuredProductCurrentIndex++;
+
+                // Kiểm tra nếu đã đến cuối danh sách, quay lại đầu
                 if (featuredProductCurrentIndex >= _featuredProducts.Count())
                 {
-                    featuredProductCurrentIndex = 0; // Quay lại từ đầu nếu hết sản phẩm
+                    featuredProductCurrentIndex = 0;
                 }
+
                 StateHasChanged();
             }
         }
+
+
 
         // Hàm chuyển về danh sách sản phẩm trước đó
         private void ShowPreviousFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                featuredProductCurrentIndex -= featuredProductsPerPage;
+                // Giảm chỉ số xuống 1 để quay lại sản phẩm trước đó
+                featuredProductCurrentIndex--;
+
+                // Kiểm tra nếu đã đến đầu danh sách, quay lại cuối
                 if (featuredProductCurrentIndex < 0)
                 {
-                    featuredProductCurrentIndex = Math.Max(0, _featuredProducts.Count() - featuredProductsPerPage);
+                    featuredProductCurrentIndex = _featuredProducts.Count() - 1;
                 }
+
                 StateHasChanged();
             }
         }
+
+
 
         // Lấy danh sách sản phẩm hiện tại để hiển thị
         private IEnumerable<GetAllPagedProductsResponse> GetCurrentFeaturedProducts()
         {
             return _featuredProducts
                 ?.Skip(featuredProductCurrentIndex)
-                .Take(featuredProductsPerPage)
+                .Take(featuredProductsPerPage)  // Hiển thị 8 sản phẩm mỗi lần
                 ?? Enumerable.Empty<GetAllPagedProductsResponse>();
         }
+
+
+
 
         /*thong tin*/
         private bool IsExpanded { get; set; } = false;
