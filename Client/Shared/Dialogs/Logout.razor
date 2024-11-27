@@ -1,4 +1,4 @@
-﻿@using LaptopStore.Shared.Constants.Application
+﻿﻿@using LaptopStore.Shared.Constants.Application
 @using Microsoft.AspNetCore.SignalR.Client
 @namespace LaptopStore.Client.Shared.Dialogs
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Logout> localizer
@@ -31,15 +31,13 @@
 
     [Parameter] public string CurrentUserId { get; set; }
 
-    [Inject] private IJSRuntime JSRuntime { get; set; }
-
     async Task Submit()
     {
         await JS.InvokeVoidAsync("localStorage.removeItem", "cartItems");
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
         await _authenticationManager.Logout();
-        await JSRuntime.InvokeVoidAsync("location.reload");
+        _navigationManager.NavigateTo("/login", true);
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();

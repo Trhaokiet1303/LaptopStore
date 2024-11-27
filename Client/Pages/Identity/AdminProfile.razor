@@ -1,0 +1,17 @@
+﻿@page "/admin/account"
+@using LaptopStore.Client.Pages.Admin.View
+@using LaptopStore.Client.Shared.Admin
+@layout MainLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Account> localizer
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+    <MudTabPanel Text="@localizer["Profile"]">
+        <Profile />
+    </MudTabPanel>
+    <MudTabPanel Text="@localizer["Security"]">
+        <Security />
+    </MudTabPanel>
+</MudTabs>
+
