@@ -84,7 +84,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 500px;
+    height: 580px;
     padding: 16px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
@@ -92,14 +92,17 @@
     overflow: hidden;
     background-color: #fff;
 }
+    .product-card:hover {
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
 
-.product {
-    position: relative;
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .product {
+        position: relative;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     .product:hover {
         transition: box-shadow 0.3s ease-in-out;
@@ -107,7 +110,7 @@
     }
 
 .img-product {
-    width: 70%;
+    width: 65%;
     height: auto;
     object-fit: contain;
     margin-bottom: 10px;
@@ -139,7 +142,6 @@
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     margin-bottom: 10px;
@@ -152,7 +154,7 @@
     gap: 8px;
     justify-content: center;
     position: absolute;
-    top: 200px; /* Đặt vị trí specs trên thông tin kỹ thuật */
+    top: 200px;
     left: 50%;
     transform: translateX(-50%);
     height: 25px;
@@ -171,20 +173,22 @@
 }
 
 .product-details {
-    text-align:left;
+    text-align: left;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    bottom: 120px; /* Đặt chi tiết sản phẩm giữa specs và price */
+    bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
-    gap: 5px; /* Khoảng cách giữa các dòng thông tin */
+    gap: 5px;
     font-size: 13px;
     color: #666;
     width: 100%;
     padding: 10px;
     background: #f2f4f7;
+    justify-content: center;
+    height: 150px;
 }
 
 .price-container {
@@ -228,21 +232,38 @@
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 60%;
     text-align: center;
+    border: 1px solid #007bfff9;
+    border-radius: 30px;
+    color: #007bfff9;
 }
+    .action-button:hover {
+        background-color: #007bfff9;
+        color: #fff;
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 .load-more-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; 
-    margin-top: 20px; 
-    position: relative; 
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    position: relative;
 }
 
 .load-more-button {
     text-align: center;
-    position: absolute; 
-    left: 50%; 
-    transform: translateX(-50%); 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 2px solid black;
 }
+
+    .load-more-button:hover {
+        background-color: #f0f0f0;
+    }

@@ -54,7 +54,7 @@
     <div class="featured-products-section">
 
         <div class="featured-header">
-            <img src="/images/banner/featureproduct.gif" alt="Alternate Text" />
+            <img class="icon-feature" src="/images/banner/flame.png"/><p class="titel-feature">SẢN PHẨM NỔI BẬT</p>
         </div>
 
         <div class="product-slider-container">
@@ -101,7 +101,7 @@
 <br />
 <MudGrid>
     <!-- Product Grid on the Right Side -->
-    <MudItem xs="12" md="9">
+    <MudItem >
         <!-- Featured Products Section -->
         @if (!_loaded)
         {
@@ -143,7 +143,7 @@
                                 <MudRating Value="@context.Rate" ReadOnly="true" Icon="@Icons.Material.Filled.Star" Class="rate" />
                             </MudCardContent>
 
-                            <MudButton Variant="Variant.Filled" OnClick="() => NavigateToProductDetail(context.Id)" Color="Color.Primary" Class="action-button">
+                            <MudButton OnClick="() => NavigateToProductDetail(context.Id)" Class="action-button">
                                 Xem chi tiết
                             </MudButton>
                         </MudCard>
@@ -194,7 +194,7 @@
                                 <MudRating Value="@context.Rate" ReadOnly="true" Icon="@Icons.Material.Filled.Star" Class="rate" />
                             </MudCardContent>
 
-                            <MudButton Variant="Variant.Filled" OnClick="() => NavigateToProductDetail(context.Id)" Color="Color.Primary" Class="action-button">
+                            <MudButton OnClick="() => NavigateToProductDetail(context.Id)" Class="action-button">
                                 Xem chi tiết
                             </MudButton>
                         </MudCard>

@@ -195,7 +195,9 @@
     overflow: hidden;
     background-color: #fff;
 }
-
+    .product-card:hover {
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
 .product {
     position: relative;
     flex: 0 0 auto;
@@ -210,7 +212,7 @@
     }
 
 .img-product {
-    width: 70%;
+    width: 65%;
     height: auto;
     object-fit: contain;
     margin-bottom: 10px;
@@ -332,9 +334,18 @@
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 60%;
     text-align: center;
+    border: 1px solid #007bfff9;
+    border-radius: 30px;
+    color: #007bfff9;
 }
+
+    .action-button:hover {
+        background-color: #007bfff9;
+        color: #fff;
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
 
 
@@ -342,7 +353,7 @@
 .featured-products-section {
     width: 100%;
     padding: 5px;
-    background-color: rgb(248, 62, 96);
+    background-color: #007bfff9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -350,15 +361,27 @@
 
 .featured-header {
     text-align: center;
-    color: rgb(248, 62, 96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #007bfff9;
 }
 
-    .featured-header img {
-        width: 30%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-    }
+.titel-feature {
+    font-size: 40px;
+    font-weight: bolder;
+    padding-left: 10px;
+    color: white;
+    margin: 0;
+    padding-top: 10px;
+}
+
+.icon-feature {
+    width: auto;
+    height: 50px; /* Điều chỉnh chiều cao ảnh */
+    display: inline-block;
+}
+
 
 .product-slider-container {
     display: flex;
