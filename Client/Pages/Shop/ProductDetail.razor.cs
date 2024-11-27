@@ -81,7 +81,6 @@ namespace LaptopStore.Client.Pages.Shop
                 Snackbar.Add($"Đã xảy ra lỗi khi tải dữ liệu sản phẩm: {ex.Message}", Severity.Error);
             }
         }
-
         private async Task AddToCart()
         {
             var cartItem = new OrderItem
