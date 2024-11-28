@@ -1,5 +1,6 @@
 ﻿using LaptopStore.Application.Features.OrderItems.Commands.AddEdit;
 using LaptopStore.Application.Features.Orders.Commands.AddEdit;
+using LaptopStore.Application.Features.Orders.Commands.Update;
 using LaptopStore.Application.Features.Orders.Queries.GetAll;
 using LaptopStore.Application.Features.Orders.Queries.GetById;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
@@ -118,24 +119,48 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             }
         }
 
-        private async Task Delete(int id)
+        private async Task Delete(int id, int orderId)
         {
             string deleteContent = _localizer["Delete Content"];
             var parameters = new DialogParameters
-            {
-                {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
-            };
+    {
+        {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
+    };
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
             var result = await dialog.Result;
+
             if (!result.Cancelled)
             {
                 var response = await OrderItemManager.DeleteAsync(id);
                 if (response.Succeeded)
                 {
+                    var existingOrderItemResponse = await OrderManager.GetOrderByIdAsync(orderId);
+                    if (existingOrderItemResponse.Succeeded && existingOrderItemResponse.Data.OrderItem != null)
+                    {
+                        var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
+                            item.Quantity * item.ProductPrice);
+
+                        var updateOrderCommand = new UpdateOrderTotalPriceCommand
+                        {
+                            OrderId = orderId,
+                            TotalPrice = updatedTotalPrice
+                        };
+
+                        var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
+                        if (orderUpdateResponse.Succeeded)
+                        {
+                            _snackBar.Add("Đã xóa sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
+                            await HubConnection.SendAsync("UpdateOrder", orderId);
+                            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        }
+                        else
+                        {
+                            _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
+                        }
+                    }
+
                     await Reset();
-                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                    _snackBar.Add(response.Messages[0], Severity.Success);
                 }
                 else
                 {
@@ -147,6 +172,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
             }
         }
+
         private async Task Reset()
         {
             _orderItem = new GetAllOrderItemsResponse();

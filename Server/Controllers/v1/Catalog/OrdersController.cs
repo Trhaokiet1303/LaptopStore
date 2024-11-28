@@ -93,6 +93,9 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 58e28d9 (fix order, orderitem)
     }
 }

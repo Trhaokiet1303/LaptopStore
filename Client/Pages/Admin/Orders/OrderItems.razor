@@ -42,7 +42,7 @@
                             }
                             @if (_canDeleteOrderItems)
                             {
-                                <MudMenuItem @onclick="@(() => Delete(@context.Id))">@_localizer["Delete"]</MudMenuItem>
+                                <MudMenuItem @onclick="@(() => Delete(@context.Id, @context.OrderId))">@_localizer["Delete"]</MudMenuItem>
                             }
                         </MudMenu>
                     }

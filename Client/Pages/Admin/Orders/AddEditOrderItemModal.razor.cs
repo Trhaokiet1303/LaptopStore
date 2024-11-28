@@ -18,7 +18,11 @@ using System.Linq;
 using LaptopStore.Application.Features.Orders.Commands.Update;
 =======
 using LaptopStore.Application.Features.Orders.Commands.AddEdit;
+<<<<<<< HEAD
 >>>>>>> 3140a2f (add totalprice in orderitem)
+=======
+using LaptopStore.Application.Features.Orders.Commands.Update;
+>>>>>>> 58e28d9 (fix order, orderitem)
 
 namespace LaptopStore.Client.Pages.Admin.Orders
 {
@@ -117,7 +121,12 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
+<<<<<<< HEAD
                     if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
+=======
+                    // If the item exists, update the order item
+                    if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
+>>>>>>> 58e28d9 (fix order, orderitem)
                     {
                         // Cập nhật số lượng sản phẩm
                         var updateCommand = new AddEditOrderItemCommand
@@ -139,7 +148,11 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         if (updateResponse.Succeeded)
                         {
 <<<<<<< HEAD
+<<<<<<< HEAD
                             // Tính lại tổng giá và cập nhật ngay lập tức
+=======
+                            // Calculate and update the total price
+>>>>>>> 58e28d9 (fix order, orderitem)
                             var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
                                 item.ProductId == AddEditOrderItemModel.ProductId
                                     ? AddEditOrderItemModel.Quantity * AddEditOrderItemModel.ProductPrice
@@ -162,9 +175,12 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             {
                                 _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
                             }
+<<<<<<< HEAD
 =======
                             _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
 >>>>>>> 3140a2f (add totalprice in orderitem)
+=======
+>>>>>>> 58e28d9 (fix order, orderitem)
 
                             MudDialog.Close();
                         }
@@ -185,11 +201,43 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 =======
                 else
                 {
+                    // If the item doesn't exist in the order, add the new order item
                     var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
                     if (response.Succeeded)
                     {
                         _snackBar.Add(response.Messages[0], Severity.Success);
 
+                        // Update the order's total price after adding the new item
+                        var existingOrderResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderItemModel.OrderId);
+                        if (existingOrderResponse.Succeeded)
+                        {
+                            var updatedTotalPrice = existingOrderResponse.Data.OrderItem.Sum(item =>
+                                item.ProductId == AddEditOrderItemModel.ProductId
+                                    ? AddEditOrderItemModel.Quantity * AddEditOrderItemModel.ProductPrice
+                                    : item.Quantity * item.ProductPrice);
+
+                            var updateOrderCommand = new UpdateOrderTotalPriceCommand
+                            {
+                                OrderId = AddEditOrderItemModel.OrderId,
+                                TotalPrice = updatedTotalPrice
+                            };
+
+                            var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
+                            if (orderUpdateResponse.Succeeded)
+                            {
+                                _snackBar.Add("Thêm sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
+                                await HubConnection.SendAsync("UpdateOrder", AddEditOrderItemModel.OrderId);
+                                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                            }
+                            else
+                            {
+                                _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
+                            }
+                        }
+                        else
+                        {
+                            _snackBar.Add("Không thể tải thông tin đơn hàng.", Severity.Error);
+                        }
 
                         MudDialog.Close();
                         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
@@ -211,9 +259,13 @@ namespace LaptopStore.Client.Pages.Admin.Orders
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 3140a2f (add totalprice in orderitem)
+=======
+
+>>>>>>> 58e28d9 (fix order, orderitem)
         public void Cancel()
         {
             MudDialog.Cancel();
