@@ -14,6 +14,7 @@ using LaptopStore.Application.Interfaces.Common;
 using MudBlazor.Services;
 using MediatR;
 using LaptopStore.Infrastructure.Services;
+using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 namespace LaptopStore.Client
 {
     public static class Program
@@ -29,6 +30,7 @@ namespace LaptopStore.Client
             builder.Services.AddScoped<IProductManager, ProductManager>();
             builder.Services.AddScoped<ProductManager>();
             builder.Services.AddMudServices();
+            builder.Services.AddScoped<IOrderManager, OrderManager>();
 
             var host = builder.Build();
             var storageService = host.Services.GetRequiredService<ClientPreferenceManager>();

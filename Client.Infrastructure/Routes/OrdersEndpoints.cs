@@ -13,5 +13,6 @@
         public static string Save = "api/v1/orders/add-edit";
         public static string GetCount = "api/v1/orders/count";
         public static string UpdateStatus = "api/v1/orders/update-status";
+        public static string UpdateTotalPrice = "api/v1/orders/update-totalprice";
     }
 }

@@ -85,6 +85,12 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             return Ok(result);
         }
 
+        [HttpPut("update-totalprice")]
+        public async Task<IActionResult> UpdateTotalPrice(UpdateOrderTotalPriceCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
 
     }
 }

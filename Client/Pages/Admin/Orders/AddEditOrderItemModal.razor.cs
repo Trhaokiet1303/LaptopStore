@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using LaptopStore.Client.Extensions;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Linq;
+using LaptopStore.Application.Features.Orders.Commands.Update;
 
 namespace LaptopStore.Client.Pages.Admin.Orders
 {
@@ -83,7 +84,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             {
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
-                
+
                 if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
                 {
                     _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
@@ -104,8 +105,9 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
-                    if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
+                    if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
                     {
+                        // Cập nhật số lượng sản phẩm
                         var updateCommand = new AddEditOrderItemCommand
                         {
                             Id = existingOrderItem.Id,
@@ -113,15 +115,37 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             ProductId = existingOrderItem.ProductId,
                             ProductName = existingOrderItem.ProductName,
                             ProductPrice = existingOrderItem.ProductPrice,
-                            Quantity = AddEditOrderItemModel.Quantity,
+                            Quantity = AddEditOrderItemModel.Quantity
                         };
 
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);
                         if (updateResponse.Succeeded)
                         {
-                            _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
+                            // Tính lại tổng giá và cập nhật ngay lập tức
+                            var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
+                                item.ProductId == AddEditOrderItemModel.ProductId
+                                    ? AddEditOrderItemModel.Quantity * AddEditOrderItemModel.ProductPrice
+                                    : item.Quantity * item.ProductPrice);
+
+                            var updateOrderCommand = new UpdateOrderTotalPriceCommand
+                            {
+                                OrderId = AddEditOrderItemModel.OrderId,
+                                TotalPrice = updatedTotalPrice
+                            };
+
+                            var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
+                            if (orderUpdateResponse.Succeeded)
+                            {
+                                _snackBar.Add("Cập nhật số lượng và tổng giá thành công.", Severity.Success);
+                                await HubConnection.SendAsync("UpdateOrder", AddEditOrderItemModel.OrderId);
+                                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                            }
+                            else
+                            {
+                                _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
+                            }
+
                             MudDialog.Close();
-                            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
                         }
                         else
                         {
@@ -136,29 +160,14 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         _snackBar.Add("Số lượng mới không thể lớn hơn số lượng hiện tại.", Severity.Error);
                     }
                 }
-                else
-                {
-                    var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
-                    if (response.Succeeded)
-                    {
-                        _snackBar.Add(response.Messages[0], Severity.Success);
-                        MudDialog.Close();
-                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                    }
-                    else
-                    {
-                        foreach (var message in response.Messages)
-                        {
-                            _snackBar.Add(message, Severity.Error);
-                        }
-                    }
-                }
             }
             else
             {
                 _snackBar.Add("Không thể tải thông tin đơn hàng.", Severity.Error);
             }
         }
+
+
         public void Cancel()
         {
             MudDialog.Cancel();

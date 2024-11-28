@@ -21,6 +21,8 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
 
         Task<IResult> CreateOrderAsync(Domain.Entities.Catalog.Order orderRequest);
         Task<IResult> UpdateOrderStatusAsync(UpdateOrderStatusCommand command);
+        Task<IResult> UpdateOrderTotalPriceAsync(UpdateOrderTotalPriceCommand command);
+
 
     }
 }
