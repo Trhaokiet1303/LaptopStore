@@ -55,9 +55,11 @@ else
                 <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
                
             </MudGrid>
-            <MudButton Class="remove-order mt-2" Color="Color.Error" Variant="Variant.Filled" OnClick="@(() => ConfirmCancelOrder(order.Id))">
+            <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
+                       OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
                 Hủy đơn hàng
             </MudButton>
+
         </MudPaper>
     }
 }

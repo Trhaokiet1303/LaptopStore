@@ -1,0 +1,37 @@
+﻿@using MudBlazor
+@using MudBlazor.Dialog
+
+<MudDialog >
+    <TitleContent>
+        <MudText Class="comfim-popup-h1">Xác nhận</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">Xác nhận</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Hủy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string ContentText { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public Color Color { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    private void Cancel() => MudDialog.Cancel();
+}
+<style>
+
+    .comfim-popup-h1{
+        font-weight:bold;
+        text-align:center;
+        font-size:20px;
+    }
+    .mud-dialog .mud-dialog-actions{
+        z-index:1050;
+        background-color:#fff;
+    }
+</style>

@@ -82,3 +82,22 @@
     color: #ff0000;
     font-style: italic;
 }
+.mud-button-root {
+    background-color: #ff0000;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    text-align: center;
+}
+    .mud-button-root:hover {
+        background-color: #cc0000;
+        color: whitesmoke;
+    }
+.mud-button-root:disabled {
+    background-color: #cc0000;
+    color: #fff;
+    border: none;
+    opacity: 1; /* Đảm bảo không bị làm mờ */
+    pointer-events: none; /* Đảm bảo không thể click */
+}

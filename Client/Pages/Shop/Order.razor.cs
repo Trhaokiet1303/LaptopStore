@@ -196,7 +196,22 @@ namespace LaptopStore.Client.Pages.Shop
                 await JS.InvokeVoidAsync("alert", "Giỏ hàng của bạn đang trống!");
                 return;
             }
+            if (string.IsNullOrEmpty(FirstName) || string.IsNullOrEmpty(LastName))
+            {
+                await JS.InvokeVoidAsync("alert", "Vui lòng nhập họ và tên!");
+                return;
+            }
 
+            if (string.IsNullOrEmpty(PhoneNumber))
+            {
+                await JS.InvokeVoidAsync("alert", "Vui lòng nhập số điện thoại!");
+                return;
+            }
+            if (string.IsNullOrEmpty(SelectedCity) || string.IsNullOrEmpty(SelectedDistrict) || string.IsNullOrEmpty(SelectedWard))
+            {
+                await JS.InvokeVoidAsync("alert", "Vui lòng chọn địa chỉ giao hàng!");
+                return;
+            }
             if (string.IsNullOrEmpty(SelectedPaymentMethod))
             {
                 await JS.InvokeVoidAsync("alert", "Vui lòng chọn phương thức thanh toán!");
@@ -213,7 +228,7 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            var userAddress = $"{street}, {selectedWard}, {selectedDistrict}, {selectedCity}";
+            var userAddress = $"{street}  {selectedWard}, {selectedDistrict}, {selectedCity}";
             var fullName = $"{FirstName} {LastName}";
 
             var order = new Domain.Entities.Catalog.Order

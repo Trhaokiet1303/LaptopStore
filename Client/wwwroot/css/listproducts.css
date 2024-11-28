@@ -10,7 +10,7 @@
     padding: 16px;
     background-color: #f5f5f5;
     position: relative; /* Giữ vị trí panel cố định */
-    z-index: 1; /* Đặt panel trên cùng nếu cần */
+    z-index: 1050; /* Đặt panel trên cùng nếu cần */
 }
 
 .filter-panel-hidden {
@@ -84,6 +84,21 @@
     width: 100px;
     height: auto;
 }
+.filter-button {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    text-align: center;
+    border: 1px solid #007bfff9;
+    border-radius: 30px;
+    color: #ffff;
+    background-color: #007bfff9;
+    margin-top: 10px;
+}
+    .filter-button:hover {
+        color: #007bfff9;
+    }
 /*Product css*/
 .product-card {
     position: relative;

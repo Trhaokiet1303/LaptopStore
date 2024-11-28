@@ -22,25 +22,25 @@
             </div>
         </MudItem>
         <MudItem xs="12">
-            <MudTextField For="@(() => _registerUserModel.UserName)" @bind-Value="_registerUserModel.UserName" Label="@_localizer["Tên đăng nhập"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.UserName)" @bind-Value="_registerUserModel.UserName" Label="@_localizer["Tên đăng nhập"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.FirstName)" @bind-Value="_registerUserModel.FirstName" Label="@_localizer["Họ"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.FirstName)" @bind-Value="_registerUserModel.FirstName" Label="@_localizer["Họ"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.LastName)" @bind-Value="_registerUserModel.LastName" Label="@_localizer["Tên"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.LastName)" @bind-Value="_registerUserModel.LastName" Label="@_localizer["Tên"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField T="string" Label="@_localizer["E-mail"]" @bind-Value="_registerUserModel.Email" For="@(() => _registerUserModel.Email)" />
+            <MudTextField Class="input-register" T="string" Label="@_localizer["E-mail"]" @bind-Value="_registerUserModel.Email" For="@(() => _registerUserModel.Email)" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField T="string" Label="@_localizer["Số điện thoại"]" @bind-Value="_registerUserModel.PhoneNumber" For="@(() => _registerUserModel.PhoneNumber)" />
+            <MudTextField Class="input-register" T="string" Label="@_localizer["Số điện thoại"]" @bind-Value="_registerUserModel.PhoneNumber" For="@(() => _registerUserModel.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.Password)" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" @bind-Value="_registerUserModel.Password" Label="@_localizer["Mật khẩu"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.Password)" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" @bind-Value="_registerUserModel.Password" Label="@_localizer["Mật khẩu"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.ConfirmPassword)" InputType="InputType.Password" @bind-Value="_registerUserModel.ConfirmPassword" Label="@_localizer["Nhập lại mật khẩu"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.ConfirmPassword)" InputType="InputType.Password" @bind-Value="_registerUserModel.ConfirmPassword" Label="@_localizer["Nhập lại mật khẩu"]" />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Disabled="@(!Validated)" Class="regisster-button">@_localizer["Đăng ký"]</MudButton>

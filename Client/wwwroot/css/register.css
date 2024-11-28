@@ -26,18 +26,26 @@
     font-weight: bold;
 }
 
-.mud-input{
+.input-register {
     border: 1px solid black;
     border-radius: 10px;
     padding: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 .regisster-button {
     background-color: #007bfff9;
     color: white;
     font-size: 1rem;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
     .regisster-button:hover {
         background-color: #0263ccf9;
     }
+.mud-button-root:disabled {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}

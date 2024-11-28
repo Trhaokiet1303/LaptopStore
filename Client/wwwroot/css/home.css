@@ -1,6 +1,8 @@
 ﻿
 .main-container {
     display: flex;
+    max-width:90%;
+    margin: 0 auto;
 }
 /*
 .filter-panel-container {
@@ -319,7 +321,7 @@
 }
 
 .rate {
-    color: yellow;
+    color: #ffb400;
     fill: yellow;
     display: flex;
     justify-content: center;
