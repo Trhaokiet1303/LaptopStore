@@ -41,7 +41,7 @@
                     <MudTextField T="string" For="@(() => AddEditOrderModel.UserAddress)" @bind-Value="AddEditOrderModel.UserAddress" Label="@_localizer["UserAddress"]" />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField For="@(() => AddEditOrderModel.TotalPrice)" @bind-Value="AddEditOrderModel.TotalPrice" Label="@_localizer["TotalPrice"]" />
+                    <MudTextField For="@(() => AddEditOrderModel.TotalPrice)" @bind-Value="AddEditOrderModel.TotalPrice" Label="@_localizer["TotalPrice"]" Disabled />
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="string" For="@(() => AddEditOrderModel.MethodPayment)" @bind-Value="AddEditOrderModel.MethodPayment" Label="@_localizer["MethodPayment"]" />

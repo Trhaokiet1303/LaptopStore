@@ -47,13 +47,15 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         [HttpPost("create-order")]
         public async Task<IActionResult> Post(Domain.Entities.Catalog.Order command)
         {
+            int totalPrice = command.OrderItem.Sum(item => item.TotalPrice);
+
             var addEditOrderCommand = new AddEditOrderCommand
             {
                 UserId = command.UserId,
-                UserName = command.UserName, 
+                UserName = command.UserName,
                 UserPhone = command.UserPhone,
                 UserAddress = command.UserAddress,
-                TotalPrice = command.TotalPrice,
+                TotalPrice = totalPrice,
                 MethodPayment = command.MethodPayment,
                 StatusOrder = command.StatusOrder,
                 IsPayment = command.IsPayment,
@@ -63,13 +65,13 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
                     ProductName = item.ProductName,
                     ProductPrice = item.ProductPrice,
                     ProductImage = item.ProductImage,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
+                    TotalPrice = item.TotalPrice
                 }).ToList()
             };
+
             return Ok(await _mediator.Send(addEditOrderCommand));
         }
-
-
 
         [Authorize(Policy = Permissions.Orders.Delete)]
         [HttpDelete("{id}")]

@@ -57,16 +57,24 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
 
         public async Task<Result<int>> Handle(AddEditOrderCommand command, CancellationToken cancellationToken)
         {
+            command.OrderItem = command.OrderItem ?? new List<OrderItem>();
+
+            int totalPrice = 0;
+
+            if (command.OrderItem.Any())
+            {
+                totalPrice = command.OrderItem.Sum(item => item.ProductPrice * item.Quantity);
+            }
+
             if (command.Id == 0)
             {
-
                 var order = new Order
                 {
                     UserId = command.UserId,
                     UserName = command.UserName,
                     UserPhone = command.UserPhone,
                     UserAddress = command.UserAddress,
-                    TotalPrice = command.TotalPrice,
+                    TotalPrice = totalPrice,
                     MethodPayment = command.MethodPayment,
                     StatusOrder = command.StatusOrder,
                     IsPayment = command.IsPayment,
@@ -76,9 +84,11 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                         ProductName = item.ProductName,
                         ProductImage = item.ProductImage,
                         ProductPrice = item.ProductPrice,
-                        Quantity = item.Quantity
+                        Quantity = item.Quantity,
+                        TotalPrice = item.ProductPrice * item.Quantity
                     }).ToList()
                 };
+
                 await _unitOfWork.Repository<Order>().AddAsync(order);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
                 return await Result<int>.SuccessAsync(order.Id, _localizer["Order Saved"]);
@@ -92,25 +102,42 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                     order.UserAddress = command.UserAddress ?? order.UserAddress;
                     order.UserName = command.UserName ?? order.UserName;
                     order.UserPhone = command.UserPhone ?? order.UserPhone;
-                    order.TotalPrice = command.TotalPrice != 0 ? command.TotalPrice : order.TotalPrice;
                     order.MethodPayment = command.MethodPayment ?? order.MethodPayment;
                     order.StatusOrder = command.StatusOrder ?? order.StatusOrder;
                     order.IsPayment = command.IsPayment;
 
+                    if (order.OrderItem == null || !order.OrderItem.Any())
+                    {
+                        order.OrderItem = new List<OrderItem>();  
+                        order.TotalPrice = 0; 
+                    }
+                    else
+                    {
+                        totalPrice = command.OrderItem.Any() ? command.OrderItem.Sum(item => item.ProductPrice * item.Quantity) : 0;
+                        order.TotalPrice = totalPrice;
+                    }
+
                     foreach (var item in command.OrderItem)
                     {
-                        var existingItem = order.OrderItem.FirstOrDefault(i => i.ProductId == item.ProductId);
-                        if (existingItem != null)
+                        if (item != null)
                         {
-                            existingItem.Quantity = item.Quantity;
-                        }
-                        else
-                        {
-                            order.OrderItem.Add(new OrderItem
+                            var existingItem = order.OrderItem.FirstOrDefault(i => i.ProductId == item.ProductId);
+                            if (existingItem != null)
                             {
-                                ProductId = item.ProductId,                            
-                                Quantity = item.Quantity,
-                            });
+                                existingItem.Quantity = item.Quantity;
+                            }
+                            else
+                            {
+                                order.OrderItem.Add(new OrderItem
+                                {
+                                    ProductId = item.ProductId,
+                                    ProductName = item.ProductName,
+                                    ProductPrice = item.ProductPrice,
+                                    ProductImage = item.ProductImage,
+                                    Quantity = item.Quantity,
+                                    TotalPrice = item.ProductPrice * item.Quantity
+                                });
+                            }
                         }
                     }
 
@@ -130,5 +157,6 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                 }
             }
         }
+
     }
 }

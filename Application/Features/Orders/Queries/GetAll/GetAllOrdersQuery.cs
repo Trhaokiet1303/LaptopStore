@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static LaptopStore.Shared.Constants.Permission.Permissions;
+using LaptopStore.Shared.Constants.Permission;
 
 namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 {
@@ -38,7 +38,6 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 
         public async Task<Result<List<GetAllOrdersResponse>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            // Truy vấn trực tiếp từ cơ sở dữ liệu, bỏ qua cache
             var orders = await _unitOfWork.Repository<Order>().GetAllAsync();
 
             var mappedOrders = _mapper.Map<List<GetAllOrdersResponse>>(orders);
@@ -48,6 +47,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                 var cartItems = await _unitOfWork.Repository<OrderItem>().Entities
                     .Where(c => c.OrderId == order.Id)
                     .ToListAsync();
+
+                int totalOrderPrice = 0;
 
                 if (cartItems.Any())
                 {
@@ -61,23 +62,32 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                             item.ProductName = product.Name;
                             item.ProductPrice = product.Price;
                             item.Quantity = item.Quantity;
+                            item.TotalPrice = item.Quantity * item.ProductPrice;
                             item.Instock = product.Quantity;
                             item.ProductImage = product.ImageDataURL;
+
+                            totalOrderPrice += item.TotalPrice;
                         }
                         else
                         {
                             item.ProductName = "Unknown Product";
                             item.ProductPrice = 0;
                             item.Quantity = 0;
+                            item.TotalPrice = 0;
+                            item.Instock = 0;
+                            item.ProductImage = null;
                         }
                     }
                 }
+                else
+                {
+                    totalOrderPrice = 0;
+                }
+
+                order.TotalPrice = totalOrderPrice;
             }
 
             return await Result<List<GetAllOrdersResponse>>.SuccessAsync(mappedOrders);
         }
-
     }
-
-
 }

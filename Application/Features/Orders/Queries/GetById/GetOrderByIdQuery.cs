@@ -39,10 +39,12 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
             var mappedOrder = _mapper.Map<GetOrderByIdResponse>(order);
 
             var orderItems = await _unitOfWork.Repository<OrderItem>().Entities
-                .Where(c => c.OrderId == order.Id) 
-                .ToListAsync(); 
+                .Where(c => c.OrderId == order.Id)
+                .ToListAsync();
 
-            if (orderItems.Any()) 
+            int totalOrderPrice = 0;
+
+            if (orderItems.Any())
             {
                 mappedOrder.OrderItem = _mapper.Map<List<GetOrderItemByIdResponse>>(orderItems);
 
@@ -55,16 +57,27 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
                         item.ProductPrice = product.Price;
                         item.Quantity = orderItems.FirstOrDefault(c => c.ProductId == item.ProductId)?.Quantity ?? 0;
                         item.Instock = product.Quantity;
-                        item.ProductImage=product.ImageDataURL;
+                        item.TotalPrice = item.Quantity * item.ProductPrice;
+                        item.ProductImage = product.ImageDataURL;
+
+                        totalOrderPrice += item.TotalPrice;
                     }
                     else
                     {
                         item.ProductName = "Unknown Product";
                         item.ProductPrice = 0;
                         item.Quantity = 0;
+                        item.Instock = 0;
+                        item.TotalPrice = 0;
                     }
                 }
             }
+            else
+            {
+                totalOrderPrice = 0;
+            }
+
+            mappedOrder.TotalPrice = totalOrderPrice;
 
             return await Result<GetOrderByIdResponse>.SuccessAsync(mappedOrder);
         }

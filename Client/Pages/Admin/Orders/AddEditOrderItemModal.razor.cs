@@ -14,7 +14,11 @@ using Microsoft.AspNetCore.SignalR.Client;
 using LaptopStore.Client.Extensions;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Linq;
+<<<<<<< HEAD
 using LaptopStore.Application.Features.Orders.Commands.Update;
+=======
+using LaptopStore.Application.Features.Orders.Commands.AddEdit;
+>>>>>>> 3140a2f (add totalprice in orderitem)
 
 namespace LaptopStore.Client.Pages.Admin.Orders
 {
@@ -59,6 +63,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         ProductName = orderItem.ProductName,
                         ProductPrice = orderItem.ProductPrice,
                         Quantity = orderItem.Quantity,
+                        TotalPrice = orderItem.TotalPrice,
                     };
                     await LoadImageAsync();
                 }
@@ -77,14 +82,20 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 AddEditOrderItemModel.ProductImage = imageResponse.Data;
             }
         }
+
         private async Task SaveAsync()
         {
+            // Get the product details based on the ProductId
             var productResponse = await ProductManager.GetProductByIdAsync(AddEditOrderItemModel.ProductId);
             if (productResponse.Succeeded)
             {
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
 
+<<<<<<< HEAD
+=======
+                // Check if the requested quantity exceeds the available stock
+>>>>>>> 3140a2f (add totalprice in orderitem)
                 if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
                 {
                     _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
@@ -97,6 +108,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 return;
             }
 
+            // Get the order details
             var existingOrderItemResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderItemModel.OrderId);
             if (existingOrderItemResponse.Succeeded && existingOrderItemResponse.Data.OrderItem != null)
             {
@@ -115,12 +127,18 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             ProductId = existingOrderItem.ProductId,
                             ProductName = existingOrderItem.ProductName,
                             ProductPrice = existingOrderItem.ProductPrice,
+<<<<<<< HEAD
                             Quantity = AddEditOrderItemModel.Quantity
+=======
+                            Quantity = AddEditOrderItemModel.Quantity,
+                            TotalPrice = AddEditOrderItemModel.Quantity * existingOrderItem.ProductPrice
+>>>>>>> 3140a2f (add totalprice in orderitem)
                         };
 
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);
                         if (updateResponse.Succeeded)
                         {
+<<<<<<< HEAD
                             // Tính lại tổng giá và cập nhật ngay lập tức
                             var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
                                 item.ProductId == AddEditOrderItemModel.ProductId
@@ -144,6 +162,9 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             {
                                 _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
                             }
+=======
+                            _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
+>>>>>>> 3140a2f (add totalprice in orderitem)
 
                             MudDialog.Close();
                         }
@@ -160,6 +181,28 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         _snackBar.Add("Số lượng mới không thể lớn hơn số lượng hiện tại.", Severity.Error);
                     }
                 }
+<<<<<<< HEAD
+=======
+                else
+                {
+                    var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
+                    if (response.Succeeded)
+                    {
+                        _snackBar.Add(response.Messages[0], Severity.Success);
+
+
+                        MudDialog.Close();
+                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                    }
+                    else
+                    {
+                        foreach (var message in response.Messages)
+                        {
+                            _snackBar.Add(message, Severity.Error);
+                        }
+                    }
+                }
+>>>>>>> 3140a2f (add totalprice in orderitem)
             }
             else
             {
@@ -167,7 +210,10 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             }
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3140a2f (add totalprice in orderitem)
         public void Cancel()
         {
             MudDialog.Cancel();

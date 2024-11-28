@@ -27,7 +27,10 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
         [Required]
         public int ProductPrice { get; set; }
         public string ProductImage { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
+        public int TotalPrice { get; set; }
         [Required]
         public int OrderId { get; set; }
         public Order Order { get; set; }
@@ -79,6 +82,7 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
                     orderItem.ProductPrice = (command.ProductPrice == 0) ? orderItem.ProductPrice : command.ProductPrice;
                     orderItem.Quantity = (command.Quantity == 0) ? orderItem.Quantity : command.Quantity;
                     orderItem.OrderId = (command.OrderId == 0) ? orderItem.OrderId : command.OrderId;
+                    orderItem.TotalPrice = command.Quantity * command.ProductPrice;
                    
                     if (uploadRequest != null)
                     {

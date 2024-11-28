@@ -11,7 +11,8 @@ namespace LaptopStore.Application.Specifications.Catalog
             {
                 Criteria = p => p.Id.ToString().Contains(searchString) || p.ProductId.ToString().Contains(searchString) ||
                 p.ProductName.Contains(searchString) || p.ProductPrice.ToString().Contains(searchString) ||
-                p.Quantity.ToString().Contains(searchString) || p.OrderId.ToString().Contains(searchString);
+                p.Quantity.ToString().Contains(searchString) || p.OrderId.ToString().Contains(searchString) ||
+                p.TotalPrice.ToString().Contains(searchString);
             }
             else
             {

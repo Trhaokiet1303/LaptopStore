@@ -38,6 +38,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
         private async Task SaveAsync()
         {
+            CalculateTotalPrice();
             var response = await OrderManager.SaveAsync(AddEditOrderModel);
             if (response.Succeeded)
             {
@@ -52,6 +53,11 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
             }
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+        }
+
+        private void CalculateTotalPrice()
+        {
+            AddEditOrderModel.TotalPrice = AddEditOrderModel.OrderItem.Sum(item => item.ProductPrice * item.Quantity);
         }
 
         private void MapOrder(GetOrderByIdResponse orderResponse)
@@ -73,8 +79,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
             if (AddEditOrderModel.Id != 0)
             {
-                // Load the existing order data when editing
-                var orderResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderModel.Id); // Assuming you have this method.
+                var orderResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderModel.Id);
 
                 if (orderResponse.Succeeded)
                 {

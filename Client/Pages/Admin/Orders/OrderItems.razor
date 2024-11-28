@@ -30,7 +30,7 @@
                 <MudTd>@context.Quantity</MudTd>
                 <MudTd>@context.Instock</MudTd>
                 <MudTd>@context.ProductPrice</MudTd>
-                <MudTd>@(context.Quantity * context.ProductPrice)</MudTd>
+                <MudTd>@context.TotalPrice</MudTd>
 
                 <MudTd DataLabel="Actions" Style="text-align: right">
                     @if (_canEditOrderItems || _canDeleteOrderItems)

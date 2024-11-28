@@ -241,13 +241,14 @@ namespace LaptopStore.Client.Pages.Shop
                 MethodPayment = SelectedPaymentMethod,
                 StatusOrder = "Đang xử lý",
                 IsPayment = SelectedPaymentMethod != "COD", 
-                OrderItem = cartItems.Select(item => new Domain.Entities.Catalog.OrderItem
+                OrderItem = cartItems.Select(item => new OrderItem
                 {
                     ProductId = item.ProductId,
                     ProductName = item.ProductName,
                     ProductImage = item.ProductImage,
                     ProductPrice = item.ProductPrice,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
+                    TotalPrice = item.TotalPrice,
                 }).ToList()
             };
 
