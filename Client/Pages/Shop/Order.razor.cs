@@ -202,7 +202,7 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            if (string.IsNullOrEmpty(PhoneNumber))
+            if (string.IsNullOrEmpty(PhoneNumber) || !System.Text.RegularExpressions.Regex.IsMatch(PhoneNumber, @"^\d{10}$"))
             {
                 await JS.InvokeVoidAsync("alert", "Vui lòng nhập số điện thoại!");
                 return;

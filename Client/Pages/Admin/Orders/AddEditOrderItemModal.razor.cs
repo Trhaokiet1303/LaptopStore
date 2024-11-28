@@ -83,7 +83,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             {
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
-
+                
                 if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
                 {
                     _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
@@ -113,7 +113,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             ProductId = existingOrderItem.ProductId,
                             ProductName = existingOrderItem.ProductName,
                             ProductPrice = existingOrderItem.ProductPrice,
-                            Quantity = AddEditOrderItemModel.Quantity 
+                            Quantity = AddEditOrderItemModel.Quantity,
                         };
 
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);

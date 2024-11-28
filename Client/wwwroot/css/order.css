@@ -118,14 +118,14 @@
 
 /* Phần thanh toán - Class 'thanhtoan' */
 .thanhtoan {
-    margin-top: 20px;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: calc(60% + 24%); /* Tổng width của user-address và dat-hang + gap */
-    margin-left: auto; /* Căn giữa */
-    margin-right: auto;
+    margin: 30px auto;
+    max-width: 70%;
+}
 }
 
     .thanhtoan h3 {
