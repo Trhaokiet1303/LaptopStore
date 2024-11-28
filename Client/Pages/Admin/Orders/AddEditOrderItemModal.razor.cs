@@ -14,15 +14,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using LaptopStore.Client.Extensions;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Linq;
-<<<<<<< HEAD
 using LaptopStore.Application.Features.Orders.Commands.Update;
-=======
-using LaptopStore.Application.Features.Orders.Commands.AddEdit;
-<<<<<<< HEAD
->>>>>>> 3140a2f (add totalprice in orderitem)
-=======
-using LaptopStore.Application.Features.Orders.Commands.Update;
->>>>>>> 58e28d9 (fix order, orderitem)
 
 namespace LaptopStore.Client.Pages.Admin.Orders
 {
@@ -96,10 +88,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
 
-<<<<<<< HEAD
-=======
                 // Check if the requested quantity exceeds the available stock
->>>>>>> 3140a2f (add totalprice in orderitem)
                 if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
                 {
                     _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
@@ -121,12 +110,9 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
-<<<<<<< HEAD
                     if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
-=======
                     // If the item exists, update the order item
                     if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
->>>>>>> 58e28d9 (fix order, orderitem)
                     {
                         // Cập nhật số lượng sản phẩm
                         var updateCommand = new AddEditOrderItemCommand
@@ -136,23 +122,14 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             ProductId = existingOrderItem.ProductId,
                             ProductName = existingOrderItem.ProductName,
                             ProductPrice = existingOrderItem.ProductPrice,
-<<<<<<< HEAD
-                            Quantity = AddEditOrderItemModel.Quantity
-=======
                             Quantity = AddEditOrderItemModel.Quantity,
                             TotalPrice = AddEditOrderItemModel.Quantity * existingOrderItem.ProductPrice
->>>>>>> 3140a2f (add totalprice in orderitem)
                         };
 
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);
                         if (updateResponse.Succeeded)
                         {
-<<<<<<< HEAD
-<<<<<<< HEAD
                             // Tính lại tổng giá và cập nhật ngay lập tức
-=======
-                            // Calculate and update the total price
->>>>>>> 58e28d9 (fix order, orderitem)
                             var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
                                 item.ProductId == AddEditOrderItemModel.ProductId
                                     ? AddEditOrderItemModel.Quantity * AddEditOrderItemModel.ProductPrice
@@ -175,12 +152,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             {
                                 _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
                             }
-<<<<<<< HEAD
-=======
                             _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
->>>>>>> 3140a2f (add totalprice in orderitem)
-=======
->>>>>>> 58e28d9 (fix order, orderitem)
 
                             MudDialog.Close();
                         }
@@ -197,8 +169,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         _snackBar.Add("Số lượng mới không thể lớn hơn số lượng hiện tại.", Severity.Error);
                     }
                 }
-<<<<<<< HEAD
-=======
                 else
                 {
                     // If the item doesn't exist in the order, add the new order item
@@ -250,7 +220,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         }
                     }
                 }
->>>>>>> 3140a2f (add totalprice in orderitem)
             }
             else
             {
@@ -258,14 +227,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 3140a2f (add totalprice in orderitem)
-=======
-
->>>>>>> 58e28d9 (fix order, orderitem)
         public void Cancel()
         {
             MudDialog.Cancel();

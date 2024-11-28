@@ -62,11 +62,5 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
             var response = await _httpClient.PutAsJsonAsync(OrdersEndpoints.UpdateTotalPrice, command);
             return await response.ToResult();
         }
-
-        public async Task<IResult> UpdateOrderTotalPriceAsync(UpdateOrderTotalPriceCommand command)
-        {
-            var response = await _httpClient.PutAsJsonAsync(OrdersEndpoints.UpdateTotalPrice, command);
-            return await response.ToResult();
-        }
     }
 }
