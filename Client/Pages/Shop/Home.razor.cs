@@ -234,5 +234,35 @@ namespace LaptopStore.Client.Pages.Shop
             IsExpanded = !IsExpanded;
         }
 
+        //Hàm tạo ngôi sao
+        private List<string> GetStars(decimal rate)
+        {
+            // Lấy phần nguyên của rate để xác định số sao đầy
+            var fullStars = (int)Math.Floor(rate);
+
+            // Kiểm tra xem có nửa sao không
+            var halfStar = (rate - fullStars) >= 0.5m; // 'm' để chỉ định là kiểu decimal
+
+            // Tính số sao trống còn lại
+            var emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+            // Tạo danh sách chứa các icon sao
+            var stars = new List<string>();
+
+            // Thêm icon sao đầy
+            stars.AddRange(Enumerable.Repeat(Icons.Material.Filled.Star, fullStars));
+
+            // Thêm icon nửa sao nếu có
+            if (halfStar)
+            {
+                stars.Add(Icons.Material.Filled.StarHalf);
+            }
+
+            // Thêm icon sao trống
+            stars.AddRange(Enumerable.Repeat(Icons.Material.Outlined.StarOutline, emptyStars));
+
+            return stars;
+        }
+
     }
 }

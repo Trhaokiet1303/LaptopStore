@@ -445,6 +445,8 @@
 }
 
 .rate-button {
+    color: gold;
+    fill: yellow;
     display: flex;
     align-items: center;
     justify-content: center;

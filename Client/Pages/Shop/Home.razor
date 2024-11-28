@@ -10,7 +10,7 @@
 
 <div class="banner-container">
     <!-- Nút điều hướng bên trái -->
-    <img class="nav-button left" src="/images/dieuhuong/is-less-than.png" @onclick="ShowPreviousImage" />
+    <img class="nav-button left" src="/images/dieuhuong/less-than.png" @onclick="ShowPreviousImage" />
 
     <!-- Banner Images -->
     <MudPaper Class="banner">
@@ -19,7 +19,7 @@
     </MudPaper>
 
     <!-- Nút điều hướng bên phải -->
-    <img class="nav-button right" src="/images/dieuhuong/is-greater-than.png" @onclick="ShowNextImage" />
+    <img class="nav-button right" src="/images/dieuhuong/greater-than.png" @onclick="ShowNextImage" />
 </div>
 <br />
 <MudGrid Class="logo-container">
@@ -66,8 +66,12 @@
                                 <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") đ</MudText>
                                 <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) đ</MudText>
                             </div>
-                            <MudRating Value="@product.Rate" MaxValue="5" ReadOnly="true" Class="rate-button" />
-
+                                <div class="rate-button">
+                                    @foreach (var star in GetStars(product.Rate))
+                                {
+                                    <MudIcon Icon="@star" Class="star-icon" />
+                                }
+                            </div>
                             <!-- Nút yêu thích -->
                             <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
                         </MudCardContent>
@@ -121,9 +125,13 @@
                                 <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") đ</MudText>
                                 <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) đ</MudText>
                             </div>
-                            <MudRating Value="@context.Rate" ReadOnly="true" Icon="@Icons.Material.Filled.Star" Class="rate" />
-     
-                            </MudCardContent>
+                            <div class="rate">
+                                @foreach (var star in GetStars(context.Rate))
+                                {
+                                    <MudIcon Icon="@star" Class="star-icon" />
+                                }
+                            </div>
+                        </MudCardContent>
 
                             <MudButton OnClick="() => NavigateToProductDetail(context.Id)" Class="action-button">
                                 Xem chi tiết

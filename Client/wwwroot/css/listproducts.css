@@ -239,13 +239,13 @@
 }
 
 .rate {
-    color: yellow;
+    color: gold;
     fill: yellow;
     display: flex;
     justify-content: center;
     gap: 2px;
     position: absolute;
-    bottom: 40px;
+    bottom: 45px;
     left: 50%;
     transform: translateX(-50%);
 }

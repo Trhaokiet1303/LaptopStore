@@ -158,8 +158,12 @@
                                     <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") đ</MudText>
                                     <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) đ</MudText>
                                 </div>
-                                <MudRating Value="@product.Rate" MaxValue="5" ReadOnly="true" Class="rate-button" />
-
+                                <div class="rate-button">
+                                    @foreach (var star in GetStars(product.Rate))
+                                    {
+                                        <MudIcon Icon="@star" Class="star-icon" />
+                                    }
+                                </div>
                                 <!-- Nút yêu thích -->
                                 <MudIconButton Icon="Icons.Material.Filled.FavoriteBorder" Color="Color.Primary" />
                             </MudCardContent>

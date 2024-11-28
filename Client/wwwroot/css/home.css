@@ -166,12 +166,12 @@
     z-index: 1;
 }
 
-    .nav-button img {
-        transition: transform 0.3s ease;
-    }
 
-    .nav-button:hover img {
-        transform: scale(1.1);
+    .nav-button:hover {
+        transition: transform 0.5s ease;
+        width: 38px;
+        height: 38px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .nav-button.left {
@@ -321,13 +321,13 @@
 }
 
 .rate {
-    color: #ffb400;
+    color: gold;
     fill: yellow;
     display: flex;
     justify-content: center;
     gap: 2px;
     position: absolute;
-    bottom: 40px;
+    bottom: 45px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -414,11 +414,11 @@
 }
 
     .slider-control.left-control {
-        left: -20px;
+        left: -15px;
     }
 
     .slider-control.right-control {
-        right: -20px;
+        right: -15px;
     }
 
 .product-list-container {
@@ -537,6 +537,8 @@
 }
 
 .rate-button {
+    color: gold;
+    fill: yellow;
     display: flex;
     align-items: center;
     justify-content: center;
