@@ -84,7 +84,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 {
                     _snackBar.Add(error, Severity.Error);
                 }
-                _navigationManager.NavigateTo("/identity/roles");
+                _navigationManager.NavigateTo("/admin/roles");
             }
         }
 
@@ -97,7 +97,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 _snackBar.Add(result.Messages[0], Severity.Success);
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions, _currentUser.GetUserId(), request.RoleId);
-                _navigationManager.NavigateTo("/identity/roles");
+                _navigationManager.NavigateTo("/admin/roles");
             }
             else
             {
