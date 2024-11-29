@@ -53,7 +53,7 @@
 
             @if (isAuthenticated)
             {
-                <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">Tài khoản</MudNavLink>
+                <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
 
             }
             else
@@ -82,6 +82,8 @@
     private bool IsHomePage { get; set; } = true;
     private bool isAuthenticated { get; set; }
     private string CurrentUserId { get; set; }
+    private string UserName { get; set; } = string.Empty;
+
     private HubConnection hubConnection;
     private MudTable<GetAllPagedProductsResponse> _table;
     private int cartItemCount = 0;
@@ -137,9 +139,13 @@
         });
 
 
-        // Đăng ký sự kiện LocationChanged
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+        if (isAuthenticated)
+        {
+            UserName = authState.User.Identity.Name ?? "Người dùng"; // Lấy tên từ thông tin đăng nhập
+        }
 
         NavigationManager.LocationChanged += OnLocationChanged;
         UpdateBreadcrumb();
