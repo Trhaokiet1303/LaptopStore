@@ -68,8 +68,6 @@ namespace LaptopStore.Infrastructure.Services.Storage
             }
             catch (JsonException e) when (e.Path == "$" && typeof(T) == typeof(string))
             {
-                // For backward compatibility return the plain string.
-                // On the next save a correct value will be stored and this Exception will not happen again, for this 'key'
                 return (T)(object)serializedData;
             }
         }
@@ -152,8 +150,6 @@ namespace LaptopStore.Infrastructure.Services.Storage
             }
             catch (JsonException e) when (e.Path == "$" && typeof(T) == typeof(string))
             {
-                // For backward compatibility return the plain string.
-                // On the next save a correct value will be stored and this Exception will not happen again, for this 'key'
                 return (T)(object)serializedData;
             }
         }

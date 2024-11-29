@@ -33,16 +33,15 @@ namespace LaptopStore.Application.Features.Orders.Commands.Update
 
                     if (order == null)
                     {
-                        return await Result<int>.FailAsync(_localizer["Order not found!"]);
+                        return await Result<int>.FailAsync(_localizer["Không tìm thấy danh sách sản phẩm trong Đơn hàng!"]);
                     }
 
-                    // Cập nhật trạng thái đơn hàng
                     order.StatusOrder = command.NewStatus;
 
                     await _unitOfWork.Repository<Order>().UpdateAsync(order);
                     await _unitOfWork.Commit(cancellationToken);
 
-                    return await Result<int>.SuccessAsync(order.Id, _localizer["Order status updated successfully."]);
+                    return await Result<int>.SuccessAsync(order.Id, _localizer["Cập nhật thành công."]);
                 }
                 catch (Exception ex)
                 {

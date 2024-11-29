@@ -9,17 +9,17 @@ namespace LaptopStore.Application.Validators.Features.Order.Commands.AddEdit
         public AddEditOrderCommandValidator(IStringLocalizer<AddEditOrderCommandValidator> localizer)
         {
             RuleFor(request => request.UserAddress)
-                .NotEmpty().WithMessage(localizer["UserAddress is required!"]);
+                .NotEmpty().WithMessage(localizer["Địa chỉ không được trống!"]);
             RuleFor(request => request.UserName)
-                .NotEmpty().WithMessage(localizer["UserName is required!"]);
+                .NotEmpty().WithMessage(localizer["Tên người đặt không được trống!"]);
             RuleFor(request => request.UserPhone)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Phone Number is required"])
-                .Length(10).WithMessage(localizer["Phone Number must be exactly 10 characters long"])
-                .Matches(@"^\d{10}$").WithMessage(localizer["Phone Number must be number"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Số điện thoại không được trống!"])
+                .Length(10).WithMessage(localizer["số điện thoại phải đủ 10 kí tự!"])
+                .Matches(@"^\d{10}$").WithMessage(localizer["Số điện thoại phải là số!"]);
             RuleFor(request => request.MethodPayment)
-                .NotEmpty().WithMessage(localizer["MethodPayment is required!"]);
+                .NotEmpty().WithMessage(localizer["Phương thức thanh toán không được trống!"]);
             RuleFor(request => request.StatusOrder)
-                .NotEmpty().WithMessage(localizer["StatusOrder is required!"]);
+                .NotEmpty().WithMessage(localizer["Trạng thái đơn hàng không được trống!"]);
         }
     }
 }

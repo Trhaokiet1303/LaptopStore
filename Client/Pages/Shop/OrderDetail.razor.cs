@@ -49,7 +49,6 @@ namespace LaptopStore.Client.Pages.Shop
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
-                Console.WriteLine($"Orders loaded from server: {result.Data.Count} items.");
                 Orders = result.Data.Where(o => o.UserId == userId).ToList();
             }
             else

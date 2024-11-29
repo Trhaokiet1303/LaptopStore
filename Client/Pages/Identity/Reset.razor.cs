@@ -44,7 +44,7 @@ namespace LaptopStore.Client.Pages.Identity
             }
             else
             {
-                _snackBar.Add(_localizer["Token Not Found!"], Severity.Error);
+                _snackBar.Add(_localizer["Không tìm thấy Token!"], Severity.Error);
             }
         }
 

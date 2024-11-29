@@ -224,7 +224,6 @@ namespace LaptopStore.Server.Extensions
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUploadService, UploadService>();
             services.AddTransient<IAuditService, AuditService>();
-            services.AddScoped<IExcelService, ExcelService>();
             return services;
         }
 

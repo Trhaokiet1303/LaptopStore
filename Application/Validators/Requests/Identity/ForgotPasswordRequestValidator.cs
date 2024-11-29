@@ -9,8 +9,8 @@ namespace LaptopStore.Application.Validators.Requests.Identity
         public ForgotPasswordRequestValidator(IStringLocalizer<ForgotPasswordRequestValidator> localizer)
         {
             RuleFor(request => request.Email)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Email is required"])
-                .EmailAddress().WithMessage(x => localizer["Email is not correct"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Email không được trống"])
+                .EmailAddress().WithMessage(x => localizer["Email không đúng"]);
         }
     }
 }

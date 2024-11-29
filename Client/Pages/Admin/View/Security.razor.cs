@@ -16,7 +16,7 @@ namespace LaptopStore.Client.Pages.Admin.View
             var response = await _accountManager.ChangePasswordAsync(_passwordModel);
             if (response.Succeeded)
             {
-                _snackBar.Add(_localizer["Password Changed!"], Severity.Success);
+                _snackBar.Add(_localizer["Đổi mật khẩu thành công!"], Severity.Success);
                 _passwordModel.Password = string.Empty;
                 _passwordModel.NewPassword = string.Empty;
                 _passwordModel.ConfirmNewPassword = string.Empty;

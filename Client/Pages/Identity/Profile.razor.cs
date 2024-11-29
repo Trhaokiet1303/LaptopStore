@@ -26,7 +26,7 @@ namespace LaptopStore.Client.Pages.Identity
             if (response.Succeeded)
             {
                 await _authenticationManager.Logout();
-                _snackBar.Add(_localizer["Your Profile has been updated. Please Login to Continue."], Severity.Success);
+                _snackBar.Add(_localizer["Cập nhật thành công. Đăng nhập lại để cập nhật."], Severity.Success);
                 _navigationManager.NavigateTo("/");
             }
             else
@@ -84,7 +84,7 @@ namespace LaptopStore.Client.Pages.Identity
                 if (result.Succeeded)
                 {
                     await _localStorage.SetItemAsync(StorageConstants.Local.UserImageURL, result.Data);
-                    _snackBar.Add(_localizer["Profile picture added."], Severity.Success);
+                    _snackBar.Add(_localizer["Đổi ảnh thành công."], Severity.Success);
                     _navigationManager.NavigateTo("/account", true);
                 }
                 else
@@ -101,7 +101,7 @@ namespace LaptopStore.Client.Pages.Identity
         {
             var parameters = new DialogParameters
             {
-                {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), $"{string.Format(_localizer["Do you want to delete the profile picture of {0}"], _profileModel.Email)}?"}
+                {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), $"{string.Format(_localizer["Xóa ảnh đại diện {0}"], _profileModel.Email)}?"}
             };
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
@@ -114,7 +114,7 @@ namespace LaptopStore.Client.Pages.Identity
                 {
                     await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageURL);
                     ImageDataUrl = string.Empty;
-                    _snackBar.Add(_localizer["Profile picture deleted."], Severity.Success);
+                    _snackBar.Add(_localizer["Xóa ảnh đại diện thành công."], Severity.Success);
                     _navigationManager.NavigateTo("/account", true);
                 }
                 else

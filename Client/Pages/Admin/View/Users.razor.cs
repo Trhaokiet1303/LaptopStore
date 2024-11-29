@@ -99,35 +99,33 @@ namespace LaptopStore.Client.Pages.Admin.View
 
         private async void ManageRoles(string userId)
         {
-            // Kiểm tra nếu người dùng hiện tại có quyền quản lý vai trò
             var canManageRoles = await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit);
 
             if (!canManageRoles.Succeeded)
             {
-                // Nếu không có quyền, hiển thị thông báo lỗi
-                _snackBar.Add(_localizer["You do not have permission to manage roles."], Severity.Error);
+                _snackBar.Add(_localizer["Không có quyền quản lý vai trò."], Severity.Error);
                 return;
             }
 
-            // Lấy email của người dùng hiện tại từ ClaimsPrincipal
             var currentUserEmail = _currentUser?.FindFirst(ClaimTypes.Email)?.Value;
 
             if (string.IsNullOrEmpty(currentUserEmail))
             {
-                _snackBar.Add(_localizer["Could not retrieve your email."], Severity.Error);
+                _snackBar.Add(_localizer["Không thể truy xuất email."], Severity.Error);
                 return;
             }
 
-            // Kiểm tra nếu người dùng có email không cho phép quản lý vai trò
-            if (currentUserEmail == "mukesh@blazorhero.com")
+            var currentUserRole = _currentUser?.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (currentUserRole == "Basic")
             {
-                _snackBar.Add(_localizer["Not Allowed."], Severity.Error);
+                _snackBar.Add(_localizer["Người dùng không được phép quản lý vai trò."], Severity.Error);
                 return;
             }
 
-            // Nếu có quyền và không phải admin, chuyển hướng đến trang quản lý vai trò
             _navigationManager.NavigateTo($"/admin/user-roles/{userId}");
         }
+
 
 
         private async Task DeleteUserAsync(string userId)
@@ -144,7 +142,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 var response = await _userManager.DeleteUserAsync(userId);
                 if (response.Succeeded)
                 {
-                    _snackBar.Add(_localizer["User deleted successfully"], Severity.Success);
+                    _snackBar.Add(_localizer["Xóa người dùng thành công"], Severity.Success);
                     await GetUsersAsync();
                 }
                 else

@@ -37,16 +37,16 @@ namespace LaptopStore.Application.Features.Brands.Commands.Delete
                 {
                     await _unitOfWork.Repository<Brand>().DeleteAsync(brand);
                     await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
-                    return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Deleted"]);
+                    return await Result<int>.SuccessAsync(brand.Id, _localizer["Xóa thành công"]);
                 }
                 else
                 {
-                    return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
+                    return await Result<int>.FailAsync(_localizer["Không tìm thấy nhãn hàng!"]);
                 }
             }
             else
             {
-                return await Result<int>.FailAsync(_localizer["Deletion Not Allowed"]);
+                return await Result<int>.FailAsync(_localizer["Không có quyền xóa!"]);
             }
         }
     }

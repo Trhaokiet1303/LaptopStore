@@ -32,11 +32,11 @@ namespace LaptopStore.Application.Features.Orders.Commands.Delete
             {
                 await _unitOfWork.Repository<Order>().DeleteAsync(order);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
-                return await Result<int>.SuccessAsync(order.Id, _localizer["Order Deleted"]);
+                return await Result<int>.SuccessAsync(order.Id, _localizer["Xóa thành công"]);
             }
             else
             {
-                return await Result<int>.FailAsync(_localizer["Order Not Found!"]);
+                return await Result<int>.FailAsync(_localizer["Không tìm thấy đơn hàng!"]);
             }
         }
     }

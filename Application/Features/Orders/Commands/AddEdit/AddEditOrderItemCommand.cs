@@ -70,7 +70,7 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
                 }
                 await _unitOfWork.Repository<OrderItem>().AddAsync(orderItem);
                 await _unitOfWork.Commit(cancellationToken);
-                return await Result<int>.SuccessAsync(orderItem.Id, _localizer["OrderItem Saved"]);
+                return await Result<int>.SuccessAsync(orderItem.Id, _localizer["Lưu thành công"]);
             }
             else
             {
@@ -91,11 +91,11 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
                    
                     await _unitOfWork.Repository<OrderItem>().UpdateAsync(orderItem);
                     await _unitOfWork.Commit(cancellationToken);
-                    return await Result<int>.SuccessAsync(orderItem.Id, _localizer["OrderItem Updated"]);
+                    return await Result<int>.SuccessAsync(orderItem.Id, _localizer["Cập nhật thành công"]);
                 }
                 else
                 {
-                    return await Result<int>.FailAsync(_localizer["OrderItem Not Found!"]);
+                    return await Result<int>.FailAsync(_localizer["Không tìm thấy danh sách sản phẩm trong Đơn hàng!"]);
                 }
             }
         }

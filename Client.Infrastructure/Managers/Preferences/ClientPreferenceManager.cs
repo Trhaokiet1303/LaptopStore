@@ -47,27 +47,6 @@ namespace LaptopStore.Client.Infrastructure.Managers.Preferences
             return false;
         }
 
-        public async Task<IResult> ChangeLanguageAsync(string languageCode)
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.LanguageCode = languageCode;
-                await SetPreference(preference);
-                return new Result
-                {
-                    Succeeded = true,
-                    Messages = new List<string> { _localizer["Client Language has been changed"] }
-                };
-            }
-
-            return new Result
-            {
-                Succeeded = false,
-                Messages = new List<string> { _localizer["Failed to get client preferences"] }
-            };
-        }
-
         public async Task<MudTheme> GetCurrentThemeAsync()
         {
             var preference = await GetPreference() as ClientPreference;

@@ -72,7 +72,7 @@ namespace LaptopStore.Application.Features.Products.Commands.AddEdit
             if (await _unitOfWork.Repository<Product>().Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Barcode == command.Barcode, cancellationToken))
             {
-                return await Result<int>.FailAsync(_localizer["Barcode already exists."]);
+                return await Result<int>.FailAsync(_localizer["Mã vạch đã tồn tại."]);
             }
 
             var uploadRequest = command.UploadRequest;
@@ -90,7 +90,7 @@ namespace LaptopStore.Application.Features.Products.Commands.AddEdit
                 }
                 await _unitOfWork.Repository<Product>().AddAsync(product);
                 await _unitOfWork.Commit(cancellationToken);
-                return await Result<int>.SuccessAsync(product.Id, _localizer["Product Saved"]);
+                return await Result<int>.SuccessAsync(product.Id, _localizer["Lưu thành công"]);
             }
             else
             {
@@ -120,11 +120,11 @@ namespace LaptopStore.Application.Features.Products.Commands.AddEdit
                     product.BrandId = (command.BrandId == 0) ? product.BrandId : command.BrandId;
                     await _unitOfWork.Repository<Product>().UpdateAsync(product);
                     await _unitOfWork.Commit(cancellationToken);
-                    return await Result<int>.SuccessAsync(product.Id, _localizer["Product Updated"]);
+                    return await Result<int>.SuccessAsync(product.Id, _localizer["Cập nhật thành công"]);
                 }
                 else
                 {
-                    return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+                    return await Result<int>.FailAsync(_localizer["Không tìm thấy sản phẩm!"]);
                 }
             }
         }

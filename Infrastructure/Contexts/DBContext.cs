@@ -68,7 +68,7 @@ namespace LaptopStore.Infrastructure.Contexts
                      .HasMany(o => o.OrderItem)
                      .WithOne(oi => oi.Order)
                      .HasForeignKey(oi => oi.OrderId)
-                     .IsRequired() // Đảm bảo không null
+                     .IsRequired() 
                      .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<User>(entity =>

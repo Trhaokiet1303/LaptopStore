@@ -9,7 +9,7 @@ namespace LaptopStore.Application.Validators.Requests.Identity
         public RoleRequestValidator(IStringLocalizer<RoleRequestValidator> localizer)
         {
             RuleFor(request => request.Name)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Name is required"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Tên không được trống"]);
         }
     }
 }

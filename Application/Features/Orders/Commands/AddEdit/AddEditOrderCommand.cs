@@ -91,7 +91,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
 
                 await _unitOfWork.Repository<Order>().AddAsync(order);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
-                return await Result<int>.SuccessAsync(order.Id, _localizer["Order Saved"]);
+                return await Result<int>.SuccessAsync(order.Id, _localizer["Lưu thành công"]);
             }
             else
             {
@@ -149,11 +149,11 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
 
                     await _unitOfWork.Repository<Order>().UpdateAsync(order);
                     await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
-                    return await Result<int>.SuccessAsync(order.Id, _localizer["Order Updated"]);
+                    return await Result<int>.SuccessAsync(order.Id, _localizer["Cập nhật thành công"]);
                 }
                 else
                 {
-                    return await Result<int>.FailAsync(_localizer["Order Not Found!"]);
+                    return await Result<int>.FailAsync(_localizer["Không tìm thấy đơn hàng!"]);
                 }
             }
         }

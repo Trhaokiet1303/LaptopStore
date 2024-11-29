@@ -3,8 +3,7 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<RolePermissions> _localizer
 @attribute [Authorize(Policy = Permissions.RoleClaims.View)]
 
-<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Roles Permission"]</MudText>
-<MudText Color="Color.Warning" Class="mb-4">@_localizer["Manage Roles Permission"]</MudText>
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Manager Roles Permission"]</MudText>
 
 @if (!_loaded)
 {

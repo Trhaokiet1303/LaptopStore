@@ -9,10 +9,10 @@ namespace LaptopStore.Application.Validators.Requests.Identity
         public TokenRequestValidator(IStringLocalizer<TokenRequestValidator> localizer)
         {
             RuleFor(request => request.Email)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Email is required"])
-                .EmailAddress().WithMessage(x => localizer["Email is not correct"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Email không được trống"])
+                .EmailAddress().WithMessage(x => localizer["Email không đúng"]);
             RuleFor(request => request.Password)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Password is required!"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Mật khẩu không được!"]);
         }
     }
 }

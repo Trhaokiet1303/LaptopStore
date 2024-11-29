@@ -38,7 +38,7 @@ namespace LaptopStore.Application.Features.Brands.Commands.AddEdit
                 var brand = _mapper.Map<Brand>(command);
                 await _unitOfWork.Repository<Brand>().AddAsync(brand);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
-                return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Saved"]);
+                return await Result<int>.SuccessAsync(brand.Id, _localizer["Lưu thành công"]);
             }
             else
             {
@@ -48,11 +48,11 @@ namespace LaptopStore.Application.Features.Brands.Commands.AddEdit
                     brand.Name = command.Name ?? brand.Name;
                     await _unitOfWork.Repository<Brand>().UpdateAsync(brand);
                     await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
-                    return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Updated"]);
+                    return await Result<int>.SuccessAsync(brand.Id, _localizer["Cập nhật thành công"]);
                 }
                 else
                 {
-                    return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
+                    return await Result<int>.FailAsync(_localizer["Không tìm thấy Nhãn hàng!"]);
                 }
             }
         }

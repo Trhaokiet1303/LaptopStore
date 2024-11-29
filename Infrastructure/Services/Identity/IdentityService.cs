@@ -46,20 +46,20 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["User Not Found."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Không tìm thấy người dùng."]);
             }
             if (!user.IsActive)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["User Not Active. Please contact the administrator."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Người dùng chưa được Active. Liên hệ Admin."]);
             }
             if (!user.EmailConfirmed)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["E-Mail not confirmed."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["E-Mail chưa xác nhận."]);
             }
             var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordValid)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["Invalid Credentials."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Thông tin xác thực sai."]);
             }
 
             user.RefreshToken = GenerateRefreshToken();
@@ -75,15 +75,15 @@ namespace LaptopStore.Infrastructure.Services.Identity
         {
             if (model is null)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["Invalid Client Token."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Client Token sai."]);
             }
             var userPrincipal = GetPrincipalFromExpiredToken(model.Token);
             var userEmail = userPrincipal.FindFirstValue(ClaimTypes.Email);
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
-                return await Result<TokenResponse>.FailAsync(_localizer["User Not Found."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Không tìm thấy người dùng."]);
             if (user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                return await Result<TokenResponse>.FailAsync(_localizer["Invalid Client Token."]);
+                return await Result<TokenResponse>.FailAsync(_localizer["Client Token sai."]);
             var token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
             user.RefreshToken = GenerateRefreshToken();
             await _userManager.UpdateAsync(user);
@@ -162,7 +162,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new SecurityTokenException(_localizer["Invalid token"]);
+                throw new SecurityTokenException(_localizer["Token sai"]);
             }
 
             return principal;

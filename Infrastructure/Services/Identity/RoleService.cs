@@ -60,16 +60,16 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 if (roleIsNotUsed)
                 {
                     await _roleManager.DeleteAsync(existingRole);
-                    return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Deleted."], existingRole.Name));
+                    return await Result<string>.SuccessAsync(string.Format(_localizer["Xóa vai trò {0} thành công."], existingRole.Name));
                 }
                 else
                 {
-                    return await Result<string>.SuccessAsync(string.Format(_localizer["Not allowed to delete {0} Role as it is being used."], existingRole.Name));
+                    return await Result<string>.SuccessAsync(string.Format(_localizer["Không được phép xóa Vai trò {0} vì nó đang được sử dụng."], existingRole.Name));
                 }
             }
             else
             {
-                return await Result<string>.SuccessAsync(string.Format(_localizer["Not allowed to delete {0} Role."], existingRole.Name));
+                return await Result<string>.SuccessAsync(string.Format(_localizer["Không được phép xóa Vai trò {0}."], existingRole.Name));
             }
         }
 
@@ -148,11 +148,11 @@ namespace LaptopStore.Infrastructure.Services.Identity
             if (string.IsNullOrEmpty(request.Id))
             {
                 var existingRole = await _roleManager.FindByNameAsync(request.Name);
-                if (existingRole != null) return await Result<string>.FailAsync(_localizer["Similar Role already exists."]);
+                if (existingRole != null) return await Result<string>.FailAsync(_localizer["Vai trò đã tồn tại."]);
                 var response = await _roleManager.CreateAsync(new Role(request.Name, request.Description));
                 if (response.Succeeded)
                 {
-                    return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Created."], request.Name));
+                    return await Result<string>.SuccessAsync(string.Format(_localizer["Tạo vai trò {0} thành công."], request.Name));
                 }
                 else
                 {
@@ -164,13 +164,13 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var existingRole = await _roleManager.FindByIdAsync(request.Id);
                 if (existingRole.Name == RoleConstants.AdministratorRole || existingRole.Name == RoleConstants.BasicRole)
                 {
-                    return await Result<string>.FailAsync(string.Format(_localizer["Not allowed to modify {0} Role."], existingRole.Name));
+                    return await Result<string>.FailAsync(string.Format(_localizer["Không được phép sửa đổi Vai trò {0}."], existingRole.Name));
                 }
                 existingRole.Name = request.Name;
                 existingRole.NormalizedName = request.Name.ToUpper();
                 existingRole.Description = request.Description;
                 await _roleManager.UpdateAsync(existingRole);
-                return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Updated."], existingRole.Name));
+                return await Result<string>.SuccessAsync(string.Format(_localizer["Cập nhật vai trò {0} thành công."], existingRole.Name));
             }
         }
 
@@ -185,7 +185,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                     var currentUser = await _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId);
                     if (await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
                     {
-                        return await Result<string>.FailAsync(_localizer["Not allowed to modify Permissions for this Role."]);
+                        return await Result<string>.FailAsync(_localizer["Không được phép sửa đổi quyền cho vai trò này."]);
                     }
                 }
 
@@ -197,7 +197,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                        || !selectedClaims.Any(x => x.Value == Permissions.RoleClaims.Edit))
                     {
                         return await Result<string>.FailAsync(string.Format(
-                            _localizer["Not allowed to deselect {0} or {1} or {2} for this Role."],
+                            _localizer["Không được phép bỏ chọn {0} hoặc {1} hoặc {2} cho Vai trò này."],
                             Permissions.Roles.View, Permissions.RoleClaims.View, Permissions.RoleClaims.Edit));
                     }
                 }
@@ -244,7 +244,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                     return await Result<string>.FailAsync(errors);
                 }
 
-                return await Result<string>.SuccessAsync(_localizer["Permissions Updated."]);
+                return await Result<string>.SuccessAsync(_localizer["Cập nhật quyền thành công."]);
             }
             catch (Exception ex)
             {

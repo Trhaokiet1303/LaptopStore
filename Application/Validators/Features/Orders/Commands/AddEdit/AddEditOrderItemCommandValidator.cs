@@ -9,9 +9,9 @@ namespace LaptopStore.Application.Validators.Features.Order.Commands.AddEdit
         public AddEditOrderItemCommandValidator(IStringLocalizer<AddEditOrderItemCommandValidator> localizer)
         {
             RuleFor(request => request.ProductId)
-                .GreaterThan(0).WithMessage(localizer["ProductId must be greater than 0!"]);
+                .GreaterThan(0).WithMessage(localizer["ID của sản phẩm phải lớn hơn 0!"]);
             RuleFor(request => request.Quantity)
-                .GreaterThan(0).WithMessage(localizer["Quantity must be greater than 0!"]);
+                .GreaterThan(0).WithMessage(localizer["Số lượng phải lớn hơn 0!"]);
         }
     }
 }

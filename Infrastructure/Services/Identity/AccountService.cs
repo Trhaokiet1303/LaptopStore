@@ -35,7 +35,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await this._userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return await Result.FailAsync(_localizer["User Not Found."]);
+                return await Result.FailAsync(_localizer["Người dùng không tồn tại."]);
             }
 
             var identityResult = await this._userManager.ChangePasswordAsync(
@@ -53,7 +53,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
                 if (userWithSamePhoneNumber != null)
                 {
-                    return await Result.FailAsync(string.Format(_localizer["Phone number {0} is already used."], request.PhoneNumber));
+                    return await Result.FailAsync(string.Format(_localizer["Số điện thoại {0} đã được sử dụng."], request.PhoneNumber));
                 }
             }
 
@@ -63,7 +63,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                 {
-                    return await Result.FailAsync(_localizer["User Not Found."]);
+                    return await Result.FailAsync(_localizer["Người dùng không tồn tại."]);
                 }
                 user.FirstName = request.FirstName;
                 user.LastName = request.LastName;
@@ -80,7 +80,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
             else
             {
-                return await Result.FailAsync(string.Format(_localizer["Email {0} is already used."], request.Email));
+                return await Result.FailAsync(string.Format(_localizer["Email {0} đã được sử dụng."], request.Email));
             }
         }
 
@@ -89,7 +89,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return await Result<string>.FailAsync(_localizer["User Not Found"]);
+                return await Result<string>.FailAsync(_localizer["Người dùng không tồn tại"]);
             }
             return await Result<string>.SuccessAsync(data: user.ProfilePictureDataUrl);
         }
@@ -97,7 +97,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
         public async Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return await Result<string>.FailAsync(message: _localizer["User Not Found"]);
+            if (user == null) return await Result<string>.FailAsync(message: _localizer["Người dùng không tồn tại"]);
             var filePath = _uploadService.UploadAsync(request);
             user.ProfilePictureDataUrl = filePath;
             var identityResult = await _userManager.UpdateAsync(user);

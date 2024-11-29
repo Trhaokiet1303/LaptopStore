@@ -111,10 +111,8 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 if (existingOrderItem != null)
                 {
                     if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
-                    // If the item exists, update the order item
                     if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
                     {
-                        // Cập nhật số lượng sản phẩm
                         var updateCommand = new AddEditOrderItemCommand
                         {
                             Id = existingOrderItem.Id,
@@ -129,7 +127,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);
                         if (updateResponse.Succeeded)
                         {
-                            // Tính lại tổng giá và cập nhật ngay lập tức
                             var updatedTotalPrice = existingOrderItemResponse.Data.OrderItem.Sum(item =>
                                 item.ProductId == AddEditOrderItemModel.ProductId
                                     ? AddEditOrderItemModel.Quantity * AddEditOrderItemModel.ProductPrice
@@ -145,7 +142,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             if (orderUpdateResponse.Succeeded)
                             {
                                 _snackBar.Add("Cập nhật số lượng và tổng giá thành công.", Severity.Success);
-                                await HubConnection.SendAsync("UpdateOrder", AddEditOrderItemModel.OrderId);
+                                await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
                                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
                             }
                             else
@@ -171,13 +168,11 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
                 else
                 {
-                    // If the item doesn't exist in the order, add the new order item
                     var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
                     if (response.Succeeded)
                     {
                         _snackBar.Add(response.Messages[0], Severity.Success);
 
-                        // Update the order's total price after adding the new item
                         var existingOrderResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderItemModel.OrderId);
                         if (existingOrderResponse.Succeeded)
                         {
@@ -196,7 +191,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             if (orderUpdateResponse.Succeeded)
                             {
                                 _snackBar.Add("Thêm sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
-                                await HubConnection.SendAsync("UpdateOrder", AddEditOrderItemModel.OrderId);
+                                await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
                                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
                             }
                             else

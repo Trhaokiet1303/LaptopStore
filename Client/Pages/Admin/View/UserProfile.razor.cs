@@ -27,7 +27,7 @@ namespace LaptopStore.Client.Pages.Admin.View
             var result = await _userManager.ToggleUserStatusAsync(request);
             if (result.Succeeded)
             {
-                _snackBar.Add(_localizer["Updated User Status."], Severity.Success);
+                _snackBar.Add(_localizer["Cập nhật thành công."], Severity.Success);
                 _navigationManager.NavigateTo("/admin/users");
             }
             else

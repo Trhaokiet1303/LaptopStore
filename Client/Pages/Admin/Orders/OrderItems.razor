@@ -3,7 +3,7 @@
 
 <MudDialog>
     <TitleContent>
-        Order Products
+        OrderItem Products
     </TitleContent>
 
     <DialogContent>
@@ -29,8 +29,8 @@
                 <MudTd>@context.ProductName</MudTd>
                 <MudTd>@context.Quantity</MudTd>
                 <MudTd>@context.Instock</MudTd>
-                <MudTd>@context.ProductPrice</MudTd>
-                <MudTd>@context.TotalPrice</MudTd>
+                <MudTd>@String.Format("{0:N0}₫", context.ProductPrice)</MudTd>
+                <MudTd>@String.Format("{0:N0}₫", context.TotalPrice)</MudTd>
 
                 <MudTd DataLabel="Actions" Style="text-align: right">
                     @if (_canEditOrderItems || _canDeleteOrderItems)

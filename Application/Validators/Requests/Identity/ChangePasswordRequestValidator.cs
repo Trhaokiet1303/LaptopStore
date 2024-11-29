@@ -9,16 +9,16 @@ namespace LaptopStore.Application.Validators.Requests.Identity
         public ChangePasswordRequestValidator(IStringLocalizer<ChangePasswordRequestValidator> localizer)
         {
             RuleFor(request => request.Password)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Current Password is required!"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Mật khẩu hiện tại không được trống!"]);
             RuleFor(request => request.NewPassword)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Password is required!"])
-                .MinimumLength(8).WithMessage(localizer["Password must be at least of length 8"])
-                .Matches(@"[A-Z]").WithMessage(localizer["Password must contain at least one capital letter"])
-                .Matches(@"[a-z]").WithMessage(localizer["Password must contain at least one lowercase letter"])
-                .Matches(@"[0-9]").WithMessage(localizer["Password must contain at least one digit"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Mật khẩu không được trống!"])
+                .MinimumLength(8).WithMessage(localizer["Mật khẩu phải có ít nhất 8 ký tự"])
+                .Matches(@"[A-Z]").WithMessage(localizer["Mật khẩu phải chứa ít nhất một chữ cái viết hoa"])
+                .Matches(@"[a-z]").WithMessage(localizer["Mật khẩu phải chứa ít nhất một chữ cái viết thường"])
+                .Matches(@"[0-9]").WithMessage(localizer["Mật khẩu phải chứa ít nhất một chữ số"]);
             RuleFor(request => request.ConfirmNewPassword)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Password Confirmation is required!"])
-                .Equal(request => request.NewPassword).WithMessage(x => localizer["Passwords don't match"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Xác nhận mật khẩu không được trống!"])
+                .Equal(request => request.NewPassword).WithMessage(x => localizer["Mật khẩu không khớp"]);
         }
     }
 }

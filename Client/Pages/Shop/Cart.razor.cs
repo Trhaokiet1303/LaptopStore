@@ -36,7 +36,6 @@ namespace LaptopStore.Client.Pages.Shop
 
         protected override async Task OnInitializedAsync()
         {
-            // Đăng ký sự kiện LocationChanged
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             isAuthenticated = authState.User.Identity.IsAuthenticated;
 
@@ -44,7 +43,6 @@ namespace LaptopStore.Client.Pages.Shop
             if (!string.IsNullOrEmpty(cartJson))
             {
                 cartItems = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
-                // Tải hình ảnh cho từng sản phẩm
                 foreach (var item in cartItems)
                 {
                     await LoadImageAsync(item);
@@ -78,7 +76,7 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task SaveCartToLocalStorage()
         {
-            await JS.InvokeVoidAsync("localStorage.setItem", "cartItems", System.Text.Json.JsonSerializer.Serialize(cartItems));
+            await JS.InvokeVoidAsync("localStorage.setItem", "cartItems", JsonSerializer.Serialize(cartItems));
         }
         private decimal GetTotalPrice()
         {

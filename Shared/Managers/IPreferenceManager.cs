@@ -10,6 +10,5 @@ namespace LaptopStore.Shared.Managers
 
         Task<IPreference> GetPreference();
 
-        Task<IResult> ChangeLanguageAsync(string languageCode);
     }
 }

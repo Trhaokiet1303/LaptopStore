@@ -9,7 +9,7 @@ namespace LaptopStore.Application.Validators.Features.Brands.Commands.AddEdit
         public AddEditBrandCommandValidator(IStringLocalizer<AddEditBrandCommandValidator> localizer)
         {
             RuleFor(request => request.Name)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Name is required!"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Tên không được trống!"]);
             
         }
     }

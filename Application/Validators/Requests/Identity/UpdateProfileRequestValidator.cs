@@ -9,9 +9,9 @@ namespace LaptopStore.Application.Validators.Requests.Identity
         public UpdateProfileRequestValidator(IStringLocalizer<UpdateProfileRequestValidator> localizer)
         {
             RuleFor(request => request.FirstName)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["First Name is required"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Tên không được trống"]);
             RuleFor(request => request.LastName)
-                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Last Name is required"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Họ không được trống"]);
         }
     }
 }

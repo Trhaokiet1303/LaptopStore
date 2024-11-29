@@ -45,7 +45,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             }
             else
             {
-                _snackBar.Add("Failed to load order items.", Severity.Error);
+                _snackBar.Add("Không thể tải dữ liệu.", Severity.Error);
             }
         }
 
@@ -93,7 +93,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
         private async Task InvokeEditModal(int id)
         {
-            // Fetch the item to edit and pass it to the modal
             var orderItemToEdit = orderItems.FirstOrDefault(x => x.Id == id);
             if (orderItemToEdit != null)
             {
@@ -151,7 +150,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         if (orderUpdateResponse.Succeeded)
                         {
                             _snackBar.Add("Đã xóa sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
-                            await HubConnection.SendAsync("UpdateOrder", orderId);
+                            await HubConnection.SendAsync("Cập nhật thành công.", orderId);
                             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
                         }
                         else

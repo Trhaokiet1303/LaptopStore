@@ -12,7 +12,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.Update
     public class UpdateOrderTotalPriceCommand : IRequest<Result<int>>
     {
         public int OrderId { get; set; }
-        public int TotalPrice { get; set; } // Tổng giá cần cập nhật
+        public int TotalPrice { get; set; }
 
         public class UpdateOrderTotalPriceCommandHandler : IRequestHandler<UpdateOrderTotalPriceCommand, Result<int>>
         {
@@ -29,22 +29,19 @@ namespace LaptopStore.Application.Features.Orders.Commands.Update
             {
                 try
                 {
-                    // Lấy thông tin đơn hàng từ cơ sở dữ liệu
                     var order = await _unitOfWork.Repository<Order>().GetByIdAsync(command.OrderId);
 
                     if (order == null)
                     {
-                        return await Result<int>.FailAsync(_localizer["Order not found!"]);
+                        return await Result<int>.FailAsync(_localizer["Không tìm thấy danh sách sản phẩm trong Đơn hàng!"]);
                     }
 
-                    // Cập nhật tổng giá trị của đơn hàng
                     order.TotalPrice = command.TotalPrice;
 
-                    // Lưu thay đổi vào cơ sở dữ liệu
                     await _unitOfWork.Repository<Order>().UpdateAsync(order);
                     await _unitOfWork.Commit(cancellationToken);
 
-                    return await Result<int>.SuccessAsync(order.Id, _localizer["Order total price updated successfully."]);
+                    return await Result<int>.SuccessAsync(order.Id, _localizer["Cập nhật thành công."]);
                 }
                 catch (Exception ex)
                 {

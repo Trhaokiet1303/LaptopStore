@@ -31,7 +31,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
         private readonly RoleManager<Role> _roleManager;
         private readonly IMailService _mailService;
         private readonly IStringLocalizer<UserService> _localizer;
-        private readonly IExcelService _excelService;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
 
@@ -41,7 +40,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
             RoleManager<Role> roleManager,
             IMailService mailService,
             IStringLocalizer<UserService> localizer,
-            IExcelService excelService,
             ICurrentUserService currentUserService)
         {
             _userManager = userManager;
@@ -49,7 +47,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
             _roleManager = roleManager;
             _mailService = mailService;
             _localizer = localizer;
-            _excelService = excelService;
             _currentUserService = currentUserService;
         }
 
@@ -65,7 +62,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
-                return await Result.FailAsync(string.Format(_localizer["Username {0} is already taken."], request.UserName));
+                return await Result.FailAsync(string.Format(_localizer["Tên người dùng {0} đã được đăng ký."], request.UserName));
             }
             var user = new User
             {
@@ -83,7 +80,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
                 if (userWithSamePhoneNumber != null)
                 {
-                    return await Result.FailAsync(string.Format(_localizer["Phone number {0} is already registered."], request.PhoneNumber));
+                    return await Result.FailAsync(string.Format(_localizer["Số điện thoại {0} đã được đăng ký."], request.PhoneNumber));
                 }
             }
 
@@ -101,13 +98,13 @@ namespace LaptopStore.Infrastructure.Services.Identity
                         {
                             From = "mail@codewithmukesh.com",
                             To = user.Email,
-                            Body = string.Format(_localizer["Please confirm your account by <a href='{0}'>clicking here</a>."], verificationUri),
-                            Subject = _localizer["Confirm Registration"]
+                            Body = string.Format(_localizer["Vui lòng xác nhận tài khoản của bạn bằng cách <a href='{0}'>nhấp vào đây</a>."], verificationUri),
+                            Subject = _localizer["Xác nhận đăng ký"]
                         };
                         BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
-                        return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["User {0} Registered. Please check your Mailbox to verify!"], user.UserName));
+                        return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký. Vui lòng kiểm tra hộp thư để xác minh!"], user.UserName));
                     }
-                    return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["User {0} Registered."], user.UserName));
+                    return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký."], user.UserName));
                 }
                 else
                 {
@@ -116,7 +113,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
             else
             {
-                return await Result.FailAsync(string.Format(_localizer["Email {0} is already registered."], request.Email));
+                return await Result.FailAsync(string.Format(_localizer["Email {0} đã được đăng ký."], request.Email));
             }
         }
 
@@ -144,7 +141,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var isAdmin = await _userManager.IsInRoleAsync(user, RoleConstants.AdministratorRole);
             if (isAdmin)
             {
-                return await Result.FailAsync(_localizer["Administrators Profile's Status cannot be toggled"]);
+                return await Result.FailAsync(_localizer["Không thể thay đổi trạng thái của tài khoản quản trị viên"]);
             }
             if (user != null)
             {
@@ -187,7 +184,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByIdAsync(request.UserId);
             if (user.Email == "mukesh@blazorhero.com")
             {
-                return await Result.FailAsync(_localizer["Not Allowed."]);
+                return await Result.FailAsync(_localizer["Không được phép."]);
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -201,13 +198,13 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var userHasAdministratorRole = roles.Any(x => x == RoleConstants.AdministratorRole);
                 if (tryToAddAdministratorRole && !userHasAdministratorRole || !tryToAddAdministratorRole && userHasAdministratorRole)
                 {
-                    return await Result.FailAsync(_localizer["Not Allowed to add or delete Administrator Role if you have not this role."]);
+                    return await Result.FailAsync(_localizer["Không được phép thêm hoặc xóa vai trò Quản trị viên nếu bạn không có vai trò này."]);
                 }
             }
 
             var result = await _userManager.RemoveFromRolesAsync(user, roles);
             result = await _userManager.AddToRolesAsync(user, selectedRoles.Select(y => y.RoleName));
-            return await Result.SuccessAsync(_localizer["Roles Updated"]);
+            return await Result.SuccessAsync(_localizer["Cập nhật vai trò thành công"]);
         }
 
         public async Task<IResult<string>> ConfirmEmailAsync(string userId, string code)
@@ -217,11 +214,11 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Account Confirmed for {0}. You can now use the /api/identity/token endpoint to generate JWT."], user.Email));
+                return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Tài khoản {0} đã được xác nhận. Bạn có thể sử dụng endpoint /api/identity/token để tạo JWT."], user.Email));
             }
             else
             {
-                throw new ApiException(string.Format(_localizer["An error occurred while confirming {0}"], user.Email));
+                throw new ApiException(string.Format(_localizer["Đã xảy ra lỗi khi xác nhận {0}"], user.Email));
             }
         }
 
@@ -230,9 +227,9 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
-                return await Result.FailAsync(_localizer["An Error has occurred!"]);
+                return await Result.FailAsync(_localizer["Đã xảy ra lỗi!"]);
             }
-          
+
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var route = "account/reset-password";
@@ -240,12 +237,12 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var passwordResetURL = QueryHelpers.AddQueryString(endpointUri.ToString(), "Token", code);
             var mailRequest = new MailRequest
             {
-                Body = string.Format(_localizer["Please reset your password by <a href='{0}>clicking here</a>."], HtmlEncoder.Default.Encode(passwordResetURL)),
-                Subject = _localizer["Reset Password"],
+                Body = string.Format(_localizer["Vui lòng đặt lại mật khẩu của bạn bằng cách <a href='{0}>nhấp vào đây</a>."], HtmlEncoder.Default.Encode(passwordResetURL)),
+                Subject = _localizer["Đặt lại mật khẩu"],
                 To = request.Email
             };
             BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
-            return await Result.SuccessAsync(_localizer["Password Reset Mail has been sent to your authorized Email."]);
+            return await Result.SuccessAsync(_localizer["Đã gửi email đặt lại mật khẩu đến email của bạn."]);
         }
 
         public async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request)
@@ -253,18 +250,17 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
-                return await Result.FailAsync(_localizer["An Error has occured!"]);
+                return await Result.FailAsync(_localizer["Đã xảy ra lỗi!"]);
             }
 
             var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
             if (result.Succeeded)
             {
-                return await Result.SuccessAsync(_localizer["Password Reset Successful!"]);
+                return await Result.SuccessAsync(_localizer["Đặt lại mật khẩu thành công!"]);
             }
             else
             {
-                return await Result.FailAsync(_localizer["An Error has occured!"]);
+                return await Result.FailAsync(_localizer["Đã xảy ra lỗi!"]);
             }
         }
 
@@ -276,25 +272,22 @@ namespace LaptopStore.Infrastructure.Services.Identity
 
         public async Task<IResult> DeleteUserAsync(string userId)
         {
-            // Check if the user exists
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return await Result.FailAsync(_localizer["User not found."]);
+                return await Result.FailAsync(_localizer["Người dùng không tồn tại."]);
             }
 
-            // Prevent deletion of administrators (if necessary)
             var isAdmin = await _userManager.IsInRoleAsync(user, RoleConstants.AdministratorRole);
             if (isAdmin)
             {
-                return await Result.FailAsync(_localizer["Administrators cannot be deleted."]);
+                return await Result.FailAsync(_localizer["Quản trị viên không thể bị xóa."]);
             }
 
-            // Delete the user
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
-                return await Result.SuccessAsync(_localizer["User deleted successfully."]);
+                return await Result.SuccessAsync(_localizer["Xóa người dùng thành công."]);
             }
             else
             {

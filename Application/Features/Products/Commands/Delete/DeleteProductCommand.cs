@@ -31,11 +31,11 @@ namespace LaptopStore.Application.Features.Products.Commands.Delete
             {
                 await _unitOfWork.Repository<Product>().DeleteAsync(product);
                 await _unitOfWork.Commit(cancellationToken);
-                return await Result<int>.SuccessAsync(product.Id, _localizer["Product Deleted"]);
+                return await Result<int>.SuccessAsync(product.Id, _localizer["Xóa thành công"]);
             }
             else
             {
-                return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+                return await Result<int>.FailAsync(_localizer["Không tìm thấy sản phẩm!"]);
             }
         }
     }

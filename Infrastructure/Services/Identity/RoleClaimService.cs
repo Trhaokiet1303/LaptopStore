@@ -68,7 +68,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
         {
             if (string.IsNullOrWhiteSpace(request.RoleId))
             {
-                return await Result<string>.FailAsync(_localizer["Role is required."]);
+                return await Result<string>.FailAsync(_localizer["Vai trò không được trống."]);
             }
 
             if (request.Id == 0)
@@ -79,12 +79,12 @@ namespace LaptopStore.Infrastructure.Services.Identity
                             x.RoleId == request.RoleId && x.ClaimType == request.Type && x.ClaimValue == request.Value);
                 if (existingRoleClaim != null)
                 {
-                    return await Result<string>.FailAsync(_localizer["Similar Role Claim already exists."]);
+                    return await Result<string>.FailAsync(_localizer["Đã có vai trò này."]);
                 }
                 var roleClaim = _mapper.Map<RoleClaim>(request);
                 await _db.RoleClaims.AddAsync(roleClaim);
                 await _db.SaveChangesAsync(_currentUserService.UserId);
-                return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} created."], request.Value));
+                return await Result<string>.SuccessAsync(string.Format(_localizer["Tạo yêu cầu vai trò {0} thành công."], request.Value));
             }
             else
             {
@@ -94,7 +94,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                         .SingleOrDefaultAsync(x => x.Id == request.Id);
                 if (existingRoleClaim == null)
                 {
-                    return await Result<string>.SuccessAsync(_localizer["Role Claim does not exist."]);
+                    return await Result<string>.SuccessAsync(_localizer["Yêu cầu vai trò không tồn tại."]);
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                     existingRoleClaim.RoleId = request.RoleId;
                     _db.RoleClaims.Update(existingRoleClaim);
                     await _db.SaveChangesAsync(_currentUserService.UserId);
-                    return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for Role {1} updated."], request.Value, existingRoleClaim.Role.Name));
+                    return await Result<string>.SuccessAsync(string.Format(_localizer["Cập nhật yêu cầu vai trò {0} cho vai trò {1} thành công."], request.Value, existingRoleClaim.Role.Name));
                 }
             }
         }
@@ -119,11 +119,11 @@ namespace LaptopStore.Infrastructure.Services.Identity
             {
                 _db.RoleClaims.Remove(existingRoleClaim);
                 await _db.SaveChangesAsync(_currentUserService.UserId);
-                return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for {1} Role deleted."], existingRoleClaim.ClaimValue, existingRoleClaim.Role.Name));
+                return await Result<string>.SuccessAsync(string.Format(_localizer["Xóa yêu cầu vài trò {0} cho vai trò {1} thành công."], existingRoleClaim.ClaimValue, existingRoleClaim.Role.Name));
             }
             else
             {
-                return await Result<string>.FailAsync(_localizer["Role Claim does not exist."]);
+                return await Result<string>.FailAsync(_localizer["Yêu cầu vai trò không tồn tại."]);
             }
         }
     }

@@ -9,8 +9,7 @@
     }
 </style>
 
-<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Orders"]</MudText>
-<MudText Color="Color.Warning" Class="mb-4">@_localizer["Manage Orders"]</MudText>
+<MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@_localizer["Manager Orders"]</MudText>
 
 @if (!_loaded)
 {
@@ -62,7 +61,7 @@ else
                 <MudHighlighter Text="@context.UserAddress" HighlightedText="@_searchString" />
             </MudTd>
 
-            <MudTd DataLabel="TotalPrice">@context.TotalPrice</MudTd>
+            <MudTd DataLabel="TotalPrice">@String.Format("{0:N0}₫", context.TotalPrice)</MudTd>
             <MudTd DataLabel="MethodPayment">
                 <MudHighlighter Text="@context.MethodPayment" HighlightedText="@_searchString" />
             </MudTd>
