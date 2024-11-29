@@ -54,7 +54,7 @@
             @if (isAuthenticated)
             {
                 <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">Tài khoản</MudNavLink>
-                <MudNavLink Href="#" Class="contact-info" Icon="@Icons.Material.Filled.Logout" OnClick="Logout"> Đăng xuất</MudNavLink>
+
             }
             else
             {
@@ -85,6 +85,7 @@
     private HubConnection hubConnection;
     private MudTable<GetAllPagedProductsResponse> _table;
     private int cartItemCount = 0;
+
     protected override async Task OnInitializedAsync()
     {
         await LoadCartItemCountFromLocalStorage();
@@ -143,7 +144,6 @@
         NavigationManager.LocationChanged += OnLocationChanged;
         UpdateBreadcrumb();
     }
-
 
     private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
     {

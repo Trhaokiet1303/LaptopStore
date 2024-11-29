@@ -1,17 +1,97 @@
 ﻿@page "/account"
 @using LaptopStore.Client.Pages.Admin.View
 @using LaptopStore.Client.Shared.Shop
+@using LaptopStore.Shared.Constants.Application
+@using Microsoft.AspNetCore.SignalR.Client
 @layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Account> localizer
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+<link href="css/userprofile.css" rel="stylesheet">
 
-<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
-    <MudTabPanel Text="@localizer["Thông tin"]">
-        <Profile />
-    </MudTabPanel>
-    <MudTabPanel Text="@localizer["Bảo mật"]">
-        <Security />
-    </MudTabPanel>
-</MudTabs>
+<MudContainer Class="main-content">
+    <MudGrid Class="content-wrapper">
+        <!-- Sidebar -->
+        <MudItem >
+            <MudPaper Class="sidebar" Elevation="4">
+                <MudText Class="sidebar-title">Tài khoản của bạn</MudText>
+                <MudList Dense>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a id="account" class="text-deco">Tài Khoản</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a href="/cart" class="text-deco">Giỏ hàng của bạn</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a href="/orderdetail" class="text-deco">Đơn hàng của bạn</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a @onclick="Logout" class="text-deco">Đăng xuất</a>
+                        </MudText>
+                    </MudListItem>
+                </MudList>
+            </MudPaper>
+        </MudItem>
 
+        <MudItem xs="12" sm="8" md="9">
+            <MudPaper Class="info" Elevation="4">
+                <MudTabs Class="info-container">
+                    <MudTabPanel Text="@localizer["Thông tin"]">
+                        <Profile />
+                    </MudTabPanel>
+                    <MudTabPanel Text="@localizer["Bảo mật"]">
+                        <Security />
+                    </MudTabPanel>
+                </MudTabs>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [Inject] private IJSRuntime JS { get; set; }
+    private HubConnection hubConnection;
+    private string CurrentUserId { get; set; }
+    private bool isAuthenticated { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = hubConnection.TryInitialize(NavigationManager);
+        await hubConnection.StartAsync();
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        isAuthenticated = user.Identity.IsAuthenticated;
+        if (isAuthenticated)
+        {
+            CurrentUserId = user.FindFirst(c => c.Type == "sub")?.Value;
+        }
+    }
+
+    private async Task Logout()
+    {
+        // Đăng xuất thông qua SignalR hoặc các phương thức của bạn
+        try
+        {
+            await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
+            await _authenticationManager.Logout(); 
+            NavigationManager.NavigateTo("/login"); 
+
+            await JS.InvokeVoidAsync("localStorage.clear");
+            await JS.InvokeVoidAsync("sessionStorage.clear");
+            await JS.InvokeVoidAsync("location.reload");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Logout failed: {ex.Message}");
+            _snackBar.Add(localizer["Logout failed."], Severity.Error);
+        }
+    }
+}

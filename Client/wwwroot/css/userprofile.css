@@ -1,0 +1,116 @@
+﻿.main-content {
+    padding: 20px;
+    margin-left: 10%;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 20px;
+}
+
+.sidebar {
+    width: 250px;
+    padding: 0;
+    background-color: #efefef;
+    border-radius: 10px;
+    color: black;
+    margin-right: 20px;
+}
+
+    .sidebar .sidebar-title {
+        text-align: center;
+        margin: 0;
+        padding: 20px 0;
+        background-color: #007bfff9;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        color: white;
+    }
+
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 15px 20px;
+        text-decoration: none;
+        border-radius: 10px;
+    }
+
+        .sidebar a:hover {
+            background-color: white;
+        }
+
+.info {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.center-text {
+    color: #003366;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 300%;
+}
+
+.info-container {
+    padding: 20px;
+    background-color: white;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+    .section h3 {
+        color: #003366;
+        text-align: left;
+        border-bottom: 2px solid #cc0000;
+        padding-bottom: 10px;
+    }
+
+    .section p {
+        margin: 10px 0;
+    }
+
+.text-deco {
+    color: gray;
+}
+
+/*MudCss*/
+.mud-avatar-filled.mud-avatar-filled-secondary {
+    background-color: deepskyblue;
+}
+.mud-tabs-toolbar-content {
+    background-color: #007bfff9;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+}
+.mud-tab:hover {
+    background-color: #1900fff9;
+}
+.mud-card-header {
+    font-weight: bold;
+}
+.mud-card-actions {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    width: 180px;
+    margin: 0 auto;
+    border-radius: 20px;
+    background-color: #007bfff9;
+    color: white;
+    font-weight: bold;
+}
+.mud-input.mud-input-outlined .mud-input-outlined-border {
+    border-radius: 20px;
+}
+.mud-input > input.mud-input-root:disabled, div.mud-input-slot.mud-input-root:disabled {
+    color: darkgray;
+}
+.mud-dialog .mud-dialog-actions {
+    background-color: #fff;
+}
