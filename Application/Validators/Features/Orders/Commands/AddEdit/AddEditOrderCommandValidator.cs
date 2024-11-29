@@ -13,7 +13,9 @@ namespace LaptopStore.Application.Validators.Features.Order.Commands.AddEdit
             RuleFor(request => request.UserName)
                 .NotEmpty().WithMessage(localizer["UserName is required!"]);
             RuleFor(request => request.UserPhone)
-                .NotEmpty().WithMessage(localizer["UserPhone is required!"]);
+                .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => localizer["Phone Number is required"])
+                .Length(10).WithMessage(localizer["Phone Number must be exactly 10 characters long"])
+                .Matches(@"^\d{10}$").WithMessage(localizer["Phone Number must be number"]);
             RuleFor(request => request.MethodPayment)
                 .NotEmpty().WithMessage(localizer["MethodPayment is required!"]);
             RuleFor(request => request.StatusOrder)

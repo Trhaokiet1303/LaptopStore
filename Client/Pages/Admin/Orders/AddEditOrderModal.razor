@@ -44,10 +44,20 @@
                     <MudTextField For="@(() => AddEditOrderModel.TotalPrice)" @bind-Value="AddEditOrderModel.TotalPrice" Label="@_localizer["TotalPrice"]" Disabled />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="string" For="@(() => AddEditOrderModel.MethodPayment)" @bind-Value="AddEditOrderModel.MethodPayment" Label="@_localizer["MethodPayment"]" />
+                    <MudSelect T="string" Label="@_localizer["MethodPayment"]" @bind-Value="AddEditOrderModel.MethodPayment">
+                        <MudSelectItem Value="@("VNPAY")">VNPAY</MudSelectItem>
+                        <MudSelectItem Value="@("COD")">COD</MudSelectItem>
+                        <MudSelectItem Value="@("Chuyển khoản ngân hàng")">Chuyển khoản ngân hàng</MudSelectItem>
+                        <MudSelectItem Value="@("Thẻ Nội địa")">Thẻ Nội địa</MudSelectItem>
+                    </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="string" For="@(() => AddEditOrderModel.StatusOrder)" @bind-Value="AddEditOrderModel.StatusOrder" Label="@_localizer["StatusOrder"]" />
+                    <MudSelect T="string" Label="@_localizer["StatusOrder"]" @bind-Value="AddEditOrderModel.StatusOrder">
+                        <MudSelectItem Value="@("Đặt Thành Công")">Đặt Thành Công</MudSelectItem>
+                        <MudSelectItem Value="@("Đang Giao")">Đang Giao</MudSelectItem>
+                        <MudSelectItem Value="@("Đã Giao")">Đã Giao</MudSelectItem>
+                        <MudSelectItem Value="@("Đã Hủy")">Đã Hủy</MudSelectItem>
+                    </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudSelect @bind-Value="AddEditOrderModel.IsPayment" Label="@_localizer["Is Payment"]">
