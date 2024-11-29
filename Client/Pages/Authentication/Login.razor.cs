@@ -28,8 +28,19 @@ namespace LaptopStore.Client.Pages.Authentication
             var result = await _authenticationManager.Login(_tokenModel);
             if (result.Succeeded)
             {
-                _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
-                _navigationManager.NavigateTo("/", true);
+                var state = await _stateProvider.GetAuthenticationStateAsync();
+                var user = state?.User;
+
+                if (user != null && user.IsInRole("basic"))
+                {
+                    _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
+                    _navigationManager.NavigateTo("/", true); 
+                }
+                else
+                {
+                    _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
+                    _navigationManager.NavigateTo("/admin/dashboard", true);
+                }
             }
             else
             {
@@ -39,6 +50,7 @@ namespace LaptopStore.Client.Pages.Authentication
                 }
             }
         }
+
 
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;
