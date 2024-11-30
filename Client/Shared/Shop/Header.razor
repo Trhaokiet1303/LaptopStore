@@ -11,6 +11,7 @@
 @using System.Threading.Tasks;
 @using Microsoft.AspNetCore.Components
 @using System.Text.Json;
+@using System.Security.Claims
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Header> localizer
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -51,15 +52,22 @@
             </MudNavLink>
 
 
-            @if (isAuthenticated)
+            @if (_user?.Identity?.IsAuthenticated == true)
             {
-                <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
-
+                if (_isAdmin)
+                {
+                    <MudNavLink Href="/admin/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
+                }
+                else
+                {
+                    <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
+                }
             }
             else
             {
                 <MudNavLink Href="/login" Class="contact-info">Đăng nhập</MudNavLink>
             }
+
         </MudItem>
     </div>
 </MudPaper>
@@ -83,7 +91,8 @@
     private bool isAuthenticated { get; set; }
     private string CurrentUserId { get; set; }
     private string UserName { get; set; } = string.Empty;
-
+    private ClaimsPrincipal _user;
+    private bool _isAdmin;
     private HubConnection hubConnection;
     private MudTable<GetAllPagedProductsResponse> _table;
     private int cartItemCount = 0;
@@ -137,14 +146,17 @@
                 }
             }
         });
-
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        _user = state?.User;
+        _isAdmin = _user?.IsInRole("Administrator") ?? false;
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity.IsAuthenticated;
 
         if (isAuthenticated)
         {
-            UserName = authState.User.Identity.Name ?? "Người dùng"; // Lấy tên từ thông tin đăng nhập
+            UserName = authState.User.Identity.Name ?? "Người dùng";
+            StateHasChanged();
         }
 
         NavigationManager.LocationChanged += OnLocationChanged;
@@ -153,8 +165,8 @@
 
     private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
     {
-        UpdateBreadcrumb(); // Cập nhật breadcrumb khi URL thay đổi
-        InvokeAsync(StateHasChanged); // Kích hoạt render lại
+        UpdateBreadcrumb(); 
+        InvokeAsync(StateHasChanged); 
     }
 
     private void UpdateBreadcrumb()

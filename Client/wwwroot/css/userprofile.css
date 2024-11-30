@@ -114,3 +114,9 @@
 .mud-dialog .mud-dialog-actions {
     background-color: #fff;
 }
+.mud-button-filled{
+    box-shadow:none;
+}
+.mud-button-filled:hover {
+    box-shadow:none;
+}
