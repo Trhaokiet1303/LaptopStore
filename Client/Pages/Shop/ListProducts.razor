@@ -33,7 +33,7 @@
                 <MudExpansionPanels>
 
                     <!-- Brand Filter -->
-                    <MudExpansionPanel Text="@_localizer["Hãng"]">
+                    <MudExpansionPanel Text="@_localizer["Hãng sản xuất"]">
                         @foreach (var brand in _brands)
                         {
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
@@ -55,7 +55,7 @@
                     </MudExpansionPanel>
 
                     <!-- Price Filter -->
-                    <MudExpansionPanel Text="@_localizer["Giá"]">
+                    <MudExpansionPanel Text="@_localizer["Mức giá"]">
                         @foreach (var priceRange in _priceRanges)
                         {
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
@@ -110,7 +110,7 @@ else if (_pagedData != null && _pagedData.Any())
                             <MudText Typo="Typo.body2" Class="product-details">
                                 Màn hình: @context.Screen<br />
                                 CPU: @context.CPU<br />
-                                Card: @context.Card<br />
+                                GPU: @context.Card<br />
                                 Pin: @context.Battery<br />
                                 Khối lượng: @context.Weight
                             </MudText>
