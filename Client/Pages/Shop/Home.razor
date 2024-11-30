@@ -52,9 +52,8 @@
                         <MudButton OnClick="() => NavigateToProductDetail(product.Id)">
                         <MudCardContent>
                             <!-- Huy hiệu -->
-                            <div class="badge-container">
-                                <MudText Typo="Typo.overline" Class="badge">Trả góp 0%</MudText>
-                                <MudText Typo="Typo.overline" Class="badge">Giá rẻ quá</MudText>
+                             <div class="gift-container">
+                                <img src="/images/icon/sale.gif" class="gif-sale"/>
                             </div>
 
                             <!-- Ảnh sản phẩm -->
@@ -63,8 +62,8 @@
                             <!-- Thông tin sản phẩm -->
                                 <MudText Class="product-name-feat">@product.Name</MudText>
                             <div class="product-price-container">
-                                <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") đ</MudText>
-                                <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) đ</MudText>
+                                <MudText Typo="Typo.h6" Class="main-price">@product.Price.ToString("N0") Đ</MudText>
+                                <MudText Typo="Typo.caption" Class="old-price">@((product.Price * 1.1).ToString("N0")) Đ</MudText>
                             </div>
                                 <div class="rate-button">
                                     @foreach (var star in GetStars(product.Rate))
@@ -122,8 +121,8 @@
                                 Khối lượng: @context.Weight
                             </MudText>
                             <div class="price-container">
-                                <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") đ</MudText>
-                                <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) đ</MudText>
+                                <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") Đ</MudText>
+                                <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) Đ</MudText>
                             </div>
                             <div class="rate">
                                 @foreach (var star in GetStars(context.Rate))

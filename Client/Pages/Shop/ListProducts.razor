@@ -115,8 +115,8 @@ else if (_pagedData != null && _pagedData.Any())
                                 Khối lượng: @context.Weight
                             </MudText>
                             <div class="price-container">
-                                <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") đ</MudText>
-                                <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) đ</MudText>
+                                <MudText Typo="Typo.h6" Class="price">@context.Price.ToString("N0") Đ</MudText>
+                                <MudText Typo="Typo.caption" Class="original-price">@((context.Price * 1.14).ToString("N0")) Đ</MudText>
                             </div>
                             <div class="rate">
                                 @foreach (var star in GetStars(context.Rate))

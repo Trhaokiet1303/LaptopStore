@@ -376,9 +376,20 @@
     margin-bottom: 10px;
     display: block;
 }
-
+.gift-container {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.gif-sale {
+    width: 60px;
+    height: auto;
+}
 @media (max-width: 1200px) {
-   
     .product-list-container {
         grid-template-columns: repeat(4, 1fr);
     }
