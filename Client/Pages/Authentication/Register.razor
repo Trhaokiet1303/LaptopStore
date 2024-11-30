@@ -25,10 +25,10 @@
             <MudTextField Class="input-register" For="@(() => _registerUserModel.UserName)" @bind-Value="_registerUserModel.UserName" Label="@_localizer["Tên đăng nhập"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField Class="input-register" For="@(() => _registerUserModel.FirstName)" @bind-Value="_registerUserModel.FirstName" Label="@_localizer["Họ"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.FirstName)" @bind-Value="_registerUserModel.FirstName" Label="@_localizer["Tên"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudTextField Class="input-register" For="@(() => _registerUserModel.LastName)" @bind-Value="_registerUserModel.LastName" Label="@_localizer["Tên"]" />
+            <MudTextField Class="input-register" For="@(() => _registerUserModel.LastName)" @bind-Value="_registerUserModel.LastName" Label="@_localizer["Họ"]" />
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
             <MudTextField Class="input-register" T="string" Label="@_localizer["E-mail"]" @bind-Value="_registerUserModel.Email" For="@(() => _registerUserModel.Email)" />

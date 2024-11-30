@@ -74,7 +74,7 @@ namespace LaptopStore.Client.Pages.Shop
         // Initialize filter options for brands
         private List<BrandFilter> _brands = new List<BrandFilter>
 {
-            new BrandFilter { Name = "Apple", LogoPath = "/images/brand/mac-icon.png" },
+            new BrandFilter { Name = "Macbook", LogoPath = "/images/brand/mac-icon.png" },
             new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
             new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
             new BrandFilter { Name = "MSI", LogoPath = "/images/brand/msi-icon.png" },
