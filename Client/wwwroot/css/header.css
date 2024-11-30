@@ -31,6 +31,7 @@
     align-items: center;
     justify-content: center;
     min-width: 20%;
+    max-width:45%;
 }
 
 .search-bar {
@@ -59,15 +60,15 @@
 .menu-container {
     display: flex;
     gap: 10px;
-    align-items: center; /* Căn giữa các mục theo chiều dọc */
-    justify-content: flex-start; /* Căn hàng ngang */
-    flex-wrap: nowrap; /* Ngăn xuống dòng */
+    align-items: center; 
+    justify-content: flex-start;
+    flex-wrap: nowrap; 
 }
 
 .menu-button {
     border-radius: 25px;
     background-color: #00aaff;
-    color: white;
+    color: #ffff;
     font-weight: bolder;
     font-size: 18px;
     text-decoration: none;
@@ -75,9 +76,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
+    border: 1px solid #00aaff;
+    text-align: center;
 }
-
-
+    .menu-button:hover {
+        color: #00aaff;
+        background-color: #ffff;
+    }
 
 .contact-container {
     flex: 1;
@@ -85,6 +90,7 @@
     justify-content: flex-end;
     align-items: center;
     width: 70%;
+    padding-right:15px;
 }
 
 .contact {
@@ -98,7 +104,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
+    border: 1px solid #00aaff;
+    margin-right: 5px;
+    text-align: center;
 }
+    .contact:hover {
+        color: #00aaff;
+        background-color: #ffff;
+    }
 .contact-info {
     border-radius: 25px;
     background-color: #00aaff;
@@ -110,8 +123,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
+    border: 1px solid #00aaff;
+    margin-right: 5px;
+    text-align:center;
 }
-
+    .contact-info:hover {
+        color: #00aaff;
+        background-color: #ffff;
+    }
 /* Responsive Design */
 @media (max-width: 1200px) {
     .menu-container,

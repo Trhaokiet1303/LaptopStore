@@ -23,7 +23,7 @@ using LaptopStore.Application.Specifications.Catalog;
 
 namespace LaptopStore.Client.Pages.Shop
 {
-    public partial class Home : IDisposable // Implement IDisposable to manage resources
+    public partial class Home : IDisposable 
     {
         [Inject] private IProductManager ProductManager { get; set; }
         [CascadingParameter] private HubConnection HubConnection { get; set; }
@@ -40,7 +40,7 @@ namespace LaptopStore.Client.Pages.Shop
         private IEnumerable<GetAllPagedProductsResponse> _featuredProducts;
         private IEnumerable<GetAllPagedProductsResponse> _RatedProducts;
         private int currentIndex = 0; 
-        private int productsPerPage = 5; // Số lượng sản phẩm trên mỗi trang
+        private int productsPerPage = 5;
         protected override async Task OnInitializedAsync()
         {
             _loaded = false;
@@ -49,7 +49,6 @@ namespace LaptopStore.Client.Pages.Shop
             ApplyFilters(); 
             _loaded = true;
 
-            // Initialize and start the timer for automatic rotation
             bannerTimer = new Timer(3000);
             bannerTimer.Elapsed += (s, e) => InvokeAsync(ShowNextImage);
             bannerTimer.Start();
@@ -59,7 +58,7 @@ namespace LaptopStore.Client.Pages.Shop
         {
             var request = new GetAllPagedProductsRequest
             {
-                PageNumber = pageNumber + 1, // Convert to 1-based index if necessary
+                PageNumber = pageNumber + 1, 
                 PageSize = pageSize,
                 SearchString = _searchString
             };
@@ -71,7 +70,6 @@ namespace LaptopStore.Client.Pages.Shop
             }
         }
 
-        // Initialize filter options for brands
         private List<BrandFilter> _brands = new List<BrandFilter>
 {
             new BrandFilter { Name = "Macbook", LogoPath = "/images/brand/mac-icon.png" },
@@ -87,7 +85,6 @@ namespace LaptopStore.Client.Pages.Shop
 
         private string SelectedRateRange = "all";
 
-        // Filter the product data based on selected filters
         private void ApplyFilters()
         {
             if (_pagedData == null) return;
@@ -96,7 +93,6 @@ namespace LaptopStore.Client.Pages.Shop
             _RatedProducts = _pagedData.Where(p => p.Rate >= 4.2m).ToList();
         }
 
-        // List of banner images
         private List<string> bannerImages = new List<string>
         {
             "/images/banner/1.png",
@@ -167,7 +163,6 @@ namespace LaptopStore.Client.Pages.Shop
         }
         private void NavigateToAllProducts(string brand)
         {
-            // Chuyển hướng tới trang /allproducts với tham số lọc thương hiệu
             NavigationManager.NavigateTo($"/allproducts?brands={Uri.EscapeDataString(brand)}");
         }
 
@@ -176,10 +171,9 @@ namespace LaptopStore.Client.Pages.Shop
             NavigationManager.NavigateTo($"/product/{productId}");
         }
 
-        private int featuredProductCurrentIndex = 0; // Index hiện tại của danh sách Featured Products
-        private int featuredProductsPerPage = 8;    // Số lượng sản phẩm hiển thị mỗi lần
+        private int featuredProductCurrentIndex = 0; 
+        private int featuredProductsPerPage = 8;    
 
-        // Hàm chuyển qua danh sách sản phẩm tiếp theo
         private IEnumerable<GetAllPagedProductsResponse> GetCurrentFeaturedProducts()
         {
             if (_featuredProducts == null || !_featuredProducts.Any())
@@ -187,7 +181,6 @@ namespace LaptopStore.Client.Pages.Shop
 
             var result = new List<GetAllPagedProductsResponse>();
 
-            // Lấy 8 sản phẩm từ chỉ số hiện tại, tuần hoàn nếu cần
             for (int i = 0; i < featuredProductsPerPage; i++)
             {
                 var index = (featuredProductCurrentIndex + i) % _featuredProducts.Count();
@@ -198,31 +191,26 @@ namespace LaptopStore.Client.Pages.Shop
         }
 
 
-        // Hàm chuyển tới trang tiếp theo
         private void ShowNextFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                // Chuyển sang sản phẩm kế tiếp
                 featuredProductCurrentIndex = (featuredProductCurrentIndex + 1) % _featuredProducts.Count();
                 StateHasChanged();
             }
         }
 
 
-        // Hàm quay lại trang trước đó
         private void ShowPreviousFeaturedProducts()
         {
             if (_featuredProducts != null && _featuredProducts.Any())
             {
-                // Quay lại sản phẩm trước đó, tuần hoàn về cuối nếu cần
                 featuredProductCurrentIndex = (featuredProductCurrentIndex - 1 + _featuredProducts.Count()) % _featuredProducts.Count();
                 StateHasChanged();
             }
         }
 
 
-        /*thong tin*/
         private bool IsExpanded { get; set; } = false;
 
         private string ButtonLabel => IsExpanded ? "Ẩn bớt nội dung" : "Xem thêm nội dung";
@@ -234,34 +222,27 @@ namespace LaptopStore.Client.Pages.Shop
             IsExpanded = !IsExpanded;
         }
 
-        //Hàm tạo ngôi sao
         private List<string> GetStars(decimal rate)
         {
-            // Lấy phần nguyên của rate để xác định số sao đầy
             var fullStars = (int)Math.Floor(rate);
-
-            // Kiểm tra xem có nửa sao không
             var halfStar = (rate - fullStars) >= 0.5m; // 'm' để chỉ định là kiểu decimal
 
-            // Tính số sao trống còn lại
             var emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-            // Tạo danh sách chứa các icon sao
             var stars = new List<string>();
-
-            // Thêm icon sao đầy
             stars.AddRange(Enumerable.Repeat(Icons.Material.Filled.Star, fullStars));
-
-            // Thêm icon nửa sao nếu có
             if (halfStar)
             {
                 stars.Add(Icons.Material.Filled.StarHalf);
             }
-
-            // Thêm icon sao trống
             stars.AddRange(Enumerable.Repeat(Icons.Material.Outlined.StarOutline, emptyStars));
 
             return stars;
+        }
+
+        private void Allproduct()
+        {
+            NavigationManager.NavigateTo($"/allproducts");
         }
 
     }

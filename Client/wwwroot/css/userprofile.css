@@ -33,10 +33,12 @@
         padding: 15px 20px;
         text-decoration: none;
         border-radius: 10px;
+        transition: transform 0.25s ease; 
     }
 
         .sidebar a:hover {
             background-color: white;
+            transform: scale(1.1); 
         }
 
 .info {
@@ -91,7 +93,8 @@
     border-radius: 15px;
 }
 .mud-tab:hover {
-    background-color: #1900fff9;
+    background-color: #0040fff9;
+    color: whitesmoke;
 }
 .mud-card-header {
     font-weight: bold;
@@ -119,4 +122,8 @@
 }
 .mud-button-filled:hover {
     box-shadow:none;
+}
+.mud-card-actions:hover {
+    background-color: #0040fff9;
+    color:whitesmoke;
 }

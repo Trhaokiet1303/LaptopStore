@@ -1,29 +1,29 @@
 ﻿.main-container {
     display: flex;
-    flex-direction: row; /* Đặt các phần tử con theo hàng ngang */
-    align-items: flex-start; /* Căn các phần tử con theo chiều dọc */
-    justify-content: flex-start; /* Căn các phần tử con theo chiều ngang */
+    flex-direction: row; 
+    align-items: flex-start; 
+    justify-content: flex-start; 
 }
 
 .filter-panel-container {
-    width: 260px; /* Đặt chiều rộng cố định cho panel */
+    width: 260px; 
     padding: 16px;
     background-color: #f5f5f5;
-    position: relative; /* Giữ vị trí panel cố định */
-    z-index: 1050; /* Đặt panel trên cùng nếu cần */
+    position: relative; 
+    z-index: 1050; 
 }
 
 .filter-panel-hidden {
-    display: none; /* Ẩn panel nếu không hiển thị */
+    display: none; 
 }
 
 .product-section {
-    flex-grow: 1; /* Cho phép phần sản phẩm chiếm không gian còn lại */
-    padding-left: 16px; /* Tạo khoảng cách giữa filter panel và sản phẩm */
-    transition: margin-left 0.3s ease; /* Hiệu ứng khi mở filter */
+    flex-grow: 1; 
+    padding-left: 16px; 
+    transition: margin-left 0.3s ease; 
     display: flex;
-    flex-wrap: wrap; /* Cho phép các sản phẩm gói gọn khi không đủ không gian */
-    gap: 16px; /* Khoảng cách giữa các sản phẩm */
+    flex-wrap: wrap; 
+    gap: 16px; 
 }
 
 .menu-bar {
@@ -119,17 +119,17 @@
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .product {
-        position: relative;
-        flex: 0 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.product {
+    position: relative;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.5s ease;
+}
 
     .product:hover {
-        transition: box-shadow 0.3s ease-in-out;
-        transform: scale(1.02);
+        transform: scale(1.1);
     }
 
 .img-product {
@@ -168,7 +168,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     margin-bottom: 10px;
-    left: 50%; /* Căn giữa theo chiều ngang */
+    left: 50%; 
     transform: translateX(-50%);
 }
 
@@ -271,22 +271,26 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     position: relative;
 }
 
 .load-more-button {
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 10px;
-    padding: 10px 20px;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
     font-weight: bold;
-    border: 2px solid black;
+    color: white;
+    background-color: #0040fff9;
+    display: block;
+    margin: 5px auto;
+    text-align: center;
+    border: 1px solid #0040fff9;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
     .load-more-button:hover {
-        background-color: #f0f0f0;
+        color: #0040fff9;
+        background-color: #fff;
     }

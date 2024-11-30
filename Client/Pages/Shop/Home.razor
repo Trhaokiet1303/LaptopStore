@@ -14,8 +14,8 @@
 
     <!-- Banner Images -->
     <MudPaper Class="banner">
-        <img src="@bannerImages[currentImageIndex]" alt="Banner Image 1" style="width: 100%; height: auto;" />
-        <img src="@bannerImages[secondImageIndex]" alt="Banner Image 2" style="width: 100%; height: auto;" />
+        <img src="@bannerImages[currentImageIndex]" alt="Banner Image 1" />
+        <img src="@bannerImages[secondImageIndex]" alt="Banner Image 2" />
     </MudPaper>
 
     <!-- Nút điều hướng bên phải -->
@@ -139,6 +139,9 @@
                         </MudCard>
                     </MudItem>
                 }
+            <MudButton Class="button-content" OnClick="()=>Allproduct()">
+                Xem thêm sản phẩm
+            </MudButton>
             </MudGrid>
        }
                   
