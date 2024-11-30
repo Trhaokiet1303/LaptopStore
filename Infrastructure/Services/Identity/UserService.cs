@@ -91,19 +91,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, RoleConstants.BasicRole);
-                    if (!request.AutoConfirmEmail)
-                    {
-                        var verificationUri = await SendVerificationEmail(user, origin);
-                        var mailRequest = new MailRequest
-                        {
-                            From = "mail@codewithmukesh.com",
-                            To = user.Email,
-                            Body = string.Format(_localizer["Vui lòng xác nhận tài khoản của bạn bằng cách <a href='{0}'>nhấp vào đây</a>."], verificationUri),
-                            Subject = _localizer["Xác nhận đăng ký"]
-                        };
-                        BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
-                        return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký. Vui lòng kiểm tra hộp thư để xác minh!"], user.UserName));
-                    }
                     return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký."], user.UserName));
                 }
                 else
@@ -115,6 +102,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             {
                 return await Result.FailAsync(string.Format(_localizer["Email {0} đã được đăng ký."], request.Email));
             }
+
         }
 
         private async Task<string> SendVerificationEmail(User user, string origin)
@@ -182,12 +170,13 @@ namespace LaptopStore.Infrastructure.Services.Identity
         public async Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
-            if (user.Email == "mukesh@blazorhero.com")
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (!roles.Contains(RoleConstants.AdministratorRole))
             {
                 return await Result.FailAsync(_localizer["Không được phép."]);
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
             var selectedRoles = request.UserRoles.Where(x => x.Selected).ToList();
 
             var currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
@@ -206,6 +195,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             result = await _userManager.AddToRolesAsync(user, selectedRoles.Select(y => y.RoleName));
             return await Result.SuccessAsync(_localizer["Cập nhật vai trò thành công"]);
         }
+
 
         public async Task<IResult<string>> ConfirmEmailAsync(string userId, string code)
         {

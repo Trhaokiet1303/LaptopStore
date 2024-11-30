@@ -69,7 +69,7 @@ namespace LaptopStore.Client.Pages.Admin.View
             {
                 return true;
             }
-            if (user.PhoneNumber.ToString().Contains(_searchString))
+            if (user.PhoneNumber.Contains(_searchString))
             {
                 return true;
             }

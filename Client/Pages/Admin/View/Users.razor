@@ -59,7 +59,7 @@ else
                 <MudHighlighter Text="@context.Email" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="PhoneNumber">
-                <MudHighlighter Text="@context.PhoneNumber.ToString()" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@context.PhoneNumber" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="EmailConfirmed"><MudCheckBox @bind-Checked="@context.EmailConfirmed" ReadOnly Color="Color.Secondary"></MudCheckBox></MudTd>
             <MudTd DataLabel="Active"><MudCheckBox @bind-Checked="@context.IsActive" ReadOnly Color="Color.Secondary"></MudCheckBox></MudTd>
