@@ -12,11 +12,12 @@
         <MudGrid Class="form-address flex-container">
             <!-- Họ và Tên -->
             <MudItem xs="6" Class="form-info-user">
-                <MudTextField @bind-Value="FirstName" Label="Họ" Required="true" RequiredError="Họ là bắt buộc" />
+                <MudTextField @bind-Value="LastName" Label="Họ" Required="true" RequiredError="Họ là bắt buộc" />
             </MudItem>
             <MudItem xs="6" Class="form-info-user">
-                <MudTextField @bind-Value="LastName" Label="Tên" Required="true" RequiredError="Tên là bắt buộc" />
+                <MudTextField @bind-Value="FirstName" Label="Tên" Required="true" RequiredError="Tên là bắt buộc" />
             </MudItem>
+           
         </MudGrid>
 
         <!-- Số điện thoại -->

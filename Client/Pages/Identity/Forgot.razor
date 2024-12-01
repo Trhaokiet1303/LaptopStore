@@ -1,32 +1,31 @@
 ﻿@page "/account/forgot-password"
-@using LaptopStore.Client.Shared.Admin
-@layout MainLayout
+@using LaptopStore.Client.Shared.Shop
+@layout ShopLayout
 @attribute [AllowAnonymous]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Forgot> _localizer
+<link href="css/login.css" rel="stylesheet">
 
 <EditForm Model="@_emailModel" OnValidSubmit="SubmitAsync">
     <FluentValidationValidator @ref="_fluentValidationValidator" />
-    <MudGrid>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudIcon Icon="@CustomIcons.BlazorHero" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;" />
-            </div>
+    <MudGrid Class="login-container">
+        <MudItem xs="12" Class="logo-container">
+            <img class="img-login" src="/images/icon/logo.png" />
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="text-container">
             <div class="d-flex justify-center">
                 <MudText Typo="Typo.h4">@_localizer["Quên mật khẩu?"]</MudText>
             </div>
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="text-container">
             <div class="d-flex justify-center">
                 <MudText Typo="Typo.subtitle2" Class="mb-n4">@_localizer["Nhập email để reset mật khẩu"]</MudText>
             </div>
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" Class="input-container">
             <MudTextField Label="@_localizer["E-mail"]" @bind-Value="_emailModel.Email" For="@(() => _emailModel.Email)" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-center">
-            <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Size="Size.Large" ButtonType="ButtonType.Submit" FullWidth="true">@_localizer["Reset mật khẩu"]</MudButton>
+        <MudItem xs="12" Class="button-container d-flex justify-center">
+            <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Class="login-button" ButtonType="ButtonType.Submit" FullWidth="true">@_localizer["Reset mật khẩu"]</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>
