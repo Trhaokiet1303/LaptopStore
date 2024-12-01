@@ -132,11 +132,17 @@ else if (_pagedData != null && _pagedData.Any())
                     </MudCard>
                 </MudItem>
             }
-            <div class="load-more-container">
-                <MudButton Variant="Variant.Filled" OnClick="LoadMoreProducts" Class="load-more-button">
-                    Xem thêm
-                </MudButton>
-            </div>
+            @if (_pagedData.Count() < _totalItems)
+            {
+                var remainingProducts = _totalItems - _pagedData.Count();
+
+                <div class="load-more-container">
+                    <MudButton Variant="Variant.Filled" OnClick="LoadMoreProducts" Class="load-more-button">
+                        Xem thêm @remainingProducts sản phẩm
+                    </MudButton>
+                </div>
+            }
+
         </MudGrid>
 }
 </div>
