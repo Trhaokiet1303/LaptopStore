@@ -34,6 +34,7 @@ namespace LaptopStore.Client.Pages.Shop
         private MudTable<GetAllPagedProductsResponse> _table;
 
         private bool isFilterPanelVisible = false;
+        private bool _showLoadMoreButton = true; // Default state is to show the button
 
         private int _totalItems;
         private int _currentPage;
@@ -194,8 +195,15 @@ namespace LaptopStore.Client.Pages.Shop
             }
 
             _currentPage = pageNumber;
+            if (filteredProducts.Count <= _pagedData.Count())
+            {
+                _showLoadMoreButton = false; // Hide the button if no products are left
+            }
+            else
+            {
+                _showLoadMoreButton = true; // Show the button if more products are available
+            }
         }
-
 
 
         private List<Product> ConvertToProductList(IEnumerable<GetAllPagedProductsResponse> responseData)

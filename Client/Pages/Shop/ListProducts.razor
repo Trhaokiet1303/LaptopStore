@@ -132,7 +132,7 @@ else if (_pagedData != null && _pagedData.Any())
                     </MudCard>
                 </MudItem>
             }
-            @if (_pagedData.Count() < _totalItems)
+            @if (_showLoadMoreButton && _pagedData.Count() < _totalItems)
             {
                 var remainingProducts = _totalItems - _pagedData.Count();
 
