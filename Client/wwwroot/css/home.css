@@ -149,12 +149,10 @@
 }
 
 .badge {
-    background-color: #ffe2e2;
-    color: #e91e63;
-    font-size: 12px;
     padding: 4px 6px;
     border-radius: 4px;
-    text-align: center;
+    width: auto;
+    height: 80px;
 }
 
 
@@ -167,7 +165,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     margin-bottom: 10px;
-    left: 50%; /* Căn giữa theo chiều ngang */
+    left: 50%; 
     transform: translateX(-50%);
 }
 
@@ -176,7 +174,7 @@
     gap: 8px;
     justify-content: center;
     position: absolute;
-    top: 200px; /* Đặt vị trí specs trên thông tin kỹ thuật */
+    top: 200px; 
     left: 50%;
     transform: translateX(-50%);
     height: 25px;
@@ -297,7 +295,7 @@
 
 .icon-feature {
     width: auto;
-    height: 50px; /* Điều chỉnh chiều cao ảnh */
+    height: 55px; /* Điều chỉnh chiều cao ảnh */
     display: inline-block;
 }
 
