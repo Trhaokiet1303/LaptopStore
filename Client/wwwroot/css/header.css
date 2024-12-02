@@ -154,6 +154,15 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.cart-badge {
+    background-color: red;
+    color: white;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 50%;
+}
+
+
 .breadcrumb {
     display: flex;
     align-items: center;

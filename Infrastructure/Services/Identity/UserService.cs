@@ -172,7 +172,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var user = await _userManager.FindByIdAsync(request.UserId);
             var roles = await _userManager.GetRolesAsync(user);
 
-            if (!roles.Contains(RoleConstants.AdministratorRole))
+            if (roles.Contains(RoleConstants.AdministratorRole))
             {
                 return await Result.FailAsync(_localizer["Không được phép."]);
             }
