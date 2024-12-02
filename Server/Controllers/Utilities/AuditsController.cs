@@ -20,15 +20,11 @@ namespace LaptopStore.Server.Controllers.Utilities
             _auditService = auditService;
         }
 
-        /// <summary>
-        /// Get Current User Audit Trails
-        /// </summary>
-        /// <returns>Status 200 OK</returns>
         [Authorize(Policy = Permissions.AuditTrails.View)]
-        [HttpGet]
-        public async Task<IActionResult> GetUserTrailsAsync()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllTrailsAsync()
         {
-            return Ok(await _auditService.GetCurrentUserTrailsAsync(_currentUserService.UserId));
+            return Ok(await _auditService.GetAllTrailsAsync());
         }
     }
 }

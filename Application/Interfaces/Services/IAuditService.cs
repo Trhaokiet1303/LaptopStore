@@ -7,6 +7,6 @@ namespace LaptopStore.Application.Interfaces.Services
 {
     public interface IAuditService
     {
-        Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId);
+        Task<IResult<IEnumerable<AuditResponse>>> GetAllTrailsAsync();
     }
 }

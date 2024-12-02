@@ -32,12 +32,13 @@ namespace LaptopStore.Infrastructure.Services
             _localizer = localizer;
         }
 
-        public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId)
+        public async Task<IResult<IEnumerable<AuditResponse>>> GetAllTrailsAsync()
         {
-            var trails = await _context.AuditTrails.Where(a => a.UserId == userId).OrderByDescending(a => a.Id).Take(250).ToListAsync();
+            var trails = await _context.AuditTrails.OrderByDescending(a => a.Id).ToListAsync();
             var mappedLogs = _mapper.Map<List<AuditResponse>>(trails);
             return await Result<IEnumerable<AuditResponse>>.SuccessAsync(mappedLogs);
         }
+
 
     }
 }

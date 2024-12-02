@@ -16,11 +16,12 @@ namespace LaptopStore.Client.Infrastructure.Managers.Audit
             _httpClient = httpClient;
         }
 
-        public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync()
+        public async Task<IResult<IEnumerable<AuditResponse>>> GetAllTrailsAsync()
         {
-            var response = await _httpClient.GetAsync(Routes.AuditEndpoints.GetCurrentUserTrails);
+            var response = await _httpClient.GetAsync(Routes.AuditEndpoints.GetAllTrails);
             var data = await response.ToResult<IEnumerable<AuditResponse>>();
             return data;
         }
+
     }
 }

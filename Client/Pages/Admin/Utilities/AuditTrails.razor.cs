@@ -74,7 +74,7 @@ namespace LaptopStore.Client.Pages.Admin.Utilities
 
         private async Task GetDataAsync()
         {
-            var response = await AuditManager.GetCurrentUserTrailsAsync();
+            var response = await AuditManager.GetAllTrailsAsync();
             if (response.Succeeded)
             {
                 Trails = response.Data

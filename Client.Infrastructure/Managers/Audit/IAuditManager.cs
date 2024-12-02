@@ -7,7 +7,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Audit
 {
     public interface IAuditManager : IManager
     {
-        Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync();
+        Task<IResult<IEnumerable<AuditResponse>>> GetAllTrailsAsync();
 
     }
 }

@@ -112,11 +112,5 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:LaptopStore.Server.Controllers.Utilities.AuditsController.GetUserTrailsAsync">
-            <summary>
-            Get Current User Audit Trails
-            </summary>
-            <returns>Status 200 OK</returns>
-        </member>
     </members>
 </doc>

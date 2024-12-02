@@ -3,6 +3,6 @@
     public static class AuditEndpoints
     {
 
-        public static string GetCurrentUserTrails = "api/audits";
+        public static string GetAllTrails = "api/audits/all";    // Endpoint mới
     }
 }
