@@ -21,11 +21,6 @@ namespace LaptopStore.Server.Controllers.Identity
             _currentUser = currentUser;
         }
 
-        /// <summary>
-        /// Update Profile
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Status 200 OK</returns>
         [HttpPut(nameof(UpdateProfile))]
         public async Task<ActionResult> UpdateProfile(UpdateProfileRequest model)
         {
@@ -33,11 +28,6 @@ namespace LaptopStore.Server.Controllers.Identity
             return Ok(response);
         }
 
-        /// <summary>
-        /// Change Password
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Status 200 OK</returns>
         [HttpPut(nameof(ChangePassword))]
         public async Task<ActionResult> ChangePassword(ChangePasswordRequest model)
         {
@@ -45,11 +35,6 @@ namespace LaptopStore.Server.Controllers.Identity
             return Ok(response);
         }
 
-        /// <summary>
-        /// Get Profile picture by Id
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>Status 200 OK </returns>
         [HttpGet("profile-picture/{userId}")]
         [ResponseCache(NoStore = false, Location = ResponseCacheLocation.Client, Duration = 60)]
         public async Task<IActionResult> GetProfilePictureAsync(string userId)
@@ -57,11 +42,6 @@ namespace LaptopStore.Server.Controllers.Identity
             return Ok(await _accountService.GetProfilePictureAsync(userId));
         }
 
-        /// <summary>
-        /// Update Profile Picture
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Status 200 OK</returns>
         [HttpPost("profile-picture/{userId}")]
         public async Task<IActionResult> UpdateProfilePictureAsync(UpdateProfilePictureRequest request)
         {
