@@ -170,30 +170,36 @@ namespace LaptopStore.Infrastructure.Services.Identity
         public async Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            if (roles.Contains(RoleConstants.AdministratorRole))
+            if (user == null)
             {
-                return await Result.FailAsync(_localizer["Không được phép."]);
+                return await Result.FailAsync(_localizer["Người dùng không tồn tại."]);
             }
-
-            var selectedRoles = request.UserRoles.Where(x => x.Selected).ToList();
-
+            var roles = await _userManager.GetRolesAsync(user);
             var currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
             if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
             {
-                var tryToAddAdministratorRole = selectedRoles
-                    .Any(x => x.RoleName == RoleConstants.AdministratorRole);
-                var userHasAdministratorRole = roles.Any(x => x == RoleConstants.AdministratorRole);
-                if (tryToAddAdministratorRole && !userHasAdministratorRole || !tryToAddAdministratorRole && userHasAdministratorRole)
-                {
-                    return await Result.FailAsync(_localizer["Không được phép thêm hoặc xóa vai trò Quản trị viên nếu bạn không có vai trò này."]);
-                }
+                return await Result.FailAsync(_localizer["Bạn không có quyền thực hiện thay đổi vai trò."]);
             }
-
-            var result = await _userManager.RemoveFromRolesAsync(user, roles);
-            result = await _userManager.AddToRolesAsync(user, selectedRoles.Select(y => y.RoleName));
-            return await Result.SuccessAsync(_localizer["Cập nhật vai trò thành công"]);
+            if (roles.Contains(RoleConstants.AdministratorRole))
+            {
+                return await Result.FailAsync(_localizer["Không được phép chỉnh sửa vai trò của Quản trị viên."]);
+            }
+            var selectedRoles = request.UserRoles.Where(x => x.Selected).Select(y => y.RoleName).ToList();
+            if (selectedRoles.Contains(RoleConstants.BasicRole) && selectedRoles.Count > 1)
+            {
+                return await Result.FailAsync(_localizer["Chọn vai trò Basic, không được chọn thêm vai trò khác."]);
+            }
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, roles);
+            if (!removeResult.Succeeded)
+            {
+                return await Result.FailAsync(_localizer["Không thể xóa vai trò hiện tại."]);
+            }
+            var addResult = await _userManager.AddToRolesAsync(user, selectedRoles);
+            if (!addResult.Succeeded)
+            {
+                return await Result.FailAsync(_localizer["Không thể thêm vai trò mới."]);
+            }
+            return await Result.SuccessAsync(_localizer["Cập nhật vai trò thành công."]);
         }
 
 
