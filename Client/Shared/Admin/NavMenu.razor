@@ -12,9 +12,12 @@
     <MudNavLink Href="/swagger/index.html" Target="_blank" Icon="@Icons.Material.Outlined.LiveHelp">
         @_localizer["Swagger"]
     </MudNavLink>
-    <MudNavLink Href="/admin/audit" Icon="@Icons.Material.Outlined.LiveHelp">
-        @_localizer["Audit"]
-    </MudNavLink>
+    @if (_canViewAudits)
+    {
+        <MudNavLink Href="/admin/audit" Icon="@Icons.Material.Outlined.LiveHelp">
+            @_localizer["Audit"]
+        </MudNavLink>
+    }
 
     @if (_canViewUsers || _canViewRoles)
     {
@@ -59,6 +62,7 @@
 
     private bool _canViewHangfire;
     private bool _canViewDashboards;
+    private bool _canViewAudits;
     private bool _canViewUsers;
     private bool _canViewRoles;
     private bool _canViewProducts;
@@ -69,6 +73,7 @@
     protected override async Task OnParametersSetAsync()
     {
         _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
+        _canViewAudits = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.AuditTrails.View)).Succeeded;
         _canViewUsers = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Users.View)).Succeeded;
         _canViewRoles = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Roles.View)).Succeeded;
         _canViewProducts = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Products.View)).Succeeded;

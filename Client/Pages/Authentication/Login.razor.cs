@@ -71,11 +71,5 @@ namespace LaptopStore.Client.Pages.Authentication
                 _passwordInput = InputType.Text;
             }
         }
-
-        private void FillAdministratorCredentials()
-        {
-            _tokenModel.Email = "admin@gmail.com";
-            _tokenModel.Password = "123Pa$$word!";
-        }
     }
 }
