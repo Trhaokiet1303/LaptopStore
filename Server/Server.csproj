@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Files\Images\ProfilePictures\" />
+    <Folder Include="Managers\Preferences\" />
   </ItemGroup>
 
 

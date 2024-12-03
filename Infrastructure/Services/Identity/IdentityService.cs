@@ -21,7 +21,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
 {
     public class IdentityService : ITokenService
     {
-        private const string InvalidErrorMessage = "Invalid email or password.";
+        private const string InvalidErrorMessage = "Sai email hoặc mật khẩu.";
 
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;

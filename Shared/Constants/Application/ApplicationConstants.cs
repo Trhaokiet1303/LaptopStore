@@ -27,10 +27,5 @@
             public const string GetAllOrdersCacheKey = "all-orders";
             public const string GetAllOrderItemsCacheKey = "all-orderitems";
         }
-
-        public static class MimeTypes
-        {
-            public const string OpenXml = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        }
     }
 }
