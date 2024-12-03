@@ -1,5 +1,6 @@
 ﻿using LaptopStore.Application.Features.Products.Commands.AddEdit;
 using LaptopStore.Application.Features.Products.Commands.Delete;
+using LaptopStore.Application.Features.Products.Commands.Update;
 using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using LaptopStore.Application.Features.Products.Queries.GetProductImage;
@@ -56,6 +57,12 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         {
             var result = await _mediator.Send(request);
             return Ok(result);
+        }
+
+        [HttpPut("UpdateRate")]
+        public async Task<IActionResult> UpdateRate([FromBody] UpdateRateProductCommand command)
+        {
+            return Ok(await _mediator.Send(command));
         }
 
     }

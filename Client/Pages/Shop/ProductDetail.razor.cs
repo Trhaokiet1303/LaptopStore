@@ -25,6 +25,8 @@ namespace LaptopStore.Client.Pages.Shop
         [Parameter] public int productId { get; set; }
         public GetProductByIdResponse Product { get; set; } = new();
         private List<GetAllPagedProductsResponse> AllProducts { get; set; } = new();
+        private decimal _selectedRating = 0;
+
         protected override async Task OnInitializedAsync()
         {
             await LoadAllProducts();
@@ -251,6 +253,49 @@ namespace LaptopStore.Client.Pages.Shop
             stars.AddRange(Enumerable.Repeat(Icons.Material.Outlined.StarOutline, emptyStars));
 
             return stars;
+        }
+        private string GetRatingText(int rating)
+        {
+            return rating switch
+            {
+                1 => "Rất tệ",
+                2 => "Tệ",
+                3 => "Tạm ổn",
+                4 => "Tốt",
+                5 => "Rất tốt",
+                _ => ""
+            };
+        }
+        private void HandleRatingChange(ChangeEventArgs e)
+        {
+            if (int.TryParse(e.Value.ToString(), out int rating))
+            {
+                _selectedRating = rating;
+                Console.WriteLine($"Rating selected: {_selectedRating}");
+            }
+        }
+        private async Task SubmitRating()
+        {
+            if (_selectedRating == 0)
+            {
+                Snackbar.Add("Vui lòng chọn số sao để đánh giá!", Severity.Warning);
+                return;
+            }
+
+            // Gửi yêu cầu đánh giá sản phẩm
+            var response = await ProductManager.UpdateRateAsync(Product.Id, _selectedRating);
+
+            if (response.Succeeded)
+            {
+                Snackbar.Add("Đánh giá sản phẩm thành công!", Severity.Success);
+
+                // Tải lại thông tin sản phẩm để cập nhật đánh giá
+                await LoadProduct(Product.Id);
+            }
+            else
+            {
+                Snackbar.Add("Không thể cập nhật đánh giá. Vui lòng thử lại sau.", Severity.Error);
+            }
         }
 
     }

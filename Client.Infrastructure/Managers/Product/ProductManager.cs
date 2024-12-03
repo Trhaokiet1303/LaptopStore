@@ -60,5 +60,11 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
             var response = await _httpClient.PostAsJsonAsync(Routes.ProductsEndpoints.Save, request);
             return await response.ToResult<int>();
         }
+        public async Task<IResult<int>> UpdateRateAsync(int productId, decimal newRate)
+        {
+            var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.UpdateRate, new { ProductId = productId, NewRate = newRate });
+            return await response.ToResult<int>();
+        }
+
     }
 }

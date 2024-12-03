@@ -60,6 +60,7 @@ namespace LaptopStore.Client.Infrastructure.Routes
 
         public static string Save = "api/v1/products";
         public static string Delete = "api/v1/products";
+        public static string UpdateRate = "api/v1/products/UpdateRate";
     }
 
 }

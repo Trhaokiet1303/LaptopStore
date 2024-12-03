@@ -17,6 +17,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
         Task<IResult<int>> SaveAsync(AddEditProductCommand request);
 
         Task<IResult<int>> DeleteAsync(int id);
+        Task<IResult<int>> UpdateRateAsync(int productId, decimal newRate);
 
     }
 }
