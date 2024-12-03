@@ -51,7 +51,8 @@ namespace LaptopStore.Application.Validators.Features.Products.Commands.AddEdit
                 .GreaterThan(0).WithMessage(localizer["Số lượng phải lớn hơn 0!"]);
 
             RuleFor(request => request.Rate)
-                .InclusiveBetween(1, 5).WithMessage(localizer["Đánh giá phải trong khoảng 1 đến 5!"]);
+                .Must(rate => rate == 0 || (rate >= 1 && rate <= 5))
+                .WithMessage(localizer["Đánh giá phải trong khoảng 1 đến 5 hoặc bằng 0!"]);
         }
     }
 }

@@ -36,8 +36,14 @@ namespace LaptopStore.Application.Features.Products.Commands.Update
                         return await Result<int>.FailAsync(_localizer["Không tìm thấy sản phẩm!"]);
                     }
 
-                    product.Rate = (command.NewRate + product.Rate) / 2;
-
+                    if (product.Rate == 0)
+                    {
+                        product.Rate = command.NewRate;
+                    }
+                    else
+                    {
+                        product.Rate = (command.NewRate + product.Rate) / 2;
+                    }
                     await _unitOfWork.Repository<Product>().UpdateAsync(product);
                     await _unitOfWork.Commit(cancellationToken);
 
