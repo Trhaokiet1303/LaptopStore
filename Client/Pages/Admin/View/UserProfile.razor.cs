@@ -53,7 +53,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                     _firstName = user.FirstName;
                     _lastName = user.LastName;
                     _email = user.Email;
-                    _phoneNumber = user.PhoneNumber.ToString();
+                    _phoneNumber = string.IsNullOrEmpty(user.PhoneNumber) ? "" : user.PhoneNumber.ToString();
                     _active = user.IsActive;
                     _confirm = user.EmailConfirmed;
                     var data = await _accountManager.GetProfilePictureAsync(userId);

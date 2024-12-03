@@ -4,7 +4,6 @@
 
 
 <MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-2">@Title</MudText>
-<MudText Color="Color.Warning" Class="mb-4">@Description</MudText>
 
 @if (!_loaded)
 {
@@ -13,7 +12,7 @@
 else
 {
     <MudGrid>
-        <AuthorizeView Roles="@RoleConstants.AdministratorRole">
+        <AuthorizeView Roles="@($"{RoleConstants.AdministratorRole},{RoleConstants.ManagerUserRole}")">
             <MudItem xs="12" sm="12" md="12">
                 <MudCard Elevation="25">
                     <MudCardHeader>
