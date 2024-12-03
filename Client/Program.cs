@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using LaptopStore.Client.Infrastructure.Settings;
-using LaptopStore.Shared.Constants.Localization;
 using LaptopStore.Application.Interfaces.Common;
 using MudBlazor.Services;
 using MediatR;
@@ -33,17 +32,6 @@ namespace LaptopStore.Client
             builder.Services.AddScoped<IOrderManager, OrderManager>();
 
             var host = builder.Build();
-            var storageService = host.Services.GetRequiredService<ClientPreferenceManager>();
-
-            if (storageService != null)
-            {
-                CultureInfo culture;
-               
-                culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");
-
-                CultureInfo.DefaultThreadCurrentCulture = culture;
-                CultureInfo.DefaultThreadCurrentUICulture = culture;
-            }
 
             await host.RunAsync();
         }

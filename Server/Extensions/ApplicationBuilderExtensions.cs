@@ -3,7 +3,6 @@ using System.Linq;
 using LaptopStore.Application.Interfaces.Services;
 using LaptopStore.Server.Hubs;
 using LaptopStore.Server.Middlewares;
-using LaptopStore.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -50,15 +49,7 @@ namespace LaptopStore.Server.Extensions
 
         internal static IApplicationBuilder UseRequestLocalizationByCulture(this IApplicationBuilder app)
         {
-            var supportedCultures = LocalizationConstants.SupportedLanguages.Select(l => new CultureInfo(l.Code)).ToArray();
-            app.UseRequestLocalization(options =>
-            {
-                options.SupportedUICultures = supportedCultures;
-                options.SupportedCultures = supportedCultures;
-                options.DefaultRequestCulture = new RequestCulture(supportedCultures.First());
-                options.ApplyCurrentCultureToResponseHeaders = true;
-            });
-
+           
             app.UseMiddleware<RequestCultureMiddleware>();
 
             return app;

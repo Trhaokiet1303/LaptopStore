@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using LaptopStore.Shared.Constants.Localization;
 using LaptopStore.Shared.Settings;
 
 namespace LaptopStore.Client.Infrastructure.Settings

@@ -184,7 +184,14 @@ namespace LaptopStore.Infrastructure.Services.Identity
             {
                 return await Result.FailAsync(_localizer["Không được phép chỉnh sửa vai trò của Quản trị viên."]);
             }
+
             var selectedRoles = request.UserRoles.Where(x => x.Selected).Select(y => y.RoleName).ToList();
+
+            if (!selectedRoles.Any())
+            {
+                return await Result.FailAsync(_localizer["Bạn phải chọn ít nhất một vai trò."]);
+            }
+
             if (selectedRoles.Contains(RoleConstants.AdministratorRole) && selectedRoles.Count > 1)
             {
                 return await Result.FailAsync(_localizer["Chọn vai trò Administrator, không được chọn thêm vai trò khác."]);
