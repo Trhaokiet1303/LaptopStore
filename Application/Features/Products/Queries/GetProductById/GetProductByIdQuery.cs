@@ -39,14 +39,12 @@ namespace LaptopStore.Application.Features.Products.Queries.GetProductById
             {
                 Console.WriteLine("Đang xử lý truy vấn với ID sản phẩm: " + query.Id);
 
-                // Sử dụng _productRepository để lấy sản phẩm theo ID
                 var product = await _productRepository.GetProductByIdAsync(query.Id);
 
                 if (product != null)
                 {
                     Console.WriteLine("Sản phẩm được tìm thấy: " + product.Name);
 
-                    // Ánh xạ sản phẩm sang GetProductByIdResponse
                     var productResponse = _mapper.Map<GetProductByIdResponse>(product);
 
                     Console.WriteLine("Tên sản phẩm sau khi ánh xạ: " + productResponse.Name);

@@ -46,8 +46,9 @@ namespace LaptopStore.Application.Features.Products.Commands.AddEdit
         public bool Featured { get; set; }
         [Required]
         public int BrandId { get; set; }
+        [Required]
         public string ProductLine { get; set; }
-
+        [Required]
         public int Quantity { get; set; }
         public UploadRequest UploadRequest { get; set; }
     }

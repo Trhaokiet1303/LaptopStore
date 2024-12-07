@@ -47,7 +47,7 @@ namespace LaptopStore.Client.Shared.Admin
                 var currentUserResult = await _userManager.GetAsync(CurrentUserId);
                 if (!currentUserResult.Succeeded || currentUserResult.Data == null)
                 {
-                    _snackBar.Add(localizer["You are logged out because the user with your Token has been deleted."], Severity.Error);
+                    _snackBar.Add(localizer["Bạn đã bị đăng xuất vì Token của bạn đã bị xóa."], Severity.Error);
                     await _authenticationManager.Logout();
                 }
 
@@ -75,14 +75,14 @@ namespace LaptopStore.Client.Shared.Admin
                     var token = await _authenticationManager.TryForceRefreshToken();
                     if (!string.IsNullOrEmpty(token))
                     {
-                        _snackBar.Add(localizer["Refreshed Token."], Severity.Success);
+                        _snackBar.Add(localizer["Token đã được làm mới."], Severity.Success);
                         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    _snackBar.Add(localizer["You are Logged Out."], Severity.Error);
+                    _snackBar.Add(localizer["Bạn đã bị đăng xuất."], Severity.Error);
                     await _authenticationManager.Logout();
                     _navigationManager.NavigateTo("/");
                 }
@@ -101,7 +101,7 @@ namespace LaptopStore.Client.Shared.Admin
                             var currentUserRolesResponse = await _userManager.GetRolesAsync(CurrentUserId);
                             if (currentUserRolesResponse.Succeeded && currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
                             {
-                                _snackBar.Add(localizer["You are logged out because the Permissions of one of your Roles have been updated."], Severity.Error);
+                                _snackBar.Add(localizer["Bạn đã bị đăng xuất vì vai trò của bạn đã được cập nhật."], Severity.Error);
                                 await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
                                 await _authenticationManager.Logout();
                                 _navigationManager.NavigateTo("/login");
@@ -116,8 +116,8 @@ namespace LaptopStore.Client.Shared.Admin
         {
             var parameters = new DialogParameters
             {
-                {nameof(Dialogs.Logout.ContentText), $"{localizer["Logout Confirmation"]}"},
-                {nameof(Dialogs.Logout.ButtonText), $"{localizer["Logout"]}"},
+                {nameof(Dialogs.Logout.ContentText), $"{localizer["Xác nhận đăng xuất"]}"},
+                {nameof(Dialogs.Logout.ButtonText), $"{localizer["Đăng xuất"]}"},
                 {nameof(Dialogs.Logout.Color), Color.Error},
                 {nameof(Dialogs.Logout.CurrentUserId), CurrentUserId},
                 {nameof(Dialogs.Logout.HubConnection), hubConnection}
@@ -125,7 +125,7 @@ namespace LaptopStore.Client.Shared.Admin
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
 
-            _dialogService.Show<Dialogs.Logout>(localizer["Logout"], parameters, options);
+            _dialogService.Show<Dialogs.Logout>(localizer["Đăng xuất"], parameters, options);
         }
 
         private void DrawerToggle()

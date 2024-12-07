@@ -20,7 +20,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
     public class OrdersController : BaseApiController<OrdersController>
     {
 
-        [Authorize(Policy = Permissions.Orders.View)]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

@@ -45,7 +45,7 @@ namespace LaptopStore.Client.Pages.Shop
                 await JSRuntime.InvokeVoidAsync("alert", "Bạn phải đăng nhập để xem đơn hàng!");
                 return;
             }
-
+            
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
@@ -67,11 +67,11 @@ namespace LaptopStore.Client.Pages.Shop
             }
 
             var parameters = new DialogParameters
-    {
-        { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
-        { "ButtonText", "Xác nhận" },
-        { "Color", Color.Error }
-    };
+            {
+                { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
+                { "ButtonText", "Xác nhận" },
+                { "Color", Color.Error }
+            };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
             var dialog = DialogService.Show<ConfirmationDialog>("Xác nhận hủy đơn hàng", parameters, options);

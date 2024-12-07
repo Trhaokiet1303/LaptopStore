@@ -19,7 +19,7 @@ namespace LaptopStore.Application.Features.Products.Queries.GetAllPaged
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string SearchString { get; set; }
-        public string[] OrderBy { get; set; } // of the form fieldname [ascending|descending],fieldname [ascending|descending]...
+        public string[] OrderBy { get; set; }
 
         public GetAllProductsQuery(int pageNumber, int pageSize, string searchString, string orderBy)
         {
@@ -79,10 +79,10 @@ namespace LaptopStore.Application.Features.Products.Queries.GetAllPaged
             }
             else
             {
-                var ordering = string.Join(",", request.OrderBy); // of the form fieldname [ascending|descending], ...
+                var ordering = string.Join(",", request.OrderBy);
                 var data = await _unitOfWork.Repository<Product>().Entities
                    .Specify(productFilterSpec)
-                   .OrderBy(ordering) // require system.linq.dynamic.core
+                   .OrderBy(ordering) 
                    .Select(expression)
                    .ToPaginatedListAsync(request.PageNumber, request.PageSize);
                 return data;
