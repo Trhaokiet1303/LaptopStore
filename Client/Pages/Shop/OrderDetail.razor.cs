@@ -48,7 +48,7 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task FilterOrdersByStatusAsync(string status)
         {
-            SelectedStatus = status; // Lưu trạng thái đã chọn
+            SelectedStatus = status; // Cập nhật trạng thái đã chọn
             IsLoading = true;
 
             // Lấy trạng thái đăng nhập và ID người dùng
@@ -63,13 +63,20 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            // Lấy danh sách đơn hàng từ server và lọc theo trạng thái
+            // Lấy danh sách đơn hàng từ server
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
                 Orders = result.Data
-                               .Where(o => o.UserId == userId && (string.IsNullOrEmpty(status) || o.StatusOrder == status))
+                               .Where(o => o.UserId == userId &&
+                                           (string.IsNullOrEmpty(status) ||
+                                            string.Equals(o.StatusOrder, status, StringComparison.OrdinalIgnoreCase)))
                                .ToList();
+
+                if (!Orders.Any())
+                {
+                    _snackBar.Add("Không có đơn hàng phù hợp với trạng thái đã chọn.", Severity.Warning);
+                }
             }
             else
             {
@@ -79,6 +86,8 @@ namespace LaptopStore.Client.Pages.Shop
 
             IsLoading = false;
         }
+
+
 
 
 
