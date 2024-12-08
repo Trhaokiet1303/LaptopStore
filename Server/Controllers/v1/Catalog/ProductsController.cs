@@ -59,11 +59,16 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             return Ok(result);
         }
 
-        [HttpPut("UpdateRate")]
+        [HttpPut("update-rate")]
         public async Task<IActionResult> UpdateRate([FromBody] UpdateRateProductCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
+        [HttpPut("update-featured-status")]
+        public async Task<IActionResult> UpdateFeaturedStatus([FromBody] UpdateProductFeaturedStatusCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
     }
 }

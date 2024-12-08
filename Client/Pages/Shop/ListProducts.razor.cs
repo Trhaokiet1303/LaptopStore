@@ -203,6 +203,7 @@ namespace LaptopStore.Client.Pages.Shop
             {
                 _showLoadMoreButton = true; // Show the button if more products are available
             }
+            await UpdateFeaturedStatusForAllProducts();
         }
 
 
@@ -355,6 +356,40 @@ namespace LaptopStore.Client.Pages.Shop
             return products.Where(p => selectedRateRanges.Any(r => p.Rate >= r.MinRate)).ToList();
         }
 
+        private async Task UpdateFeaturedStatusForAllProducts()
+        {
+            var allProductsResponse = await ProductManager.GetProductsAsync(new GetAllPagedProductsRequest
+            {
+                PageSize = int.MaxValue,
+                PageNumber = 1,
+                SearchString = _searchString
+            });
+
+            if (allProductsResponse.Succeeded)
+            {
+                var allProducts = allProductsResponse.Data;
+
+                foreach (var product in allProducts)
+                {
+                    var updateResponse = await ProductManager.UpdateFeaturedStatusAsync(product.Id);
+                    if (!updateResponse.Succeeded)
+                    { 
+                        foreach (var message in updateResponse.Messages)
+                        {
+                            _snackBar.Add(message, Severity.Error);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var message in allProductsResponse.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
+            }
+        }
+
         private async Task InvokeModal(int id = 0)
         {
             var parameters = new DialogParameters();
@@ -405,7 +440,7 @@ namespace LaptopStore.Client.Pages.Shop
             NavigationManager.NavigateTo($"/product/{productId}");
         }
 
-    private List<string> GetStars(decimal rate)
+        private List<string> GetStars(decimal rate)
         {
             // Lấy phần nguyên của rate để xác định số sao đầy
             var fullStars = (int)Math.Floor(rate);

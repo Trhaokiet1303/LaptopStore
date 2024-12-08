@@ -18,10 +18,9 @@
         public bool Featured { get; set; }
         public string Brand { get; set; }
         public string ProductLine { get; set; }
-
         public int Quantity { get; set; }
         public int BrandId { get; set; }
-
         public string ImageDataURL { get; set; }
+
     }
 }

@@ -67,11 +67,46 @@ namespace LaptopStore.Client.Pages.Shop
             {
                 _pagedData = response.Data;
                 _totalItems = response.TotalCount;
+                await UpdateFeaturedStatusForAllProducts();
+            }
+        }
+
+        private async Task UpdateFeaturedStatusForAllProducts()
+        {
+            var allProductsResponse = await ProductManager.GetProductsAsync(new GetAllPagedProductsRequest
+            {
+                PageSize = int.MaxValue,
+                PageNumber = 1,
+                SearchString = _searchString
+            });
+
+            if (allProductsResponse.Succeeded)
+            {
+                var allProducts = allProductsResponse.Data;
+
+                foreach (var product in allProducts)
+                {
+                    var updateResponse = await ProductManager.UpdateFeaturedStatusAsync(product.Id);
+                    if (!updateResponse.Succeeded)
+                    {
+                        foreach (var message in updateResponse.Messages)
+                        {
+                            _snackBar.Add(message, Severity.Error);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var message in allProductsResponse.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
 
         private List<BrandFilter> _brands = new List<BrandFilter>
-{
+           {
             new BrandFilter { Name = "Macbook", LogoPath = "/images/brand/mac-icon.png" },
             new BrandFilter { Name = "Lenovo", LogoPath = "/images/brand/lenovo-icon.png" },
             new BrandFilter { Name = "Asus", LogoPath = "/images/brand/asus-icon.png" },
@@ -81,9 +116,6 @@ namespace LaptopStore.Client.Pages.Shop
             new BrandFilter { Name = "Samsung", LogoPath = "/images/brand/samsung-icon.png" },
             new BrandFilter { Name = "Dell", LogoPath = "/images/brand/dell-icon.png" }
         };
-
-
-        private string SelectedRateRange = "all";
 
         private void ApplyFilters()
         {

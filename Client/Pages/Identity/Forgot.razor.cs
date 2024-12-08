@@ -2,6 +2,7 @@
 using MudBlazor;
 using System.Threading.Tasks;
 using Blazored.FluentValidation;
+using System.Linq;
 
 namespace LaptopStore.Client.Pages.Identity
 {
@@ -16,8 +17,8 @@ namespace LaptopStore.Client.Pages.Identity
             var result = await _userManager.ForgotPasswordAsync(_emailModel);
             if (result.Succeeded)
             {
-                _snackBar.Add(_localizer["Thành công!"], Severity.Success);
-                _navigationManager.NavigateTo("/");
+                _snackBar.Add(result.Messages.FirstOrDefault() ?? _localizer["Thành công!"], Severity.Success);
+                _navigationManager.NavigateTo("/login");
             }
             else
             {

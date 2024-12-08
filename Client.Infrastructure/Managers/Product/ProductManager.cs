@@ -52,8 +52,11 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
             return await response.ToPaginatedResult<GetAllPagedProductsResponse>();
         }
 
-
-
+        public async Task<IResult> UpdateFeaturedStatusAsync(int productId)
+        {
+            var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.UpdateFeaturedStatus, new { ProductId = productId });
+            return await response.ToResult();
+        }
 
         public async Task<IResult<int>> SaveAsync(AddEditProductCommand request)
         {

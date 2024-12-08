@@ -6,6 +6,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System;
 using System.Threading.Tasks;
 
 namespace LaptopStore.Infrastructure.Shared.Services
@@ -25,6 +26,12 @@ namespace LaptopStore.Infrastructure.Shared.Services
         {
             try
             {
+                // Kiểm tra xem người nhận có được chỉ định chưa
+                if (string.IsNullOrEmpty(request.To))
+                {
+                    throw new ArgumentException("No recipients have been specified.");
+                }
+
                 var email = new MimeMessage
                 {
                     Sender = new MailboxAddress(_config.DisplayName, request.From ?? _config.From),
@@ -34,16 +41,22 @@ namespace LaptopStore.Infrastructure.Shared.Services
                         HtmlBody = request.Body
                     }.ToMessageBody()
                 };
+
+                // Thêm người nhận vào email
+                email.To.Add(new MailboxAddress(request.To));
+
+                // Kết nối và gửi email
                 using var smtp = new SmtpClient();
                 await smtp.ConnectAsync(_config.Host, _config.Port, SecureSocketOptions.StartTls);
                 await smtp.AuthenticateAsync(_config.UserName, _config.Password);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex.Message, ex);
+                _logger.LogError(ex, "Error occurred while sending email.");
             }
         }
+
     }
 }

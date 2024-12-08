@@ -96,9 +96,9 @@ namespace LaptopStore.Infrastructure.Services.Identity
                         var verificationUri = await SendVerificationEmail(user, origin);
                         var mailRequest = new MailRequest
                         {
-                            From = "trhaokiet.1303@gmail.com",
+                            From = "margarette.bayer0@ethereal.email",
                             To = user.Email,
-                            Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>clicking here</a>."], verificationUri),
+                            Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>Nhấp vào đây</a>."], verificationUri),
                             Subject = _localizer["Xác nhận đăng ký tài khoản"]
                         };
                         BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
@@ -257,7 +257,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var passwordResetURL = QueryHelpers.AddQueryString(endpointUri.ToString(), "Token", code);
             var mailRequest = new MailRequest
             {
-                Body = string.Format(_localizer["Vui lòng đặt lại mật khẩu của bạn bằng cách <a href='{0}>nhấp vào đây</a>."], HtmlEncoder.Default.Encode(passwordResetURL)),
+                Body = string.Format(_localizer["Vui lòng đặt lại mật khẩu của bạn bằng cách <a href='{0}'>Nhấp vào đây</a>."], HtmlEncoder.Default.Encode(passwordResetURL)),
                 Subject = _localizer["Đặt lại mật khẩu"],
                 To = request.Email
             };
