@@ -6,60 +6,98 @@
 
 
 <h1 class="orderdetail-container">Đơn hàng của bạn</h1>
+<MudContainer Class="main-content">
+    <MudGrid Class="content-wrapper">
+        <!-- Sidebar -->
+        <MudItem >
+            <MudPaper Class="sidebar" Elevation="4">
+                <MudText Class="sidebar-title">Xem đơn hàng</MudText>
+                <MudList Dense>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a @onclick="FilterProcessingOrders" class="text-deco">Đang xử lý</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a @onclick="FilterShippingOrders" class="text-deco">Đang giao</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a @onclick="FilterDeliveredOrders" class="text-deco">Đã giao</a>
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudText Typo="Typo.body1">
+                            <a @onclick="FilterCanceledOrders" class="text-deco">Đã hủy</a>
+                        </MudText>
+                    </MudListItem>
+                </MudList>
+            </MudPaper>
+        </MudItem>
 
-@if (IsLoading)
-{
-    <MudProgressCircular Indeterminate="true" />
-}
-else if (Orders == null || !Orders.Any())
-{
-    <p id="status">Bạn chưa có đơn hàng nào!</p>
-}
-else
-{
-    @foreach (var order in Orders)
-    {
-        <MudPaper Class="order-item mb-4 p-3" Elevation="3">
-            <MudText Typo="Typo.h5">Đơn hàng #@order.Id</MudText>
-            <MudText>Trạng thái: <span class="order-status">@order.StatusOrder</span> </MudText>
+        <MudItem xs="12" sm="8" md="9">
+            <MudPaper Class="info" Elevation="4">
+                <MudTabs Class="info-container">
+                    @if (IsLoading)
+                    {
+                        <MudProgressCircular Indeterminate="true" />
+                    }
+                    else if (Orders == null || !Orders.Any())
+                    {
+                        <p id="status">Bạn chưa có đơn hàng nào!</p>
+                    }
+                    else
+                    {
+                        @foreach (var order in Orders)
+                        {
+                            <MudPaper Class="order-item mb-4 p-3" Elevation="3">
+                                <MudText Typo="Typo.h5">Đơn hàng #@order.Id</MudText>
+                                <MudText>Trạng thái: <span class="order-status">@order.StatusOrder</span> </MudText>
 
-            <MudDivider Class="my-2" />
+                                <MudDivider Class="my-2" />
 
-            <MudText Class="subtitle">Thông tin người nhận</MudText>
-            <MudText Typo="Typo.body2">@order.UserName | @order.UserPhone</MudText>
-            <MudText Typo="Typo.body2">@order.UserAddress</MudText>
-            <MudText Typo="Typo.body2">Phương thức thanh toán: @order.MethodPayment</MudText>
+                                <MudText Class="subtitle">Thông tin người nhận</MudText>
+                                <MudText Typo="Typo.body2">@order.UserName | @order.UserPhone</MudText>
+                                <MudText Typo="Typo.body2">@order.UserAddress</MudText>
+                                <MudText Typo="Typo.body2">Phương thức thanh toán: @order.MethodPayment</MudText>
 
-            <MudDivider Class="my-2" />
+                                <MudDivider Class="my-2" />
 
-            <div class="orderdetail-products">
-                @foreach (var item in order.OrderItem)
-                {
-                    <MudItem Class="orderdetail-product">
-                        <img src="@item.ProductImage" alt="@item.ProductName" class="orderdetail-product-img" />
-                        <div class="product-info">
-                            <MudText Class="productname">@item.ProductName</MudText>
-                            <MudText Class="productinfo" >Giá: @($"{item.ProductPrice:C}")</MudText>
-                            <MudText Class="productinfo">Số lượng: @item.Quantity</MudText>
-                        </div>
-                    </MudItem>
-                }
-            </div>
+                                <div class="orderdetail-products">
+                                    @foreach (var item in order.OrderItem)
+                                    {
+                                        <MudItem Class="orderdetail-product">
+                                            <img src="@item.ProductImage" alt="@item.ProductName" class="orderdetail-product-img" />
+                                            <div class="product-info">
+                                                <MudText Class="productname">@item.ProductName</MudText>
+                                                <MudText Class="productinfo">Giá: @($"{item.ProductPrice:C}")</MudText>
+                                                <MudText Class="productinfo">Số lượng: @item.Quantity</MudText>
+                                            </div>
+                                        </MudItem>
+                                    }
+                                </div>
 
-            <MudDivider Class="my-2" />
+                                <MudDivider Class="my-2" />
 
-            <MudGrid>
-                <MudItem xs="6"><MudText Typo="Typo.body2">Tiền hàng hóa:</MudText></MudItem>
-                <MudItem xs="6"><MudText Typo="Typo.body2">Giảm giá:</MudText></MudItem>
-                <MudItem xs="6"><MudText Typo="Typo.body2">Vận chuyển:</MudText></MudItem>
-                <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
-               
-            </MudGrid>
-            <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
-                       OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
-                Hủy đơn hàng
-            </MudButton>
+                                <MudGrid>
+                                    <MudItem xs="6"><MudText Typo="Typo.body2">Tiền hàng hóa:</MudText></MudItem>
+                                    <MudItem xs="6"><MudText Typo="Typo.body2">Giảm giá:</MudText></MudItem>
+                                    <MudItem xs="6"><MudText Typo="Typo.body2">Vận chuyển:</MudText></MudItem>
+                                    <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
 
-        </MudPaper>
-    }
-}
+                                </MudGrid>
+                                <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
+                                           OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
+                                    Hủy đơn hàng
+                                </MudButton>
+
+                            </MudPaper>
+                        }
+                    }
+                </MudTabs>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
