@@ -5,6 +5,7 @@ using LaptopStore.Application.Features.Orders.Queries.GetAll;
 using LaptopStore.Application.Features.Orders.Queries.GetById;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.OrderItem;
+using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Shared.Constants.Application;
 using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
         [Parameter] public int OrderId { get; set; } 
         [Inject] private IOrderManager OrderManager { get; set; } 
         [Inject] private IOrderItemManager OrderItemManager { get; set; } 
+        [Inject] private IProductManager ProductManager { get; set; } 
         private List<GetOrderItemByIdResponse> orderItems { get; set; } = new();
         private List<GetAllOrderItemsResponse> _orderItemList = new();
         private GetAllOrderItemsResponse _orderItem = new();
@@ -123,7 +125,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             string deleteContent = _localizer["Delete Content"];
             var parameters = new DialogParameters
     {
-        {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
+        { nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id) }
     };
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
@@ -134,6 +136,33 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 var response = await OrderItemManager.DeleteAsync(id);
                 if (response.Succeeded)
                 {
+                    var orderItemToDelete = orderItems.FirstOrDefault(x => x.Id == id);
+                    if (orderItemToDelete != null)
+                    {
+                        var productResponse = await ProductManager.GetProductByIdAsync(orderItemToDelete.ProductId);
+                        if (productResponse.Succeeded)
+                        {
+                            var product = productResponse.Data;
+
+                            var newQuantity = product.Quantity + orderItemToDelete.Quantity;
+
+                            var updateProductQuantityResponse = await ProductManager.UpdateProductQuantityAsync(product.Id, newQuantity);
+                            if (updateProductQuantityResponse.Succeeded)
+                            {
+                                _snackBar.Add("Đã cập nhật lại số lượng sản phẩm trong kho.", Severity.Success);
+                            }
+                            else
+                            {
+                                _snackBar.Add("Cập nhật số lượng sản phẩm thất bại.", Severity.Error);
+                            }
+                        }
+                        else
+                        {
+                            _snackBar.Add("Không thể tìm thấy sản phẩm để cập nhật số lượng.", Severity.Error);
+                        }
+                    }
+
+                    // Update the order total price
                     var existingOrderItemResponse = await OrderManager.GetOrderByIdAsync(orderId);
                     if (existingOrderItemResponse.Succeeded && existingOrderItemResponse.Data.OrderItem != null)
                     {
@@ -171,6 +200,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
             }
         }
+
 
         private async Task Reset()
         {

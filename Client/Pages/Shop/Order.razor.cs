@@ -15,6 +15,7 @@ using LaptopStore.Domain.Entities.Catalog;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using System.Text.Json;
 using Microsoft.JSInterop;
+using LaptopStore.Application.Features.Products.Commands.Update;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -240,7 +241,7 @@ namespace LaptopStore.Client.Pages.Shop
                 TotalPrice = (int)GetTotalPrice(),
                 MethodPayment = SelectedPaymentMethod,
                 StatusOrder = "Đặt Thành Công",
-                IsPayment = SelectedPaymentMethod != "COD", 
+                IsPayment = SelectedPaymentMethod != "COD",
                 OrderItem = cartItems.Select(item => new OrderItem
                 {
                     ProductId = item.ProductId,
@@ -252,11 +253,54 @@ namespace LaptopStore.Client.Pages.Shop
                 }).ToList()
             };
 
-            await OrderManager.CreateOrderAsync(order);
-            await JS.InvokeVoidAsync("alert", "Đặt hàng thành công!");
+            var createdOrder = await OrderManager.CreateOrderAsync(order);
 
-            await JS.InvokeVoidAsync("localStorage.removeItem", "cartItems");
-            NavigationManager.NavigateTo($"/orderdetail");
+            if (createdOrder != null)
+            {
+                foreach (var item in cartItems)
+                {
+                    // Get the current product details to retrieve the current stock (Instock)
+                    var productResponse = await ProductManager.GetProductByIdAsync(item.ProductId);
+
+                    if (productResponse != null && productResponse.Succeeded)
+                    {
+                        // Get the current stock (Instock)
+                        var currentStock = productResponse.Data.Quantity;
+
+                        // Check if there's enough stock
+                        if (currentStock < item.Quantity)
+                        {
+                            await JS.InvokeVoidAsync("alert", $"Không đủ hàng cho sản phẩm {item.ProductName}");
+                            return;
+                        }
+
+                        // Update the stock (decrease it based on the order quantity)
+                        var newQuantity = currentStock - item.Quantity;
+
+                        // Call the API to update the product quantity
+                        var updateResult = await ProductManager.UpdateProductQuantityAsync(item.ProductId, newQuantity);
+
+                        if (!updateResult.Succeeded)
+                        {
+                            await JS.InvokeVoidAsync("alert", "Có lỗi khi cập nhật số lượng sản phẩm.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        await JS.InvokeVoidAsync("alert", "Lỗi khi lấy thông tin sản phẩm.");
+                        return;
+                    }
+                }
+
+                await JS.InvokeVoidAsync("alert", "Đặt hàng thành công!");
+                await JS.InvokeVoidAsync("localStorage.removeItem", "cartItems");
+                NavigationManager.NavigateTo($"/orderdetail");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "Đặt hàng không thành công, vui lòng thử lại!");
+            }
         }
 
         private void HandlePaymentMethodChange(ChangeEventArgs e)

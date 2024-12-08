@@ -13,6 +13,8 @@ using LaptopStore.Application.Features.Orders.Commands.Update;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using LaptopStore.Infrastructure.Models.Identity;
+using LaptopStore.Application.Features.Products.Commands.AddEdit;
+using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 
 namespace LaptopStore.Server.Controllers.v1.Catalog
 {
@@ -24,6 +26,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         {
             _userManager = userManager;
         }
+
 
         [AllowAnonymous]
         [HttpGet]

@@ -68,6 +68,10 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
             var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.UpdateRate, new { ProductId = productId, NewRate = newRate });
             return await response.ToResult<int>();
         }
-
+        public async Task<IResult<int>> UpdateProductQuantityAsync(int productId, int newQuantity)
+        {
+            var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.UpdateProductQuantity, new { ProductId = productId, NewQuantity = newQuantity });
+            return await response.ToResult<int>();
+        }
     }
 }

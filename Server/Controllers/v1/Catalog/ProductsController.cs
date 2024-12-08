@@ -70,5 +70,12 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         {
             return Ok(await _mediator.Send(command));
         }
+
+        [HttpPut("update-quantity")]
+        public async Task<IActionResult> UpdateProductQuantityAsync([FromBody] UpdateProductQuantityCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

@@ -81,14 +81,12 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
         private async Task SaveAsync()
         {
-            // Get the product details based on the ProductId
             var productResponse = await ProductManager.GetProductByIdAsync(AddEditOrderItemModel.ProductId);
             if (productResponse.Succeeded)
             {
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
 
-                // Check if the requested quantity exceeds the available stock
                 if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
                 {
                     _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
@@ -101,7 +99,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 return;
             }
 
-            // Get the order details
             var existingOrderItemResponse = await OrderManager.GetOrderByIdAsync(AddEditOrderItemModel.OrderId);
             if (existingOrderItemResponse.Succeeded && existingOrderItemResponse.Data.OrderItem != null)
             {
@@ -111,7 +108,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 if (existingOrderItem != null)
                 {
                     if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
-                    if (AddEditOrderItemModel.Quantity <= existingOrderItem.Instock)
                     {
                         var updateCommand = new AddEditOrderItemCommand
                         {
@@ -141,16 +137,26 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
                             if (orderUpdateResponse.Succeeded)
                             {
-                                _snackBar.Add("Cập nhật số lượng và tổng giá thành công.", Severity.Success);
-                                await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
-                                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                                var reduceStockResponse = await ProductManager.UpdateProductQuantityAsync(
+                                    AddEditOrderItemModel.ProductId,
+                                    productResponse.Data.Quantity - AddEditOrderItemModel.Quantity);
+
+                                if (reduceStockResponse.Succeeded)
+                                {
+                                    _snackBar.Add("Cập nhật số lượng và tổng giá thành công.", Severity.Success);
+                                    await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
+                                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                                }
+                                else
+                                {
+                                    _snackBar.Add("Cập nhật số lượng sản phẩm thất bại.", Severity.Error);
+                                }
                             }
                             else
                             {
                                 _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
                             }
                             _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
-
                             MudDialog.Close();
                         }
                         else
@@ -168,6 +174,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
                 else
                 {
+                    // Add new order item
                     var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
                     if (response.Succeeded)
                     {
@@ -190,9 +197,21 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
                             if (orderUpdateResponse.Succeeded)
                             {
-                                _snackBar.Add("Thêm sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
-                                await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
-                                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                                // Reduce the stock of the product
+                                var reduceStockResponse = await ProductManager.UpdateProductQuantityAsync(
+                                    AddEditOrderItemModel.ProductId,
+                                    productResponse.Data.Quantity - AddEditOrderItemModel.Quantity);
+
+                                if (reduceStockResponse.Succeeded)
+                                {
+                                    _snackBar.Add("Thêm sản phẩm và cập nhật tổng giá thành công.", Severity.Success);
+                                    await HubConnection.SendAsync("Cập nhật thành công.", AddEditOrderItemModel.OrderId);
+                                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                                }
+                                else
+                                {
+                                    _snackBar.Add("Cập nhật số lượng sản phẩm thất bại.", Severity.Error);
+                                }
                             }
                             else
                             {
@@ -218,9 +237,10 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             }
             else
             {
-                _snackBar.Add("Không thể tải thông tin đơn hàng.", Severity.Error);
+                _snackBar.Add("Không thể tải thông tin sản phẩm.", Severity.Error);
             }
         }
+
 
         public void Cancel()
         {

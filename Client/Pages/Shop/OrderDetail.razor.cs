@@ -2,6 +2,7 @@
 using LaptopStore.Application.Features.Orders.Queries.GetAll;
 using LaptopStore.Client.Extensions;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
+using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using LaptopStore.Client.Shared.Dialogs;
 using LaptopStore.Domain.Entities.Catalog;
 using LaptopStore.Shared.Constants.Application;
@@ -13,6 +14,7 @@ using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace LaptopStore.Client.Pages.Shop
@@ -22,6 +24,8 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private IOrderManager OrderManager { get; set; }
         [Inject] private AuthenticationStateProvider AuthenticationProvider { get; set; }
         [Inject] private IJSRuntime JSRuntime { get; set; }
+        [Inject] private IProductManager ProductManager { get; set; }
+        [Inject] private IJSRuntime JS { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
 
         private bool IsLoading { get; set; }
@@ -104,7 +108,27 @@ namespace LaptopStore.Client.Pages.Shop
 
             if (response.Succeeded)
             {
-                _snackBar.Add("Hủy đơn hàng đã được cập nhật thành công!", Severity.Success);
+                // Nếu trạng thái là "Hủy", trả lại số lượng sản phẩm vào kho
+                if (newStatus == "Đã Hủy")
+                {
+                    var orderResponse = await OrderManager.GetOrderByIdAsync(orderId); // Get order details by orderId
+                    if (orderResponse.Succeeded && orderResponse.Data != null)
+                    {
+                        foreach (var item in orderResponse.Data.OrderItem)
+                        {
+                            // Restore stock by increasing the quantity based on the order item
+                            var updateResult = await ProductManager.UpdateProductQuantityAsync(item.ProductId, item.Instock + item.Quantity);
+
+                            if (!updateResult.Succeeded)
+                            {
+                                await JS.InvokeVoidAsync("alert", $"Lỗi khi cập nhật lại số lượng sản phẩm {item.ProductName}. Vui lòng thử lại!");
+                                break; // Exit loop if error occurs in updating stock
+                            }
+                        }
+                    }
+                }
+
+                _snackBar.Add("Trạng thái đơn hàng đã được cập nhật thành công!", Severity.Success);
 
                 // Tải lại toàn bộ danh sách đơn hàng từ server
                 await LoadOrdersAsync();
@@ -117,5 +141,6 @@ namespace LaptopStore.Client.Pages.Shop
             // Kết thúc trạng thái đang xử lý
             IsLoading = false;
         }
+
     }
 }

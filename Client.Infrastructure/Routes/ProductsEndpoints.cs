@@ -38,6 +38,6 @@ namespace LaptopStore.Client.Infrastructure.Routes
         public static string Delete = "api/v1/products";
         public static string UpdateRate = "api/v1/products/update-rate";
         public static string UpdateFeaturedStatus = "api/v1/products/update-featured-status";
+        public static string UpdateProductQuantity = "api/v1/products/update-quantity";
     }
-
 }

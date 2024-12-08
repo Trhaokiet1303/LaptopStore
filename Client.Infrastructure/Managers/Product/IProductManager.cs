@@ -19,6 +19,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Product
         Task<IResult<int>> DeleteAsync(int id);
         Task<IResult<int>> UpdateRateAsync(int productId, decimal newRate);
         Task<IResult> UpdateFeaturedStatusAsync(int productId);
+        Task<IResult<int>> UpdateProductQuantityAsync(int productId, int newQuantity);
 
     }
 }
