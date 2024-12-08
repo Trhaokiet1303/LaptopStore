@@ -40,7 +40,7 @@ namespace LaptopStore.Client.Pages.Shop
             IsLoading = false;
         }
 
-        private async Task FilterProcessingOrders() => await FilterOrdersByStatusAsync("Đang xử lý");
+        private async Task FilterProcessingOrders() => await FilterOrdersByStatusAsync("Đặt thành công");
         private async Task FilterShippingOrders() => await FilterOrdersByStatusAsync("Đang giao");
         private async Task FilterDeliveredOrders() => await FilterOrdersByStatusAsync("Đã giao");
         private async Task FilterCanceledOrders() => await FilterOrdersByStatusAsync("Đã hủy");
@@ -88,9 +88,6 @@ namespace LaptopStore.Client.Pages.Shop
         }
 
 
-
-
-
         private async Task LoadOrdersAsync(string status = "")
         {
             var state = await AuthenticationProvider.GetAuthenticationStateAsync();
@@ -121,18 +118,26 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task ConfirmCancelOrder(int orderId, string currentStatus)
         {
+            // Prevent canceling if the order is already "Đã Hủy", "Đang giao" or "Đã giao"
             if (currentStatus == "Đã Hủy")
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Bạn đã hủy đơn hàng này rồi!");
                 return;
             }
 
-            var parameters = new DialogParameters
+            if (currentStatus == "Đang Giao" || currentStatus == "Đã Giao")
             {
-                { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
-                { "ButtonText", "Xác nhận" },
-                { "Color", Color.Error }
-            };
+                await JSRuntime.InvokeVoidAsync("alert", "Đơn hàng này không thể hủy vì đang giao hoặc đã giao!");
+                return;
+            }
+
+            // Show a confirmation dialog for cancellation
+            var parameters = new DialogParameters
+    {
+        { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
+        { "ButtonText", "Xác nhận" },
+        { "Color", Color.Error }
+    };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
             var dialog = DialogService.Show<ConfirmationDialog>("Xác nhận hủy đơn hàng", parameters, options);
@@ -144,19 +149,15 @@ namespace LaptopStore.Client.Pages.Shop
             }
         }
 
-
         private bool IsCancelDisabled(string status)
         {
             return status == "Đã Hủy";
         }
 
-
         private async Task UpdateOrderStatus(int orderId, string newStatus)
         {
-            // Hiển thị trạng thái đang xử lý
             IsLoading = true;
 
-            // Gửi yêu cầu cập nhật trạng thái tới server
             var response = await OrderManager.UpdateOrderStatusAsync(new UpdateOrderStatusCommand
             {
                 OrderId = orderId,
@@ -165,21 +166,19 @@ namespace LaptopStore.Client.Pages.Shop
 
             if (response.Succeeded)
             {
-                // Nếu trạng thái là "Hủy", trả lại số lượng sản phẩm vào kho
                 if (newStatus == "Đã Hủy")
                 {
-                    var orderResponse = await OrderManager.GetOrderByIdAsync(orderId); // Get order details by orderId
+                    var orderResponse = await OrderManager.GetOrderByIdAsync(orderId);
                     if (orderResponse.Succeeded && orderResponse.Data != null)
                     {
                         foreach (var item in orderResponse.Data.OrderItem)
                         {
-                            // Restore stock by increasing the quantity based on the order item
                             var updateResult = await ProductManager.UpdateProductQuantityAsync(item.ProductId, item.Instock + item.Quantity);
 
                             if (!updateResult.Succeeded)
                             {
                                 await JS.InvokeVoidAsync("alert", $"Lỗi khi cập nhật lại số lượng sản phẩm {item.ProductName}. Vui lòng thử lại!");
-                                break; // Exit loop if error occurs in updating stock
+                                break;
                             }
                         }
                     }
@@ -187,7 +186,6 @@ namespace LaptopStore.Client.Pages.Shop
 
                 _snackBar.Add("Trạng thái đơn hàng đã được cập nhật thành công!", Severity.Success);
 
-                // Tải lại toàn bộ danh sách đơn hàng từ server
                 await LoadOrdersAsync();
             }
             else
@@ -195,7 +193,6 @@ namespace LaptopStore.Client.Pages.Shop
                 _snackBar.Add($"Không thể cập nhật trạng thái đơn hàng. Lỗi: {response.Messages[0]}", Severity.Error);
             }
 
-            // Kết thúc trạng thái đang xử lý
             IsLoading = false;
         }
 

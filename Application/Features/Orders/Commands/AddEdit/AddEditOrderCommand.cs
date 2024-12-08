@@ -64,15 +64,17 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                 return await Result<int>.FailAsync(_localizer["Không thể chỉnh sửa đơn hàng {0}!", order.StatusOrder]);
             }
 
+            // Ensure OrderItem is not null
             command.OrderItem = command.OrderItem ?? new List<OrderItem>();
-            int totalPrice = 0;
 
+            // Calculate total price
+            int totalPrice = 0;
             if (command.OrderItem.Any())
             {
                 totalPrice = command.OrderItem.Sum(item => item.ProductPrice * item.Quantity);
             }
 
-            if (command.Id == 0) 
+            if (command.Id == 0)
             {
                 var newOrder = new Order
                 {
@@ -103,6 +105,9 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
             {
                 if (order != null)
                 {
+                    // Initialize OrderItem if null
+                    order.OrderItem = order.OrderItem ?? new List<OrderItem>();
+
                     // Update order details
                     order.UserId = command.UserId ?? order.UserId;
                     order.UserAddress = command.UserAddress ?? order.UserAddress;
@@ -112,13 +117,14 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                     order.StatusOrder = command.StatusOrder ?? order.StatusOrder;
                     order.IsPayment = command.IsPayment;
 
-                    // Calculate total price based on items
+                    // Recalculate total price
                     totalPrice = command.OrderItem.Any() ? command.OrderItem.Sum(item => item.ProductPrice * item.Quantity) : 0;
+
                     order.TotalPrice = totalPrice;
 
-                    foreach (var item in command.OrderItem)
+                    if (command.OrderItem != null)
                     {
-                        if (item != null)
+                        foreach (var item in command.OrderItem)
                         {
                             var existingItem = order.OrderItem.FirstOrDefault(i => i.ProductId == item.ProductId);
                             if (existingItem != null)
@@ -131,19 +137,22 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                                 {
                                     ProductId = item.ProductId,
                                     ProductName = item.ProductName,
-                                    ProductPrice = item.ProductPrice,
                                     ProductImage = item.ProductImage,
+                                    ProductPrice = item.ProductPrice,
                                     Quantity = item.Quantity,
                                     TotalPrice = item.ProductPrice * item.Quantity
                                 });
                             }
                         }
-                    }
 
-                    var itemsToRemove = order.OrderItem.Where(existing => !command.OrderItem.Any(newItem => newItem.ProductId == existing.ProductId)).ToList();
-                    foreach (var itemToRemove in itemsToRemove)
-                    {
-                        order.OrderItem.Remove(itemToRemove);
+                        // Remove items not in the new order
+                        var itemsToRemove = order.OrderItem
+                            .Where(existing => !command.OrderItem.Any(newItem => newItem.ProductId == existing.ProductId))
+                            .ToList();
+                        foreach (var itemToRemove in itemsToRemove)
+                        {
+                            order.OrderItem.Remove(itemToRemove);
+                        }
                     }
 
                     await _unitOfWork.Repository<Order>().UpdateAsync(order);
@@ -156,6 +165,5 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                 }
             }
         }
-
     }
 }
