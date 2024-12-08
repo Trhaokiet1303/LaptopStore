@@ -16,6 +16,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
+using Hangfire;
+using LaptopStore.Application.Requests.Mail;
+using MediatR;
+using LaptopStore.Application.Interfaces.Services;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace LaptopStore.Infrastructure.Services.Identity
 {
@@ -28,20 +33,25 @@ namespace LaptopStore.Infrastructure.Services.Identity
         private readonly AppConfiguration _appConfig;
         private readonly SignInManager<User> _signInManager;
         private readonly IStringLocalizer<IdentityService> _localizer;
+        private readonly IMailService _mailService; 
 
         public IdentityService(
-            UserManager<User> userManager, RoleManager<Role> roleManager,
-            IOptions<AppConfiguration> appConfig, SignInManager<User> signInManager,
-            IStringLocalizer<IdentityService> localizer)
+            UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            IOptions<AppConfiguration> appConfig,
+            SignInManager<User> signInManager,
+            IStringLocalizer<IdentityService> localizer,
+            IMailService mailService) 
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _appConfig = appConfig.Value;
             _signInManager = signInManager;
             _localizer = localizer;
+            _mailService = mailService;  
         }
 
-        public async Task<Result<TokenResponse>> LoginAsync(TokenRequest model)
+        public async Task<Result<TokenResponse>> LoginAsync(TokenRequest model, string origin)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -54,8 +64,19 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
             if (!user.EmailConfirmed)
             {
-                return await Result<TokenResponse>.FailAsync(_localizer["E-Mail chưa xác nhận."]);
+                var verificationUri = await SendVerificationEmail(user, origin);
+                var mailRequest = new MailRequest
+                {
+                    From = "trhaokiet.13003",
+                    To = user.Email,
+                    Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>Nhấp vào đây</a>."], verificationUri),
+                    Subject = _localizer["Xác nhận đăng ký tài khoản"]
+                };
+                BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
+
+                return await Result<TokenResponse>.FailAsync(_localizer["E-Mail chưa xác nhận. Một email xác nhận đã được gửi lại."]);
             }
+
             var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordValid)
             {
@@ -69,6 +90,17 @@ namespace LaptopStore.Infrastructure.Services.Identity
             var token = await GenerateJwtAsync(user);
             var response = new TokenResponse { Token = token, RefreshToken = user.RefreshToken, UserImageURL = user.ProfilePictureDataUrl };
             return await Result<TokenResponse>.SuccessAsync(response);
+        }
+
+        private async Task<string> SendVerificationEmail(User user, string origin)
+        {
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var route = "api/identity/user/confirm-email/";
+            var endpointUri = new Uri(string.Concat($"{origin}/", route));
+            var verificationUri = QueryHelpers.AddQueryString(endpointUri.ToString(), "userId", user.Id);
+            verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
+            return verificationUri;
         }
 
         public async Task<Result<TokenResponse>> GetRefreshTokenAsync(RefreshTokenRequest model)

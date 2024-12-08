@@ -49,12 +49,6 @@ namespace LaptopStore.Client.Pages.Admin.Dashboard
                 OrderCount = response.Data.OrderCount;
                 UserCount = response.Data.UserCount;
                 RoleCount = response.Data.RoleCount;
-                foreach (var item in response.Data.DataEnterBarChart)
-                {
-                    _dataEnterBarChartSeries
-                        .RemoveAll(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
-                    _dataEnterBarChartSeries.Add(new ChartSeries { Name = item.Name, Data = item.Data });
-                }
             }
             else
             {

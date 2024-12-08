@@ -28,6 +28,7 @@ namespace LaptopStore.Client.Shared.Shop
         private string Email { get; set; }
         private char FirstLetterOfName { get; set; }
         private string PageTitle { get; set; }
+
         private HubConnection hubConnection;
 
         public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
@@ -36,21 +37,16 @@ namespace LaptopStore.Client.Shared.Shop
         {
             try
             {
-                // Lấy thông tin cơ bản về trang hiện tại (ví dụ: URL để tùy chỉnh tiêu đề)
                 var currentUri = NavigationManager.Uri;
-                PageTitle = currentUri.Contains("home") ? "Home Page" : "Shop Page";
+                PageTitle = currentUri.Contains("home") ? "Trang chủ" : "Trang cửa hàng";
 
-                // Register for interceptors and set up HubConnection
                 _interceptor.RegisterEvent();
                 hubConnection = hubConnection.TryInitialize(_navigationManager);
 
-                // Start the connection to SignalR
                 await hubConnection.StartAsync();
 
-                // Load data about the user
                 await LoadDataAsync();
 
-                // Handle token regeneration and logout events
                 hubConnection.On(ApplicationConstants.SignalR.ReceiveRegenerateTokens, async () =>
                 {
                     try
@@ -58,14 +54,14 @@ namespace LaptopStore.Client.Shared.Shop
                         var token = await _authenticationManager.TryForceRefreshToken();
                         if (!string.IsNullOrEmpty(token))
                         {
-                            _snackBar.Add(localizer["Refreshed Token."], Severity.Success);
+                            _snackBar.Add("Token đã được làm mới.", Severity.Success);
                             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                         }
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        _snackBar.Add(localizer["You are Logged Out."], Severity.Error);
+                        _snackBar.Add("Bạn đã đăng xuất.", Severity.Error);
                         await _authenticationManager.Logout();
                         _navigationManager.NavigateTo("/");
                     }
@@ -84,7 +80,7 @@ namespace LaptopStore.Client.Shared.Shop
                                 var currentUserRolesResponse = await _userManager.GetRolesAsync(CurrentUserId);
                                 if (currentUserRolesResponse.Succeeded && currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
                                 {
-                                    _snackBar.Add(localizer["You are logged out because the Permissions of one of your Roles have been updated."], Severity.Error);
+                                    _snackBar.Add("Bạn đã bị đăng xuất vì vai trò của bạn đã được cập nhật.", Severity.Error);
                                     await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
                                     await _authenticationManager.Logout();
                                     _navigationManager.NavigateTo("/login");
@@ -96,7 +92,7 @@ namespace LaptopStore.Client.Shared.Shop
             }
             catch (Exception ex)
             {
-                _snackBar.Add(localizer["An error occurred while initializing the shop layout."], Severity.Error);
+                _snackBar.Add("Đã xảy ra lỗi khi khởi tạo giao diện cửa hàng.", Severity.Error);
                 Console.WriteLine(ex.Message);
             }
         }
@@ -109,7 +105,7 @@ namespace LaptopStore.Client.Shared.Shop
                 var user = state.User;
                 if (user == null || !user.Identity?.IsAuthenticated == true)
                 {
-                    _snackBar.Add(localizer["User is not authenticated."], Severity.Error);
+                    _snackBar.Add("Người dùng chưa được xác thực.", Severity.Error);
                     return;
                 }
 
@@ -129,11 +125,10 @@ namespace LaptopStore.Client.Shared.Shop
                     ImageDataUrl = imageResponse.Data;
                 }
 
-                // Validate user exists
                 var currentUserResult = await _userManager.GetAsync(CurrentUserId);
                 if (!currentUserResult.Succeeded || currentUserResult.Data == null)
                 {
-                    _snackBar.Add(localizer["You are logged out because the user with your Token has been deleted."], Severity.Error);
+                    _snackBar.Add("Bạn đã bị đăng xuất.", Severity.Error);
                     await _authenticationManager.Logout();
                     _navigationManager.NavigateTo("/login");
                     return;
@@ -143,7 +138,7 @@ namespace LaptopStore.Client.Shared.Shop
             }
             catch (Exception ex)
             {
-                _snackBar.Add(localizer["An error occurred while loading user data."], Severity.Error);
+                _snackBar.Add("Đã xảy ra lỗi khi tải dữ liệu người dùng.", Severity.Error);
                 Console.WriteLine(ex.Message);
             }
         }
@@ -153,12 +148,11 @@ namespace LaptopStore.Client.Shared.Shop
             try
             {
                 _interceptor.DisposeEvent();
-                // Optionally, dispose of the SignalR connection here
-                // await hubConnection.DisposeAsync();
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error disposing resources: " + ex.Message);
+                Console.WriteLine("Lỗi khi hủy tài nguyên: " + ex.Message);
             }
         }
     }

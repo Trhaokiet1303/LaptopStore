@@ -42,26 +42,6 @@ namespace LaptopStore.Application.Features.Dashboards.Queries.GetData
                 UserCount = await _userService.GetCountAsync(),
                 RoleCount = await _roleService.GetCountAsync()
             };
-
-            var selectedYear = DateTime.Now.Year;
-            double[] productsFigure = new double[13];
-            double[] brandsFigure = new double[13];
-            double[] ordersFigure = new double[13];
-            
-            for (int i = 1; i <= 12; i++)
-            {
-                var month = i;
-                var filterStartDate = new DateTime(selectedYear, month, 01);
-                var filterEndDate = new DateTime(selectedYear, month, DateTime.DaysInMonth(selectedYear, month), 23, 59, 59); // Monthly Based
-
-                productsFigure[i - 1] = await _unitOfWork.Repository<Product>().Entities.Where(x => x.CreatedOn >= filterStartDate && x.CreatedOn <= filterEndDate).CountAsync(cancellationToken);
-                brandsFigure[i - 1] = await _unitOfWork.Repository<Brand>().Entities.Where(x => x.CreatedOn >= filterStartDate && x.CreatedOn <= filterEndDate).CountAsync(cancellationToken);
-            }
-
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Products"], Data = productsFigure });
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Brands"], Data = brandsFigure });
-            response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Orders"], Data = ordersFigure });
-
             return await Result<DashboardDataResponse>.SuccessAsync(response);
         }
     }

@@ -1,34 +1,38 @@
-﻿using LaptopStore.Application.Interfaces.Services;
-using LaptopStore.Application.Interfaces.Services.Identity;
+﻿using LaptopStore.Application.Interfaces.Services.Identity;
 using LaptopStore.Application.Requests.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Threading.Tasks;
 
-namespace LaptopStore.Server.Controllers.Identity
+[Route("api/identity/token")]
+[ApiController]
+public class TokenController : ControllerBase
 {
-    [Route("api/identity/token")]
-    [ApiController]
-    public class TokenController : ControllerBase
+    private readonly ITokenService _identityService;
+
+    public TokenController(ITokenService identityService)
     {
-        private readonly ITokenService _identityService;
+        _identityService = identityService;
+    }
 
-        public TokenController(ITokenService identityService, ICurrentUserService currentUserService)
+    [HttpPost]
+    public async Task<ActionResult> Get(TokenRequest model)
+    {
+        var origin = Request.Headers["Origin"];
+
+        if (string.IsNullOrEmpty(origin))
         {
-            _identityService = identityService;
+            origin = "http://default-origin.com"; 
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Get(TokenRequest model)
-        {
-            var response = await _identityService.LoginAsync(model);
-            return Ok(response);
-        }
+        var response = await _identityService.LoginAsync(model, origin);
+        return Ok(response);
+    }
 
-        [HttpPost("refresh")]
-        public async Task<ActionResult> Refresh([FromBody] RefreshTokenRequest model)
-        {
-            var response = await _identityService.GetRefreshTokenAsync(model);
-            return Ok(response);
-        }
+    [HttpPost("refresh")]
+    public async Task<ActionResult> Refresh([FromBody] RefreshTokenRequest model)
+    {
+        var response = await _identityService.GetRefreshTokenAsync(model);
+        return Ok(response);
     }
 }

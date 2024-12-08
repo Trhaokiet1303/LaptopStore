@@ -26,7 +26,6 @@ namespace LaptopStore.Infrastructure.Shared.Services
         {
             try
             {
-                // Kiểm tra xem người nhận có được chỉ định chưa
                 if (string.IsNullOrEmpty(request.To))
                 {
                     throw new ArgumentException("No recipients have been specified.");
@@ -42,10 +41,8 @@ namespace LaptopStore.Infrastructure.Shared.Services
                     }.ToMessageBody()
                 };
 
-                // Thêm người nhận vào email
                 email.To.Add(new MailboxAddress(request.To));
 
-                // Kết nối và gửi email
                 using var smtp = new SmtpClient();
                 await smtp.ConnectAsync(_config.Host, _config.Port, SecureSocketOptions.StartTls);
                 await smtp.AuthenticateAsync(_config.UserName, _config.Password);

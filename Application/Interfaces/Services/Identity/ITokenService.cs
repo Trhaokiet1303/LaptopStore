@@ -8,7 +8,7 @@ namespace LaptopStore.Application.Interfaces.Services.Identity
 {
     public interface ITokenService : IService
     {
-        Task<Result<TokenResponse>> LoginAsync(TokenRequest model);
+        Task<Result<TokenResponse>> LoginAsync(TokenRequest model, string origin);
 
         Task<Result<TokenResponse>> GetRefreshTokenAsync(RefreshTokenRequest model);
     }

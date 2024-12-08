@@ -17,6 +17,9 @@ namespace LaptopStore.Client.Pages.Admin.View
 {
     public partial class Users
     {
+        [Inject] private IOrderManager OrderManager { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; }
+
         private List<UserResponse> _userList = new();
         private UserResponse _user = new();
         private string _searchString = "";
@@ -132,7 +135,6 @@ namespace LaptopStore.Client.Pages.Admin.View
 
         private async Task DeleteUserAsync(string userId)
         {
-            // Check if the user has any orders
             var ordersExist = await CheckIfUserHasOrdersAsync(userId);
 
             if (ordersExist)
@@ -154,7 +156,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 var response = await _userManager.DeleteUserAsync(userId);
                 if (response.Succeeded)
                 {
-                    _snackBar.Add(_localizer["User deleted successfully"], Severity.Success);
+                    _snackBar.Add(_localizer["Người dùng tạm thời bị vô hiệu hóa"], Severity.Success);
                     await GetUsersAsync();
                 }
                 else
@@ -172,15 +174,11 @@ namespace LaptopStore.Client.Pages.Admin.View
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
-                // Check if the user has any orders
                 return result.Data.Any(o => o.UserId == userId);
             }
 
             await JSRuntime.InvokeVoidAsync("alert", "Không thể tải đơn hàng.");
             return false;
         }
-        [Inject] private IOrderManager OrderManager { get; set; }
-        [Inject] private IJSRuntime JSRuntime { get; set; }
-
     }
 }
