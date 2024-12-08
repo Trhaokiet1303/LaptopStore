@@ -30,15 +30,59 @@ namespace LaptopStore.Client.Pages.Shop
 
         private bool IsLoading { get; set; }
         private List<GetAllOrdersResponse> Orders { get; set; } = new();
+        private string SelectedStatus { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             IsLoading = true;
-            await LoadOrdersAsync();
+            SelectedStatus = ""; 
+            await LoadOrdersAsync(SelectedStatus);
             IsLoading = false;
         }
 
-        private async Task LoadOrdersAsync()
+        private async Task FilterProcessingOrders() => await FilterOrdersByStatusAsync("Đang xử lý");
+        private async Task FilterShippingOrders() => await FilterOrdersByStatusAsync("Đang giao");
+        private async Task FilterDeliveredOrders() => await FilterOrdersByStatusAsync("Đã giao");
+        private async Task FilterCanceledOrders() => await FilterOrdersByStatusAsync("Đã hủy");
+
+
+        private async Task FilterOrdersByStatusAsync(string status)
+        {
+            SelectedStatus = status; // Lưu trạng thái đã chọn
+            IsLoading = true;
+
+            // Lấy trạng thái đăng nhập và ID người dùng
+            var state = await AuthenticationProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            var userId = user.GetUserId();
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Bạn phải đăng nhập để xem đơn hàng!");
+                IsLoading = false;
+                return;
+            }
+
+            // Lấy danh sách đơn hàng từ server và lọc theo trạng thái
+            var result = await OrderManager.GetAllAsync();
+            if (result.Succeeded)
+            {
+                Orders = result.Data
+                               .Where(o => o.UserId == userId && (string.IsNullOrEmpty(status) || o.StatusOrder == status))
+                               .ToList();
+            }
+            else
+            {
+                Orders.Clear(); // Nếu không thành công, xóa danh sách hiện tại
+                await JSRuntime.InvokeVoidAsync("alert", "Không thể tải danh sách đơn hàng!");
+            }
+
+            IsLoading = false;
+        }
+
+
+
+        private async Task LoadOrdersAsync(string status = "")
         {
             var state = await AuthenticationProvider.GetAuthenticationStateAsync();
             var user = state.User;
@@ -49,11 +93,15 @@ namespace LaptopStore.Client.Pages.Shop
                 await JSRuntime.InvokeVoidAsync("alert", "Bạn phải đăng nhập để xem đơn hàng!");
                 return;
             }
-            
+
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
-                Orders = result.Data.Where(o => o.UserId == userId).ToList();
+                // Hiển thị tất cả đơn hàng khi không có status hoặc lọc theo trạng thái
+                Orders = result.Data
+                               .Where(o => o.UserId == userId &&
+                                           (string.IsNullOrEmpty(status) || o.StatusOrder == status))
+                               .ToList();
             }
             else
             {
