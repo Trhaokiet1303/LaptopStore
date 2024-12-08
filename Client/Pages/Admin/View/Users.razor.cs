@@ -10,6 +10,8 @@ using LaptopStore.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.JSInterop;
 using LaptopStore.Client.Pages.Identity;
+using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
+using Microsoft.AspNetCore.Components;
 
 namespace LaptopStore.Client.Pages.Admin.View
 {
@@ -130,6 +132,16 @@ namespace LaptopStore.Client.Pages.Admin.View
 
         private async Task DeleteUserAsync(string userId)
         {
+            // Check if the user has any orders
+            var ordersExist = await CheckIfUserHasOrdersAsync(userId);
+
+            if (ordersExist)
+            {
+                _snackBar.Add(_localizer["Người dùng không thể bị xóa vì họ có đơn hàng."], Severity.Error);
+                return;
+            }
+
+            // Proceed with deletion if no orders exist
             var confirmDelete = await _dialogService.ShowMessageBox(
                 _localizer["Confirm Deletion"],
                 _localizer["Are you sure you want to delete this user?"],
@@ -142,7 +154,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 var response = await _userManager.DeleteUserAsync(userId);
                 if (response.Succeeded)
                 {
-                    _snackBar.Add(_localizer["Xóa người dùng thành công"], Severity.Success);
+                    _snackBar.Add(_localizer["User deleted successfully"], Severity.Success);
                     await GetUsersAsync();
                 }
                 else
@@ -154,6 +166,21 @@ namespace LaptopStore.Client.Pages.Admin.View
                 }
             }
         }
+
+        private async Task<bool> CheckIfUserHasOrdersAsync(string userId)
+        {
+            var result = await OrderManager.GetAllAsync();
+            if (result.Succeeded)
+            {
+                // Check if the user has any orders
+                return result.Data.Any(o => o.UserId == userId);
+            }
+
+            await JSRuntime.InvokeVoidAsync("alert", "Không thể tải đơn hàng.");
+            return false;
+        }
+        [Inject] private IOrderManager OrderManager { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; }
 
     }
 }

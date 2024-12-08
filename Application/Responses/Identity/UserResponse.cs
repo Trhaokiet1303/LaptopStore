@@ -1,4 +1,7 @@
-﻿namespace LaptopStore.Application.Responses.Identity
+﻿using LaptopStore.Domain.Entities.Catalog;
+using System.Collections.Generic;
+
+namespace LaptopStore.Application.Responses.Identity
 {
     public class UserResponse
     {

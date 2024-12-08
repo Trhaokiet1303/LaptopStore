@@ -18,6 +18,10 @@
         {
             return $"api/identity/user/roles/{userId}";
         }
+        public static string GetOrdersByUserAsync(string userId)
+        {
+            return $"api/identity/user/orders/{userId}";
+        }
 
         public static string Register = "api/identity/user";
         public static string ToggleUserStatus = "api/identity/user/toggle-status";

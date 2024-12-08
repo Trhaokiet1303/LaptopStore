@@ -30,6 +30,12 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.Delete
             var orderItem = await _unitOfWork.Repository<OrderItem>().GetByIdAsync(command.Id);
             if (orderItem != null)
             {
+                var order = await _unitOfWork.Repository<Order>().GetByIdAsync(orderItem.OrderId);
+
+                if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
+                {
+                    return await Result<int>.FailAsync(_localizer["Không thể xóa sản phẩm trong đơn hàng {0}!", order.StatusOrder]);
+                }
                 await _unitOfWork.Repository<OrderItem>().DeleteAsync(orderItem);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrderItemsCacheKey);
                 return await Result<int>.SuccessAsync(orderItem.Id, _localizer["Xóa thành công"]);

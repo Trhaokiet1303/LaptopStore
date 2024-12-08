@@ -14,6 +14,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using LaptopStore.Application.Features.Products.Commands.AddEdit;
+using FluentValidation;
 
 namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
 {
@@ -55,6 +56,8 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
 
         public async Task<Result<int>> Handle(AddEditOrderItemCommand command, CancellationToken cancellationToken)
         {
+            var order = await _unitOfWork.Repository<Order>().GetByIdAsync(command.OrderId);
+
             var uploadRequest = command.UploadRequest;
             if (uploadRequest != null)
             {
@@ -63,6 +66,11 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
 
             if (command.Id == 0)
             {
+                if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
+                {
+                    string message = string.Format(_localizer["Không thể thêm đơn hàng {0}!", order.StatusOrder]);
+                    return await Result<int>.FailAsync(message);
+                }
                 var orderItem = _mapper.Map<OrderItem>(command);
                 if (uploadRequest != null)
                 {
@@ -74,6 +82,11 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
             }
             else
             {
+                if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
+                {
+                    string message = string.Format(_localizer["Không thể thêm đơn hàng {0}!", order.StatusOrder]);
+                    return await Result<int>.FailAsync(message);
+                }
                 var orderItem = await _unitOfWork.Repository<OrderItem>().GetByIdAsync(command.Id);
                 if (orderItem != null)
                 {
@@ -83,12 +96,11 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
                     orderItem.Quantity = (command.Quantity == 0) ? orderItem.Quantity : command.Quantity;
                     orderItem.OrderId = (command.OrderId == 0) ? orderItem.OrderId : command.OrderId;
                     orderItem.TotalPrice = command.Quantity * command.ProductPrice;
-                   
+
                     if (uploadRequest != null)
                     {
                         orderItem.ProductImage = _uploadService.UploadAsync(uploadRequest);
                     }
-                   
                     await _unitOfWork.Repository<OrderItem>().UpdateAsync(orderItem);
                     await _unitOfWork.Commit(cancellationToken);
                     return await Result<int>.SuccessAsync(orderItem.Id, _localizer["Cập nhật thành công"]);

@@ -26,6 +26,7 @@
             public const string GetAllBrandsCacheKey = "all-brands";
             public const string GetAllOrdersCacheKey = "all-orders";
             public const string GetAllOrderItemsCacheKey = "all-orderitems";
+            public const string GetOrderItemByIdCacheKey = "orderitem-by-id-";
         }
     }
 }

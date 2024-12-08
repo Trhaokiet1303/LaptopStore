@@ -1,4 +1,5 @@
-﻿using LaptopStore.Application.Requests.Identity;
+﻿using LaptopStore.Application.Features.Orders.Queries.GetAll;
+using LaptopStore.Application.Requests.Identity;
 using LaptopStore.Application.Responses.Identity;
 using LaptopStore.Client.Infrastructure.Extensions;
 using LaptopStore.Client.Infrastructure.Routes;
@@ -72,6 +73,5 @@ namespace LaptopStore.Client.Infrastructure.Managers.Identity.Users
             var response = await _httpClient.DeleteAsync(Routes.UserEndpoints.Delete(userId));
             return await response.ToResult();
         }
-
     }
 }

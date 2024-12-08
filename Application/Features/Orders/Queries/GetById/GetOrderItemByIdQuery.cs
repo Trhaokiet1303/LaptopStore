@@ -12,6 +12,7 @@ namespace LaptopStore.Application.Features.OrderItems.Queries.GetById
     public class GetOrderItemByIdQuery : IRequest<Result<GetOrderItemByIdResponse>>
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
     }
 
     internal class GetOrderItemByIdQueryHandler : IRequestHandler<GetOrderItemByIdQuery, Result<GetOrderItemByIdResponse>>
@@ -27,9 +28,20 @@ namespace LaptopStore.Application.Features.OrderItems.Queries.GetById
 
         public async Task<Result<GetOrderItemByIdResponse>> Handle(GetOrderItemByIdQuery query, CancellationToken cancellationToken)
         {
-            var order = await _unitOfWork.Repository<OrderItem>().GetByIdAsync(query.Id);
+            var repository = _unitOfWork.Repository<OrderItem>();
+
+            var order = string.IsNullOrEmpty(query.UserId)
+                ? await repository.GetByIdAsync(query.Id)
+                : await repository.GetFirstAsync(o => o.Id == query.Id && o.Order.UserId == query.UserId);
+
+            if (order == null)
+            {
+                return await Result<GetOrderItemByIdResponse>.FailAsync("Order not found or you do not have permission to access it.");
+            }
+
             var mappedOrder = _mapper.Map<GetOrderItemByIdResponse>(order);
             return await Result<GetOrderItemByIdResponse>.SuccessAsync(mappedOrder);
         }
+
     }
 }

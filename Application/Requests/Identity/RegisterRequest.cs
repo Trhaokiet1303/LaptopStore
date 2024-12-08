@@ -29,7 +29,7 @@ namespace LaptopStore.Application.Requests.Identity
 
         public bool ActivateUser { get; set; } = true;
 
-        public bool AutoConfirmEmail { get; set; } = true;
+        public bool AutoConfirmEmail { get; set; } = false;
 
     }
 }

@@ -2,6 +2,7 @@
 using LaptopStore.Domain.Contracts;
 using LaptopStore.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,12 @@ namespace LaptopStore.Infrastructure.Repositories
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
+
+        public async Task<T> GetFirstAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        {
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(predicate);
+        }
+
 
         public async Task<List<T>> GetPagedResponseAsync(int pageNumber, int pageSize)
         {

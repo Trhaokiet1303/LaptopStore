@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LaptopStore.Domain.Contracts;
@@ -10,6 +11,8 @@ namespace LaptopStore.Application.Interfaces.Repositories
         IQueryable<T> Entities { get; }
 
         Task<T> GetByIdAsync(TId id);
+
+        Task<T> GetFirstAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
 
         Task<List<T>> GetAllAsync();
 

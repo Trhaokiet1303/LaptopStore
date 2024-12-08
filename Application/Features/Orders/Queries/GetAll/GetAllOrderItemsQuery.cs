@@ -8,6 +8,7 @@ using LazyCache;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
         public GetAllOrderItemsQuery()
         {
         }
+        public string UserId { get; set; }
     }
 
     internal class GetAllOrderItemsCachedQueryHandler : IRequestHandler<GetAllOrderItemsQuery, Result<List<GetAllOrderItemsResponse>>>
@@ -38,7 +40,12 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
             Func<Task<List<OrderItem>>> getAllOrderItems = () => _unitOfWork.Repository<OrderItem>().GetAllAsync();
             var orderList = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllOrderItemsCacheKey, getAllOrderItems);
             var mappedOrders = _mapper.Map<List<GetAllOrderItemsResponse>>(orderList);
+            if (!string.IsNullOrEmpty(request.UserId))
+            {
+                mappedOrders = mappedOrders.Where(order => order.Order.UserId == request.UserId).ToList();
+            }
             return await Result<List<GetAllOrderItemsResponse>>.SuccessAsync(mappedOrders);
         }
     }
+
 }

@@ -91,6 +91,19 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, RoleConstants.BasicRole);
+                    if (!request.AutoConfirmEmail)
+                    {
+                        var verificationUri = await SendVerificationEmail(user, origin);
+                        var mailRequest = new MailRequest
+                        {
+                            From = "trhaokiet.1303@gmail.com",
+                            To = user.Email,
+                            Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>clicking here</a>."], verificationUri),
+                            Subject = _localizer["Xác nhận đăng ký tài khoản"]
+                        };
+                        BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
+                        return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký. Kiểm tra email để xác nhận đăng ký!"], user.UserName));
+                    }
                     return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký."], user.UserName));
                 }
                 else
@@ -291,16 +304,17 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 return await Result.FailAsync(_localizer["Quản trị viên không thể bị xóa."]);
             }
 
-            var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
+            user.EmailConfirmed = false;
+            var updateResult = await _userManager.UpdateAsync(user);
+
+            if (updateResult.Succeeded)
             {
-                return await Result.SuccessAsync(_localizer["Xóa người dùng thành công."]);
+                return await Result.SuccessAsync(_localizer["Người dùng tạm thời bị vô hiệu hóa."]);
             }
             else
             {
-                return await Result.FailAsync(result.Errors.Select(a => a.Description).ToList());
+                return await Result.FailAsync(updateResult.Errors.Select(a => a.Description).ToList());
             }
         }
-
     }
 }

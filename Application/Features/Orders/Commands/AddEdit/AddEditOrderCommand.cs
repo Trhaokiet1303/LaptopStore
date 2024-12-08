@@ -57,8 +57,14 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
 
         public async Task<Result<int>> Handle(AddEditOrderCommand command, CancellationToken cancellationToken)
         {
-            command.OrderItem = command.OrderItem ?? new List<OrderItem>();
+            var order = command.Id == 0 ? null : await _unitOfWork.Repository<Order>().GetByIdAsync(command.Id);
 
+            if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
+            {
+                return await Result<int>.FailAsync(_localizer["Không thể chỉnh sửa đơn hàng {0}!", order.StatusOrder]);
+            }
+
+            command.OrderItem = command.OrderItem ?? new List<OrderItem>();
             int totalPrice = 0;
 
             if (command.OrderItem.Any())
@@ -66,9 +72,9 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                 totalPrice = command.OrderItem.Sum(item => item.ProductPrice * item.Quantity);
             }
 
-            if (command.Id == 0)
+            if (command.Id == 0) 
             {
-                var order = new Order
+                var newOrder = new Order
                 {
                     UserId = command.UserId,
                     UserName = command.UserName,
@@ -89,15 +95,15 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                     }).ToList()
                 };
 
-                await _unitOfWork.Repository<Order>().AddAsync(order);
+                await _unitOfWork.Repository<Order>().AddAsync(newOrder);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
-                return await Result<int>.SuccessAsync(order.Id, _localizer["Lưu thành công"]);
+                return await Result<int>.SuccessAsync(newOrder.Id, _localizer["Lưu thành công"]);
             }
-            else
+            else // Edit existing order
             {
-                var order = await _unitOfWork.Repository<Order>().GetByIdAsync(command.Id);
                 if (order != null)
                 {
+                    // Update order details
                     order.UserId = command.UserId ?? order.UserId;
                     order.UserAddress = command.UserAddress ?? order.UserAddress;
                     order.UserName = command.UserName ?? order.UserName;
@@ -106,16 +112,9 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                     order.StatusOrder = command.StatusOrder ?? order.StatusOrder;
                     order.IsPayment = command.IsPayment;
 
-                    if (order.OrderItem == null || !order.OrderItem.Any())
-                    {
-                        order.OrderItem = new List<OrderItem>();  
-                        order.TotalPrice = 0; 
-                    }
-                    else
-                    {
-                        totalPrice = command.OrderItem.Any() ? command.OrderItem.Sum(item => item.ProductPrice * item.Quantity) : 0;
-                        order.TotalPrice = totalPrice;
-                    }
+                    // Calculate total price based on items
+                    totalPrice = command.OrderItem.Any() ? command.OrderItem.Sum(item => item.ProductPrice * item.Quantity) : 0;
+                    order.TotalPrice = totalPrice;
 
                     foreach (var item in command.OrderItem)
                     {

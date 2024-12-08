@@ -14,5 +14,6 @@
         public static string GetCount = "api/v1/orders/count";
         public static string UpdateStatus = "api/v1/orders/update-status";
         public static string UpdateTotalPrice = "api/v1/orders/update-totalprice";
+        public static string GetOrdersByUserId = "api/v1/orders/user/{userId}";
     }
 }

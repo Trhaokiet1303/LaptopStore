@@ -97,6 +97,5 @@ namespace LaptopStore.Server.Controllers.Identity
             }
             return BadRequest(result);
         }
-
     }
 }

@@ -239,7 +239,7 @@ namespace LaptopStore.Client.Pages.Shop
                 UserAddress = userAddress,
                 TotalPrice = (int)GetTotalPrice(),
                 MethodPayment = SelectedPaymentMethod,
-                StatusOrder = "Đang xử lý",
+                StatusOrder = "Đặt Thành Công",
                 IsPayment = SelectedPaymentMethod != "COD", 
                 OrderItem = cartItems.Select(item => new OrderItem
                 {

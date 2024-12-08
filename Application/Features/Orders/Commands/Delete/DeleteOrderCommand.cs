@@ -26,10 +26,15 @@ namespace LaptopStore.Application.Features.Orders.Commands.Delete
         }
 
         public async Task<Result<int>> Handle(DeleteOrderCommand command, CancellationToken cancellationToken)
-        {  
+        {
             var order = await _unitOfWork.Repository<Order>().GetByIdAsync(command.Id);
             if (order != null)
             {
+                if (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao")
+                {
+                    return await Result<int>.FailAsync(_localizer["Không thể xóa đơn hàng {0}!", order.StatusOrder]);
+                }
+
                 await _unitOfWork.Repository<Order>().DeleteAsync(order);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
                 return await Result<int>.SuccessAsync(order.Id, _localizer["Xóa thành công"]);
@@ -39,5 +44,6 @@ namespace LaptopStore.Application.Features.Orders.Commands.Delete
                 return await Result<int>.FailAsync(_localizer["Không tìm thấy đơn hàng!"]);
             }
         }
+
     }
 }

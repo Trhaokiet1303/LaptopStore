@@ -1,4 +1,5 @@
-﻿using LaptopStore.Application.Requests.Identity;
+﻿using LaptopStore.Application.Features.Orders.Queries.GetAll;
+using LaptopStore.Application.Requests.Identity;
 using LaptopStore.Application.Responses.Identity;
 using LaptopStore.Shared.Wrapper;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ namespace LaptopStore.Client.Infrastructure.Managers.Identity.Users
 
         Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);
 
-        Task<IResult> DeleteUserAsync(string userId); 
-
+        Task<IResult> DeleteUserAsync(string userId);
     }
 }

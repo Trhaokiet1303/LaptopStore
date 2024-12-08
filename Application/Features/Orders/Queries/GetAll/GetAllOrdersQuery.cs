@@ -1,62 +1,65 @@
 ﻿using AutoMapper;
 using LaptopStore.Application.Interfaces.Repositories;
 using LaptopStore.Domain.Entities.Catalog;
-using LaptopStore.Shared.Constants.Application;
 using LaptopStore.Shared.Wrapper;
-using LazyCache;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LaptopStore.Shared.Constants.Permission;
 
 namespace LaptopStore.Application.Features.Orders.Queries.GetAll
 {
     public class GetAllOrdersQuery : IRequest<Result<List<GetAllOrdersResponse>>>
     {
-        public GetAllOrdersQuery()
-        {
-
-        }
+        public string UserId { get; set; }
     }
 
     internal class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, Result<List<GetAllOrdersResponse>>>
     {
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAppCache _cache;
 
-        public GetAllOrdersQueryHandler(IUnitOfWork<int> unitOfWork, IMapper mapper, IAppCache cache)
+        public GetAllOrdersQueryHandler(IUnitOfWork<int> unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _cache = cache;
         }
 
         public async Task<Result<List<GetAllOrdersResponse>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _unitOfWork.Repository<Order>().GetAllAsync();
+            var ordersQuery = _unitOfWork.Repository<Order>().Entities.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.UserId))
+            {
+                ordersQuery = ordersQuery.Where(o => o.UserId == request.UserId);
+            }
+
+            var orders = await ordersQuery.ToListAsync(cancellationToken);
 
             var mappedOrders = _mapper.Map<List<GetAllOrdersResponse>>(orders);
 
+            var orderItems = await _unitOfWork.Repository<OrderItem>().Entities
+                .Where(oi => orders.Select(o => o.Id).Contains(oi.OrderId))
+                .ToListAsync(cancellationToken);
+
+            var products = await _unitOfWork.Repository<Product>().Entities
+                .Where(p => orderItems.Select(oi => oi.ProductId).Contains(p.Id))
+                .ToListAsync(cancellationToken);
+
             foreach (var order in mappedOrders)
             {
-                var cartItems = await _unitOfWork.Repository<OrderItem>().Entities
-                    .Where(c => c.OrderId == order.Id)
-                    .ToListAsync();
-
+                var orderItemsForOrder = orderItems.Where(oi => oi.OrderId == order.Id).ToList();
                 int totalOrderPrice = 0;
 
-                if (cartItems.Any())
+                if (orderItemsForOrder.Any())
                 {
-                    order.OrderItem = _mapper.Map<List<GetAllOrderItemsResponse>>(cartItems);
+                    var mappedOrderItems = _mapper.Map<List<GetAllOrderItemsResponse>>(orderItemsForOrder);
 
-                    foreach (var item in order.OrderItem)
+                    foreach (var item in mappedOrderItems)
                     {
-                        var product = await _unitOfWork.Repository<Product>().GetByIdAsync(item.ProductId);
+                        var product = products.FirstOrDefault(p => p.Id == item.ProductId);
                         if (product != null)
                         {
                             item.ProductName = product.Name;
@@ -78,10 +81,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                             item.ProductImage = null;
                         }
                     }
-                }
-                else
-                {
-                    totalOrderPrice = 0;
+
+                    order.OrderItem = mappedOrderItems;
                 }
 
                 order.TotalPrice = totalOrderPrice;

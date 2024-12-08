@@ -14,6 +14,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
     public class GetOrderByIdQuery : IRequest<Result<GetOrderByIdResponse>>
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
     }
 
     internal class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Result<GetOrderByIdResponse>>
@@ -29,25 +30,22 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
 
         public async Task<Result<GetOrderByIdResponse>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            var order = await _unitOfWork.Repository<Order>().GetByIdAsync(request.Id);
-
+            var userId = request.UserId;
+            var order = await _unitOfWork.Repository<Order>().Entities
+                .Where(o => o.Id == request.Id && (userId == null || o.UserId == userId))
+                .FirstOrDefaultAsync();
             if (order == null)
             {
-                return await Result<GetOrderByIdResponse>.FailAsync("Order not found.");
+                return await Result<GetOrderByIdResponse>.FailAsync("Order not found or you do not have permission to access it.");
             }
-
             var mappedOrder = _mapper.Map<GetOrderByIdResponse>(order);
-
             var orderItems = await _unitOfWork.Repository<OrderItem>().Entities
                 .Where(c => c.OrderId == order.Id)
                 .ToListAsync();
-
             int totalOrderPrice = 0;
-
             if (orderItems.Any())
             {
                 mappedOrder.OrderItem = _mapper.Map<List<GetOrderItemByIdResponse>>(orderItems);
-
                 foreach (var item in mappedOrder.OrderItem)
                 {
                     var product = await _unitOfWork.Repository<Product>().GetByIdAsync(item.ProductId);
@@ -76,9 +74,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
             {
                 totalOrderPrice = 0;
             }
-
             mappedOrder.TotalPrice = totalOrderPrice;
-
             return await Result<GetOrderByIdResponse>.SuccessAsync(mappedOrder);
         }
     }

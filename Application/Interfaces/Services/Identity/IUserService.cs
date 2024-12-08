@@ -1,4 +1,5 @@
-﻿using LaptopStore.Application.Interfaces.Common;
+﻿using LaptopStore.Application.Features.Orders.Queries.GetAll;
+using LaptopStore.Application.Interfaces.Common;
 using LaptopStore.Application.Requests.Identity;
 using LaptopStore.Application.Responses.Identity;
 using LaptopStore.Shared.Wrapper;
@@ -30,5 +31,6 @@ namespace LaptopStore.Application.Interfaces.Services.Identity
         Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
 
         Task<IResult> DeleteUserAsync(string userId);
+
     }
 }
