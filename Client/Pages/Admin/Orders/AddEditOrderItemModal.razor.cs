@@ -107,7 +107,10 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
-                    if (AddEditOrderItemModel.Quantity <= productResponse.Data.Quantity)
+                    // Calculate the difference in quantity
+                    var quantityDifference = AddEditOrderItemModel.Quantity - existingOrderItem.Quantity;
+
+                    if (quantityDifference <= productResponse.Data.Quantity || quantityDifference <= 0) // Ensure sufficient stock or reduction
                     {
                         var updateCommand = new AddEditOrderItemCommand
                         {
@@ -137,9 +140,11 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             var orderUpdateResponse = await OrderManager.UpdateOrderTotalPriceAsync(updateOrderCommand);
                             if (orderUpdateResponse.Succeeded)
                             {
+                                // Update product stock
+                                var newStockQuantity = productResponse.Data.Quantity - quantityDifference;
                                 var reduceStockResponse = await ProductManager.UpdateProductQuantityAsync(
                                     AddEditOrderItemModel.ProductId,
-                                    productResponse.Data.Quantity - AddEditOrderItemModel.Quantity);
+                                    newStockQuantity);
 
                                 if (reduceStockResponse.Succeeded)
                                 {
@@ -156,7 +161,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             {
                                 _snackBar.Add("Cập nhật tổng giá thất bại.", Severity.Error);
                             }
-                            _snackBar.Add("Cập nhật số lượng sản phẩm thành công.", Severity.Success);
                             MudDialog.Close();
                         }
                         else
@@ -169,7 +173,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                     }
                     else
                     {
-                        _snackBar.Add("Số lượng mới không thể lớn hơn số lượng hiện tại.", Severity.Error);
+                        _snackBar.Add("Số lượng mới không hợp lệ (vượt quá tồn kho).", Severity.Error);
                     }
                 }
                 else
