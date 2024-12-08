@@ -67,7 +67,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var verificationUri = await SendVerificationEmail(user, origin);
                 var mailRequest = new MailRequest
                 {
-                    From = "trhaokiet.13003",
+                    From = "trhaokiet.1303@gmail.com",
                     To = user.Email,
                     Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>Nhấp vào đây</a>."], verificationUri),
                     Subject = _localizer["Xác nhận đăng ký tài khoản"]

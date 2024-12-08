@@ -127,7 +127,7 @@ namespace LaptopStore.Client.Pages.Shop
 
             if (currentStatus == "Đang Giao" || currentStatus == "Đã Giao")
             {
-                await JSRuntime.InvokeVoidAsync("alert", "Đơn hàng này không thể hủy vì đang giao hoặc đã giao!");
+                await JSRuntime.InvokeVoidAsync("alert", $"Đơn hàng này không thể vì: {currentStatus}!");
                 return;
             }
 
