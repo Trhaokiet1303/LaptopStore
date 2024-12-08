@@ -38,11 +38,6 @@ namespace LaptopStore.Application.Features.Products.Commands.Update
                     return Result<int>.Fail(_localizer["Không tìm thấy sản phẩm!"]); 
                 }
 
-                if (product.Featured)
-                {
-                    return Result<int>.Success(_localizer["Sản phẩm này đã có trạng thái Featured."]); 
-                }
-
                 var totalQuantity = await _unitOfWork.Repository<Order>()
                     .Entities
                     .Where(order => order.OrderItem.Any(oi => oi.ProductId == product.Id))

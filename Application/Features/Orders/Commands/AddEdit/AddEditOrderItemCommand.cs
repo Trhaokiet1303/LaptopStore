@@ -68,7 +68,7 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
             {
                 if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
                 {
-                    string message = string.Format(_localizer["Không thể thêm đơn hàng {0}!", order.StatusOrder]);
+                    string message = string.Format(_localizer["Không thể thêm sản phẩm của đơn hàng {0}!", order.StatusOrder]);
                     return await Result<int>.FailAsync(message);
                 }
                 var orderItem = _mapper.Map<OrderItem>(command);
@@ -84,7 +84,7 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
             {
                 if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
                 {
-                    string message = string.Format(_localizer["Không thể thêm đơn hàng {0}!", order.StatusOrder]);
+                    string message = string.Format(_localizer["Không thể thêm sản phẩm của đơn hàng {0}!", order.StatusOrder]);
                     return await Result<int>.FailAsync(message);
                 }
                 var orderItem = await _unitOfWork.Repository<OrderItem>().GetByIdAsync(command.Id);

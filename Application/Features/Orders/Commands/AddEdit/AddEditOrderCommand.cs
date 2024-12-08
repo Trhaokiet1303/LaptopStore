@@ -59,9 +59,33 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
         {
             var order = command.Id == 0 ? null : await _unitOfWork.Repository<Order>().GetByIdAsync(command.Id);
 
-            if (order != null && (order.StatusOrder == "Đang Giao" || order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy"))
+            if (order.StatusOrder == "Đã Giao" || order.StatusOrder == "Đã Hủy")
             {
                 return await Result<int>.FailAsync(_localizer["Không thể chỉnh sửa đơn hàng {0}!", order.StatusOrder]);
+            }
+
+            // Nếu trạng thái là "Đang Giao", chỉ cho phép sửa trạng thái đơn hàng
+            if (order.StatusOrder == "Đang Giao")
+            {
+                if ((command.UserId != order.UserId) ||
+                (command.UserName != order.UserName) ||
+                (command.UserPhone != order.UserPhone) ||
+                (command.UserAddress != order.UserAddress) ||
+                (command.MethodPayment != order.MethodPayment) ||
+                (command.IsPayment != order.IsPayment) ||
+                (command.OrderItem != null && command.OrderItem.Any()))
+                {
+                    return await Result<int>.FailAsync(_localizer["Không thể chỉnh sửa thông tin khác ngoài trạng thái đơn hàng khi đơn hàng đang giao!"]);
+                }
+                if (!string.IsNullOrWhiteSpace(command.StatusOrder))
+                {
+                    order.StatusOrder = command.StatusOrder;
+                    await _unitOfWork.Repository<Order>().UpdateAsync(order);
+                    await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllOrdersCacheKey);
+                    return await Result<int>.SuccessAsync(order.Id, _localizer["Cập nhật trạng thái thành công"]);
+                }
+
+                return await Result<int>.FailAsync(_localizer["Không có trạng thái mới để cập nhật!"]);
             }
 
             // Ensure OrderItem is not null

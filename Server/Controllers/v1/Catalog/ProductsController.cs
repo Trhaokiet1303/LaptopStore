@@ -65,7 +65,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             return Ok(await _mediator.Send(command));
         }
 
-        [HttpPut("update-featured-status")]
+        [HttpPut("UpdateFeaturedStatus")]
         public async Task<IActionResult> UpdateFeaturedStatus([FromBody] UpdateProductFeaturedStatusCommand command)
         {
             return Ok(await _mediator.Send(command));
