@@ -5,7 +5,6 @@
 <link href="css/orderdetail.css" rel="stylesheet">
 
 
-<h1 class="orderdetail-container">Đơn hàng của bạn</h1>
 <MudContainer Class="main-content">
     <MudGrid Class="content-wrapper">
         <!-- Sidebar -->
@@ -15,7 +14,7 @@
                 <MudList Dense>
                     <MudListItem>
                         <MudText Typo="Typo.body1">
-                            <a @onclick="FilterProcessingOrders" class="text-deco">Đang xử lý</a>
+                            <a @onclick="FilterProcessingOrders" class="text-deco">Đặt thành công</a>
                         </MudText>
                     </MudListItem>
                     <MudListItem>
@@ -39,6 +38,7 @@
 
         <MudItem xs="12" sm="8" md="9">
             <MudPaper Class="info" Elevation="4">
+                <h1 class="orderdetail-container">Đơn hàng của bạn</h1>
                 <MudTabs Class="info-container">
                     @if (IsLoading)
                     {
