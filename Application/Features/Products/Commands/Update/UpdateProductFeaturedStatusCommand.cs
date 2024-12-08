@@ -35,10 +35,14 @@ namespace LaptopStore.Application.Features.Products.Commands.Update
 
                 if (product == null)
                 {
-                    return Result<int>.Fail(_localizer["Không tìm thấy sản phẩm!"]); // Đảm bảo trả về kiểu Result, không phải IResult
+                    return Result<int>.Fail(_localizer["Không tìm thấy sản phẩm!"]); 
                 }
 
-                // Tính tổng số lượng của sản phẩm trong tất cả các đơn hàng
+                if (product.Featured)
+                {
+                    return Result<int>.Success(_localizer["Sản phẩm này đã có trạng thái Featured."]); 
+                }
+
                 var totalQuantity = await _unitOfWork.Repository<Order>()
                     .Entities
                     .Where(order => order.OrderItem.Any(oi => oi.ProductId == product.Id))
@@ -48,25 +52,23 @@ namespace LaptopStore.Application.Features.Products.Commands.Update
 
                 var currentRate = product.Rate;
 
-                // Kiểm tra và cập nhật trạng thái Featured
                 if (totalQuantity >= 10 && currentRate >= 4)
                 {
                     product.Featured = true;
                 }
                 else
                 {
-                    product.Featured = false;
+                    product.Featured = false; 
                 }
 
-                // Cập nhật trạng thái Featured trong cơ sở dữ liệu
                 await _unitOfWork.Repository<Product>().UpdateAsync(product);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Result<int>.Success(_localizer["Cập nhật trạng thái Featured thành công."]); // Đảm bảo trả về kiểu Result
+                return Result<int>.Success(_localizer["Cập nhật trạng thái Featured thành công."]);
             }
             catch (Exception ex)
             {
-                return Result<int>.Fail(_localizer[$"Đã xảy ra lỗi: {ex.Message}"]); // Đảm bảo trả về kiểu Result
+                return Result<int>.Fail(_localizer[$"Đã xảy ra lỗi: {ex.Message}"]);
             }
         }
     }

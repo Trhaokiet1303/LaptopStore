@@ -28,6 +28,7 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private IJSRuntime JSRuntime { get; set; }
         private int quantity = 1;
+        private int MaxQuantity = 10;
 
         [Parameter] public GetProductByIdResponse Product { get; set; } = new();
         [CascadingParameter] private HubConnection HubConnection { get; set; }
@@ -54,6 +55,20 @@ namespace LaptopStore.Client.Pages.Shop
         private async Task LoadDataAsync()
         {
             await LoadImageAsync();
+            await LoadMaxQuantityAsync();
+        }
+
+        private async Task LoadMaxQuantityAsync()
+        {
+            var productResponse = await ProductManager.GetProductByIdAsync(Product.Id);
+            if (productResponse.Succeeded)
+            {
+                MaxQuantity = productResponse.Data.Quantity;
+            }
+            else
+            {
+                Snackbar.Add("Không thể tải thông tin sản phẩm.", Severity.Error);
+            }
         }
 
         private async Task LoadImageAsync()
@@ -70,12 +85,28 @@ namespace LaptopStore.Client.Pages.Shop
         }
         private async Task AddToCart()
         {
+            // Lấy thông tin sản phẩm từ cơ sở dữ liệu hoặc API (ví dụ: qua ProductManager)
+            var productResponse = await ProductManager.GetProductByIdAsync(Product.Id);
+            if (!productResponse.Succeeded)
+            {
+                Snackbar.Add("Không thể tải thông tin sản phẩm.", Severity.Error);
+                return;
+            }
+
+            var product = productResponse.Data;
+
+            // Kiểm tra nếu số lượng người dùng muốn thêm vào giỏ hàng lớn hơn số lượng còn lại trong kho
+            if (quantity > product.Quantity)
+            {
+                return;
+            }
+
             var cartItem = new OrderItem
             {
-                ProductId = Product.Id,
-                ProductName = Product.Name,
-                ProductPrice = Product.Price,
-                ProductImage = Product.ImageDataURL,
+                ProductId = product.Id,
+                ProductName = product.Name,
+                ProductPrice = product.Price,
+                ProductImage = product.ImageDataURL,
                 Quantity = quantity
             };
 
@@ -89,7 +120,15 @@ namespace LaptopStore.Client.Pages.Shop
             if (existingItem != null)
             {
                 // Nếu sản phẩm đã có, tăng số lượng lên
-                existingItem.Quantity += cartItem.Quantity;
+                if (existingItem.Quantity + cartItem.Quantity <= product.Quantity)
+                {
+                    existingItem.Quantity += cartItem.Quantity;
+                }
+                else
+                {
+                    Snackbar.Add($"Không thể thêm quá {product.Quantity} sản phẩm vào giỏ hàng.", Severity.Error);
+                    return;
+                }
             }
             else
             {
