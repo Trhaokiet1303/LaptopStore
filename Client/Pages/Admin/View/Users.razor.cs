@@ -122,7 +122,7 @@ namespace LaptopStore.Client.Pages.Admin.View
 
             var currentUserRole = _currentUser?.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (currentUserRole == "Basic")
+            if (currentUserRole != "Administrator")
             {
                 _snackBar.Add(_localizer["Người dùng không được phép quản lý vai trò."], Severity.Error);
                 return;
@@ -134,25 +134,15 @@ namespace LaptopStore.Client.Pages.Admin.View
 
 
         private async Task DeleteUserAsync(string userId)
-        {
-            // Get the current user's role from ClaimsPrincipal
-            var currentUserRole = _currentUser?.FindFirst(ClaimTypes.Role)?.Value;
+        { 
+            var ordersExist = await CheckIfUserHasOrdersAsync(userId);
 
-            // If the current user is an admin, skip the order check
-            bool isAdmin = currentUserRole == "Administrator"; // Adjust "Admin" to the actual role name used in your app
-
-            // If the user is not an admin, check if they have orders
-            if (!isAdmin)
+            if (ordersExist)
             {
-                var ordersExist = await CheckIfUserHasOrdersAsync(userId);
-                if (ordersExist)
-                {
-                    _snackBar.Add(_localizer["Người dùng không thể bị xóa vì họ có đơn hàng."], Severity.Error);
-                    return;
-                }
+                _snackBar.Add(_localizer["Không thể xóa tài khoản này vì có đơn hàng."], Severity.Error);
+                return;
             }
 
-            // Proceed with deletion if no orders exist or if the user is an admin
             var confirmDelete = await _dialogService.ShowMessageBox(
                 _localizer["Confirm Deletion"],
                 _localizer["Are you sure you want to delete this user?"],
@@ -165,7 +155,7 @@ namespace LaptopStore.Client.Pages.Admin.View
                 var response = await _userManager.DeleteUserAsync(userId);
                 if (response.Succeeded)
                 {
-                    _snackBar.Add(_localizer["Người dùng tạm thời bị vô hiệu hóa"], Severity.Success);
+                    _snackBar.Add(_localizer["Tài khoản đã được vô hiệu hóa"], Severity.Success);
                     await GetUsersAsync();
                 }
                 else

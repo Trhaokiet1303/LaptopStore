@@ -2,7 +2,6 @@ using LaptopStore.Application.Extensions;
 using LaptopStore.Infrastructure.Extensions;
 using LaptopStore.Server.Extensions;
 using LaptopStore.Server.Middlewares;
-using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
-using LaptopStore.Server.Filters;
 using LaptopStore.Server.Managers.Preferences;
 using Microsoft.Extensions.Localization;
 
@@ -51,8 +49,6 @@ namespace LaptopStore.Server
             services.AddSharedInfrastructure(_configuration);
             services.RegisterSwagger();
             services.AddInfrastructureMappings();
-            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddHangfireServer();
             services.AddControllers().AddValidators();
             services.AddRazorPages();
             services.AddApiVersioning(config =>
@@ -81,11 +77,7 @@ namespace LaptopStore.Server
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseHangfireDashboard("/jobs", new DashboardOptions
-            {
-                DashboardTitle = localizer["Jobs"],
-                Authorization = new[] { new HangfireAuthorizationFilter() }
-            });
+            
             app.UseEndpoints();
             app.ConfigureSwagger();
             app.Initialize(_configuration);

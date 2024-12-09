@@ -13,11 +13,11 @@ using LaptopStore.Application.Interfaces.Services.Identity;
 using LaptopStore.Application.Requests.Identity;
 using LaptopStore.Application.Requests.Mail;
 using LaptopStore.Application.Responses.Identity;
+using LaptopStore.Domain.Entities.Catalog;
 using LaptopStore.Infrastructure.Models.Identity;
 using LaptopStore.Infrastructure.Specifications;
 using LaptopStore.Shared.Constants.Role;
 using LaptopStore.Shared.Wrapper;
-using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -101,7 +101,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                             Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>Nhấp vào đây</a>."], verificationUri),
                             Subject = _localizer["Xác nhận đăng ký tài khoản"]
                         };
-                        BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
+                        await Task.Run(() => _mailService.SendAsync(mailRequest));
                         return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký. Kiểm tra email để xác nhận đăng ký!"], user.UserName));
                     }
                     return await Result<string>.SuccessAsync(user.Id, string.Format(_localizer["Người dùng {0} đã được đăng ký."], user.UserName));
@@ -261,7 +261,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 Subject = _localizer["Đặt lại mật khẩu"],
                 To = request.Email
             };
-            BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
+            await Task.Run(() => _mailService.SendAsync(mailRequest));
             return await Result.SuccessAsync(_localizer["Đã gửi email đặt lại mật khẩu đến email của bạn."]);
         }
 
@@ -298,6 +298,21 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 return await Result.FailAsync(_localizer["Người dùng không tồn tại."]);
             }
 
+            if (!user.EmailConfirmed && !user.IsActive)
+            {
+                return await Result.FailAsync(_localizer["Không thể xóa tài khoản này vì cả Email xác nhận và trạng thái hoạt động đều không hợp lệ."]);
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return await Result.FailAsync(_localizer["Không thể xóa tài khoản này vì Email chưa được xác nhận."]);
+            }
+
+            if (!user.IsActive)
+            {
+                return await Result.FailAsync(_localizer["Không thể xóa tài khoản này vì tài khoản không hoạt động."]);
+            }
+
             var isAdmin = await _userManager.IsInRoleAsync(user, RoleConstants.AdministratorRole);
             if (isAdmin)
             {
@@ -305,6 +320,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
 
             user.EmailConfirmed = false;
+            user.IsActive = false;
             var updateResult = await _userManager.UpdateAsync(user);
 
             if (updateResult.Succeeded)

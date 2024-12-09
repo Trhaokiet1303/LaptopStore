@@ -16,7 +16,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
-using Hangfire;
 using LaptopStore.Application.Requests.Mail;
 using MediatR;
 using LaptopStore.Application.Interfaces.Services;
@@ -72,7 +71,7 @@ namespace LaptopStore.Infrastructure.Services.Identity
                     Body = string.Format(_localizer["Xác nhận tài khoản của bạn <a href='{0}'>Nhấp vào đây</a>."], verificationUri),
                     Subject = _localizer["Xác nhận đăng ký tài khoản"]
                 };
-                BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
+                await Task.Run(() => _mailService.SendAsync(mailRequest));
 
                 return await Result<TokenResponse>.FailAsync(_localizer["E-Mail chưa xác nhận. Một email xác nhận đã được gửi lại."]);
             }
