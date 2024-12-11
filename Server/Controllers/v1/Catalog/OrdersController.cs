@@ -98,6 +98,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
                     ProductPrice = item.ProductPrice,
                     ProductImage = item.ProductImage,
                     Quantity = item.Quantity,
+                    IsRated = item.IsRated,
                     TotalPrice = item.TotalPrice
                 }).ToList()
             };

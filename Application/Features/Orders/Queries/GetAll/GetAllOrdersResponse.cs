@@ -31,7 +31,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
         public int TotalPrice { get; set; }
         public int OrderId { get; set; }
         public int Instock { get; set; }
-
+        public bool IsRated { get; set; }
+        public decimal Rate { get; set; }
 
         [JsonIgnore]
         public Order Order { get; set; }

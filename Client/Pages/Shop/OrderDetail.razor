@@ -76,6 +76,13 @@
                                                 <MudText Class="productinfo">Số lượng: @item.Quantity</MudText>
                                             </div>
                                         </MudItem>
+                                        @if (order.StatusOrder == "Đã Giao")
+                                        {
+                                            <MudButton OnClick="@( () => InvokeModal(item.ProductId, item.Id))">
+                                                @(item.IsRated ? "Đánh giá lại" : "Đánh giá sản phẩm")
+                                            </MudButton>
+
+                                        }
                                     }
                                 </div>
 
@@ -88,6 +95,7 @@
                                     <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
 
                                 </MudGrid>
+                                
                                 <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
                                            OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
                                     Hủy đơn hàng

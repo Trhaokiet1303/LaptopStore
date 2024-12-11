@@ -132,21 +132,6 @@
             </MudItem>
         </MudGrid>
     </MudPaper>
-    <MudPaper Class="rating-product-container" Elevation="1">
-        <MudText Typo="Typo.h6" Class="product-policy-h3">Đánh giá sản phẩm</MudText>
-        <div class="rating-container">
-            @for (int i = 5; i >= 1; i--)
-            {
-                <input type="radio" id="star-@i" name="rating" value="@i" @onchange="HandleRatingChange" />
-                <label for="star-@i" class="star-label">★</label>
-                <span class="rating-text">@GetRatingText(i)</span>
-            }
-        </div>
-        <MudButton Class="button-rating" OnClick="SubmitRating">
-            Đánh giá
-        </MudButton>
-    </MudPaper>
-   
 </MudContainer>
 
 <br />

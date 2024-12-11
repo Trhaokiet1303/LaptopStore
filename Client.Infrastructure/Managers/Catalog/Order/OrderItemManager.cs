@@ -9,6 +9,9 @@ using LaptopStore.Application.Features.OrderItems.Commands.AddEdit;
 using LaptopStore.Application.Requests.Catalog;
 using LaptopStore.Application.Features.Products.Queries.GetProductById;
 using LaptopStore.Application.Features.Orders.Queries.GetById;
+using LaptopStore.Application.Features.Orders.Commands.Update;
+using LaptopStore.Client.Infrastructure.Routes;
+using LaptopStore.Application.Features.OrderItems.Commands.Update;
 
 namespace LaptopStore.Client.Infrastructure.Managers.Catalog.OrderItem
 {
@@ -39,15 +42,15 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.OrderItem
             return await response.ToResult<List<GetAllOrderItemsResponse>>();
         }
 
-        //public async Task<IResult> SaveAsync(AddEditOrderItemCommand request)
-        //{
-        //    var response = await _httpClient.PostAsJsonAsync(Routes.OrderItemsEndpoints.Save, request);
-        //    return await response.ToResult();
-        //}
         public async Task<IResult<int>> SaveAsync(AddEditOrderItemCommand request)
         {
             var response = await _httpClient.PostAsJsonAsync("api/v1/orderitems/add-edit", request);
             return await response.ToResult<int>();
+        }
+        public async Task<IResult> UpdateIsRatedAsync(UpdateIsRatedCommand command)
+        {
+            var response = await _httpClient.PostAsJsonAsync(OrderItemsEndpoints.UpdateIsRated, command);
+            return await response.ToResult();
         }
 
     }

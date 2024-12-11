@@ -31,6 +31,10 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
         [Required]
         public int Quantity { get; set; }
         [Required]
+        public bool IsRated { get; set; }
+        [Required]
+        public decimal Rate { get; set; }
+        [Required]
         public int TotalPrice { get; set; }
         [Required]
         public int OrderId { get; set; }
@@ -94,6 +98,8 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
                     orderItem.ProductName = command.ProductName ?? orderItem.ProductName;
                     orderItem.ProductPrice = (command.ProductPrice == 0) ? orderItem.ProductPrice : command.ProductPrice;
                     orderItem.Quantity = (command.Quantity == 0) ? orderItem.Quantity : command.Quantity;
+                    orderItem.IsRated = (command.IsRated == false) ? orderItem.IsRated : command.IsRated;
+                    orderItem.Rate = (command.Rate == 0) ? orderItem.Rate : command.Rate;
                     orderItem.OrderId = (command.OrderId == 0) ? orderItem.OrderId : command.OrderId;
                     orderItem.TotalPrice = command.Quantity * command.ProductPrice;
 

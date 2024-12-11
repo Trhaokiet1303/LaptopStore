@@ -67,6 +67,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                             item.Quantity = item.Quantity;
                             item.TotalPrice = item.Quantity * item.ProductPrice;
                             item.Instock = product.Quantity;
+                            item.IsRated = item.IsRated;
+                            item.Rate = item.Rate;
                             item.ProductImage = product.ImageDataURL;
 
                             totalOrderPrice += item.TotalPrice;
@@ -78,6 +80,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
                             item.Quantity = 0;
                             item.TotalPrice = 0;
                             item.Instock = 0;
+                            item.IsRated = false;
+                            item.Rate = 0;
                             item.ProductImage = null;
                         }
                     }

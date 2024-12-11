@@ -15,6 +15,8 @@ using LaptopStore.Application.Features.Orders.Commands.AddEdit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using LaptopStore.Infrastructure.Models.Identity;
+using LaptopStore.Application.Features.Orders.Commands.Update;
+using LaptopStore.Application.Features.OrderItems.Commands.Update;
 
 namespace LaptopStore.Server.Controllers.v1.Catalog
 {
@@ -77,6 +79,12 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await _mediator.Send(new DeleteOrderItemCommand { Id = id }));
+        }
+        [HttpPost("update-is-rated")]
+        public async Task<IActionResult> UpdateIsRated(UpdateIsRatedCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

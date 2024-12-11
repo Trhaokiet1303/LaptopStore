@@ -59,7 +59,6 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
         {
             Order order = null;
 
-            // Only find the order if the command is to edit (Id > 0)
             if (command.Id != 0)
             {
                 order = await _unitOfWork.Repository<Order>().GetByIdAsync(command.Id);
@@ -126,6 +125,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                         ProductImage = item.ProductImage,
                         ProductPrice = item.ProductPrice,
                         Quantity = item.Quantity,
+                        IsRated = item.IsRated,
                         TotalPrice = item.ProductPrice * item.Quantity
                     }).ToList()
                 };
@@ -138,10 +138,8 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
             {
                 if (order != null)
                 {
-                    // Initialize OrderItem if null
                     order.OrderItem = order.OrderItem ?? new List<OrderItem>();
 
-                    // Update order details
                     order.UserId = command.UserId ?? order.UserId;
                     order.UserAddress = command.UserAddress ?? order.UserAddress;
                     order.UserName = command.UserName ?? order.UserName;
@@ -150,7 +148,6 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                     order.StatusOrder = command.StatusOrder ?? order.StatusOrder;
                     order.IsPayment = command.IsPayment;
 
-                    // Recalculate total price
                     totalPrice = command.OrderItem.Any() ? command.OrderItem.Sum(item => item.ProductPrice * item.Quantity) : 0;
 
                     order.TotalPrice = totalPrice;
@@ -173,6 +170,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
                                     ProductImage = item.ProductImage,
                                     ProductPrice = item.ProductPrice,
                                     Quantity = item.Quantity,
+                                    IsRated = item.IsRated,
                                     TotalPrice = item.ProductPrice * item.Quantity
                                 });
                             }

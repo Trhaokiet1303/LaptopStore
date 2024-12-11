@@ -27,6 +27,8 @@ namespace LaptopStore.Domain.Entities.Catalog
         public string ProductImage { get; set; }
         public int Quantity { get; set; }
         public int TotalPrice { get; set; }
+        public bool IsRated { get; set; }
+        public decimal Rate { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
     }

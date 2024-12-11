@@ -60,6 +60,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                         ProductPrice = orderItem.ProductPrice,
                         Quantity = orderItem.Quantity,
                         TotalPrice = orderItem.TotalPrice,
+                        IsRated = orderItem.IsRated,
                     };
                     await LoadImageAsync();
                 }
@@ -120,7 +121,8 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                             ProductName = existingOrderItem.ProductName,
                             ProductPrice = existingOrderItem.ProductPrice,
                             Quantity = AddEditOrderItemModel.Quantity,
-                            TotalPrice = AddEditOrderItemModel.Quantity * existingOrderItem.ProductPrice
+                            TotalPrice = AddEditOrderItemModel.Quantity * existingOrderItem.ProductPrice,
+                            IsRated = existingOrderItem.IsRated,
                         };
 
                         var updateResponse = await OrderItemManager.SaveAsync(updateCommand);
@@ -178,7 +180,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
                 else
                 {
-                    // Add new order item
                     var response = await OrderItemManager.SaveAsync(AddEditOrderItemModel);
                     if (response.Succeeded)
                     {

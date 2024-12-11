@@ -30,6 +30,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
         public int Quantity { get; set; }
         public int TotalPrice { get; set; }
         public int Instock { get; set; }
+        public bool IsRated { get; set; }
+        public decimal Rate { get; set; }
         public int OrderId { get; set; }
 
         [JsonIgnore]

@@ -11,6 +11,8 @@ namespace LaptopStore.Application.Requests.Catalog
         public string ProductImage { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public int TotalPrice { get; set; }
+        public bool IsRated { get; set; }
+        public decimal Rate { get; set; }
     }
 
 }

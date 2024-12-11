@@ -55,6 +55,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
                         item.ProductPrice = product.Price;
                         item.Quantity = orderItems.FirstOrDefault(c => c.ProductId == item.ProductId)?.Quantity ?? 0;
                         item.Instock = product.Quantity;
+                        item.IsRated = item.IsRated;
+                        item.Rate = item.Rate;
                         item.TotalPrice = item.Quantity * item.ProductPrice;
                         item.ProductImage = product.ImageDataURL;
 
@@ -67,6 +69,8 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
                         item.Quantity = 0;
                         item.Instock = 0;
                         item.TotalPrice = 0;
+                        item.IsRated = false;
+                        item.Rate = 0;
                     }
                 }
             }

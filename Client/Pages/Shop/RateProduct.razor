@@ -1,0 +1,201 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<RateProduct> _localizer
+
+<MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+    <DialogContent>
+        <MudGrid>
+            <!-- Hình ảnh sản phẩm -->
+            <MudItem xs="12" md="6">
+                <img class="img-product" src="@(Product.ImageDataURL)" Square="true" />
+                <MudText Class="product-name-dialog">@Product.Name</MudText>
+                <MudText Class="product-price-dialog">@Product.Price.ToString("N0") đ</MudText>
+            </MudItem>
+
+            <!-- Thông số kỹ thuật -->
+            <MudItem xs="12" md="6">
+                <MudText Typo="Typo.h5" GutterBottom="true">Thông số kỹ thuật</MudText>
+                <div class="specifications">
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2" Class="spec-title">Màn hình</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Chi tiết:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Screen</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2" Class="spec-title">Bộ xử lý & Đồ họa</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Loại CPU:</MudText>
+                        <MudText Typo="Typo.body2">@Product.CPU</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Loại card đồ họa:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Card</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2" Class="spec-title">Bộ nhớ RAM, Ổ cứng</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Dung lượng RAM:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Ram</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Ổ cứng:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Rom</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2" Class="spec-title">Thông số khác</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Trọng lượng:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Weight</MudText>
+                    </div>
+                    <div class="spec-row">
+                        <MudText Typo="Typo.body2">Pin:</MudText>
+                        <MudText Typo="Typo.body2">@Product.Battery</MudText>
+                    </div>
+                </div>
+            </MudItem>
+
+
+            <MudItem xs="12">
+                <MudPaper Class="rating-product-container centered-rating" Elevation="1">
+                    <MudText Typo="Typo.h6" Class="product-policy-h3">Đánh giá sản phẩm</MudText>
+                    <div class="rating-container">
+                        @for (int i = 5; i >= 1; i--)
+                        {
+                            <input type="radio" id="star-@i" name="rating" value="@i"
+                                   checked="@(_selectedRating == i)" @onchange="HandleRatingChange" />
+                            <label for="star-@i" class="star-label">★</label>
+                        }
+                    </div>
+
+                    <MudButton Class="button-rating" OnClick="SubmitRating">
+                        Đánh giá
+                    </MudButton>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+
+<style>
+    .original-price {
+        color: #b0b0b0;
+        text-decoration: line-through;
+        margin-bottom: 8px;
+    }
+
+    .quantity-field {
+        margin-top: 16px;
+        width: 50px;
+    }
+
+    .add-to-cart-btn {
+        margin-top: 16px;
+        width: 100%;
+    }
+
+    .img-product {
+        width: 100%;
+        height: 300px;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+        .img-product:hover {
+            transform: scale(1.02);
+        }
+
+    .product-rating {
+        font-size: 14px;
+        color: #ff9800;
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+        .product-rating svg {
+            margin-right: 5px;
+        }
+
+    .product-name-dialog {
+        font-weight: bolder;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .product-price-dialog {
+        color: red;
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .specifications {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .spec-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+    .spec-title {
+        font-weight: bold;
+        margin-top: 12px;
+    }
+
+    .centered-rating {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 24px auto;
+        padding: 16px;
+    }
+
+    .rating-container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        align-items: center;
+        margin-top: 16px;
+        gap: 8px; /* Khoảng cách giữa các ngôi sao */
+    }
+
+    .star-label {
+        font-size: 2rem;
+        color: gold;
+        cursor: pointer;
+        margin: 0 4px;
+        transition: transform 0.2s ease;
+    }
+
+        .star-label:hover {
+            transform: scale(1.2);
+        }
+
+    .rating-text {
+        font-size: 1rem;
+        color: #555;
+        margin-left: 8px;
+    }
+
+    .button-rating {
+        margin-top: 16px;
+        font-weight: bold;
+    }
+
+
+</style>

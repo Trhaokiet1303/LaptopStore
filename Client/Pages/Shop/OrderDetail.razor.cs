@@ -1,5 +1,8 @@
 ﻿using LaptopStore.Application.Features.Orders.Commands.Update;
 using LaptopStore.Application.Features.Orders.Queries.GetAll;
+using LaptopStore.Application.Features.Products.Queries.GetAllPaged;
+using LaptopStore.Application.Features.Products.Queries.GetProductById;
+using LaptopStore.Application.Requests.Catalog;
 using LaptopStore.Client.Extensions;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Order;
 using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
@@ -8,13 +11,11 @@ using LaptopStore.Domain.Entities.Catalog;
 using LaptopStore.Shared.Constants.Application;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace LaptopStore.Client.Pages.Shop
@@ -25,8 +26,9 @@ namespace LaptopStore.Client.Pages.Shop
         [Inject] private AuthenticationStateProvider AuthenticationProvider { get; set; }
         [Inject] private IJSRuntime JSRuntime { get; set; }
         [Inject] private IProductManager ProductManager { get; set; }
-        [Inject] private IJSRuntime JS { get; set; }
+        [Inject] private NavigationManager Navigation { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
+        private IEnumerable<GetAllPagedProductsResponse> _pagedData;
 
         private bool IsLoading { get; set; }
         private List<GetAllOrdersResponse> Orders { get; set; } = new();
@@ -35,8 +37,9 @@ namespace LaptopStore.Client.Pages.Shop
         protected override async Task OnInitializedAsync()
         {
             IsLoading = true;
-            SelectedStatus = ""; 
+            SelectedStatus = "";
             await LoadOrdersAsync(SelectedStatus);
+            await LoadData(0, int.MaxValue, new TableState());
             IsLoading = false;
         }
 
@@ -45,13 +48,11 @@ namespace LaptopStore.Client.Pages.Shop
         private async Task FilterDeliveredOrders() => await FilterOrdersByStatusAsync("Đã giao");
         private async Task FilterCanceledOrders() => await FilterOrdersByStatusAsync("Đã hủy");
 
-
         private async Task FilterOrdersByStatusAsync(string status)
         {
-            SelectedStatus = status; // Cập nhật trạng thái đã chọn
+            SelectedStatus = status;
             IsLoading = true;
 
-            // Lấy trạng thái đăng nhập và ID người dùng
             var state = await AuthenticationProvider.GetAuthenticationStateAsync();
             var user = state.User;
             var userId = user.GetUserId();
@@ -63,30 +64,23 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            // Lấy danh sách đơn hàng từ server
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
                 Orders = result.Data
-                               .Where(o => o.UserId == userId &&
-                                           (string.IsNullOrEmpty(status) ||
-                                            string.Equals(o.StatusOrder, status, StringComparison.OrdinalIgnoreCase)))
-                               .ToList();
-
-                if (!Orders.Any())
-                {
-                    _snackBar.Add("Không có đơn hàng phù hợp với trạng thái đã chọn.", Severity.Warning);
-                }
+                            .Where(o => o.UserId == userId &&
+                                        (string.IsNullOrEmpty(status) ||
+                                        string.Equals(o.StatusOrder, status, StringComparison.OrdinalIgnoreCase)))
+                            .ToList();
             }
             else
             {
-                Orders.Clear(); // Nếu không thành công, xóa danh sách hiện tại
+                Orders.Clear();
                 await JSRuntime.InvokeVoidAsync("alert", "Không thể tải danh sách đơn hàng!");
             }
 
             IsLoading = false;
         }
-
 
         private async Task LoadOrdersAsync(string status = "")
         {
@@ -103,7 +97,6 @@ namespace LaptopStore.Client.Pages.Shop
             var result = await OrderManager.GetAllAsync();
             if (result.Succeeded)
             {
-                // Hiển thị tất cả đơn hàng khi không có status hoặc lọc theo trạng thái
                 Orders = result.Data
                                .Where(o => o.UserId == userId &&
                                            (string.IsNullOrEmpty(status) || o.StatusOrder == status))
@@ -115,10 +108,8 @@ namespace LaptopStore.Client.Pages.Shop
             }
         }
 
-
         private async Task ConfirmCancelOrder(int orderId, string currentStatus)
         {
-            // Prevent canceling if the order is already "Đã Hủy", "Đang giao" or "Đã giao"
             if (currentStatus == "Đã Hủy")
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Bạn đã hủy đơn hàng này rồi!");
@@ -131,13 +122,12 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            // Show a confirmation dialog for cancellation
             var parameters = new DialogParameters
-    {
-        { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
-        { "ButtonText", "Xác nhận" },
-        { "Color", Color.Error }
-    };
+            {
+                { "ContentText", "Bạn có chắc chắn muốn hủy đơn hàng này không?" },
+                { "ButtonText", "Xác nhận" },
+                { "Color", Color.Error }
+            };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
             var dialog = DialogService.Show<ConfirmationDialog>("Xác nhận hủy đơn hàng", parameters, options);
@@ -166,26 +156,7 @@ namespace LaptopStore.Client.Pages.Shop
 
             if (response.Succeeded)
             {
-                if (newStatus == "Đã Hủy")
-                {
-                    var orderResponse = await OrderManager.GetOrderByIdAsync(orderId);
-                    if (orderResponse.Succeeded && orderResponse.Data != null)
-                    {
-                        foreach (var item in orderResponse.Data.OrderItem)
-                        {
-                            var updateResult = await ProductManager.UpdateProductQuantityAsync(item.ProductId, item.Instock + item.Quantity);
-
-                            if (!updateResult.Succeeded)
-                            {
-                                await JS.InvokeVoidAsync("alert", $"Lỗi khi cập nhật lại số lượng sản phẩm {item.ProductName}. Vui lòng thử lại!");
-                                break;
-                            }
-                        }
-                    }
-                }
-
                 _snackBar.Add("Trạng thái đơn hàng đã được cập nhật thành công!", Severity.Success);
-
                 await LoadOrdersAsync();
             }
             else
@@ -196,5 +167,65 @@ namespace LaptopStore.Client.Pages.Shop
             IsLoading = false;
         }
 
+        private async Task LoadData(int pageNumber, int pageSize, TableState state)
+        {
+            var request = new GetAllPagedProductsRequest
+            {
+                PageNumber = pageNumber + 1,
+                PageSize = pageSize,
+                SearchString = _searchString
+            };
+            var response = await ProductManager.GetProductsAsync(request);
+            if (response.Succeeded)
+            {
+                _pagedData = response.Data;
+                _totalItems = response.TotalCount;
+            }
+        }
+        private int _totalItems;
+        private int _currentPage;
+        private string _searchString = "";
+
+        private async Task InvokeModal(int id = 0, int orderitemid = 0)
+        {
+            var parameters = new DialogParameters();
+            if (id != 0)
+            {
+                var product = _pagedData.FirstOrDefault(c => c.Id == id);
+                if (product != null)
+                {
+                    parameters.Add(nameof(RateProduct.Product), new GetProductByIdResponse
+                    {
+                        ImageDataURL = product.ImageDataURL,
+                        Id = product.Id,
+                        Name = product.Name,
+                        Price = product.Price,
+                        CPU = product.CPU,
+                        Screen = product.Screen,
+                        Card = product.Card,
+                        Ram = product.Ram,
+                        Rom = product.Rom,
+                        Battery = product.Battery,
+                        Weight = product.Weight,
+                        Description = product.Description,
+                        Rate = product.Rate,
+                        Barcode = product.Barcode,
+                    });
+                }
+            }
+            parameters.Add("OrderItemId", orderitemid);
+
+            var options = new DialogOptions
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+                DisableBackdropClick = true
+
+            };
+
+            var dialog = _dialogService.Show<RateProduct>("Thông tin sản phẩm", parameters, options);
+            var result = await dialog.Result;
+        }
     }
 }
