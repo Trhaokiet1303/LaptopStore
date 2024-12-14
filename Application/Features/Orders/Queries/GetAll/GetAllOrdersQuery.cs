@@ -51,7 +51,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetAll
             foreach (var order in mappedOrders)
             {
                 var orderItemsForOrder = orderItems.Where(oi => oi.OrderId == order.Id).ToList();
-                int totalOrderPrice = 0;
+                long totalOrderPrice = 0;
 
                 if (orderItemsForOrder.Any())
                 {

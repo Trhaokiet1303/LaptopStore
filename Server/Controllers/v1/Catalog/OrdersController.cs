@@ -32,23 +32,22 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            // Lấy thông tin user hiện tại
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return Unauthorized();
             }
-            var userId = user.Id;
-            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.Orders.View);
 
-            if (!hasPermission)
-            {
-                return Forbid(); 
-            }
+            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
+
             var ordersQuery = new GetAllOrdersQuery
             {
-                UserId = userId
+                UserId = isAdmin ? null : user.Id 
             };
-            return Ok(await _mediator.Send(ordersQuery));
+
+            var result = await _mediator.Send(ordersQuery);
+            return Ok(result);
         }
 
         [Authorize]
@@ -60,16 +59,13 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             {
                 return Unauthorized();
             }
-            var userId = user.Id;
-            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.Orders.View);
-            if (!hasPermission)
-            {
-                return Forbid();
-            }
+
+            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
+
             var orderQuery = new GetOrderByIdQuery
             {
                 Id = id,
-                UserId = userId
+                UserId = isAdmin ? null : user.Id
             };
             return Ok(await _mediator.Send(orderQuery));
         }
@@ -86,7 +82,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         [HttpPost("create-order")]
         public async Task<IActionResult> Post(Domain.Entities.Catalog.Order command)
         {
-            int totalPrice = command.OrderItem.Sum(item => item.TotalPrice);
+            long totalPrice = command.OrderItem.Sum(item => item.TotalPrice);
 
             var addEditOrderCommand = new AddEditOrderCommand
             {

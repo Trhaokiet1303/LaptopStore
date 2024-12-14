@@ -42,7 +42,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
             var orderItems = await _unitOfWork.Repository<OrderItem>().Entities
                 .Where(c => c.OrderId == order.Id)
                 .ToListAsync();
-            int totalOrderPrice = 0;
+            long totalOrderPrice = 0;
             if (orderItems.Any())
             {
                 mappedOrder.OrderItem = _mapper.Map<List<GetOrderItemByIdResponse>>(orderItems);

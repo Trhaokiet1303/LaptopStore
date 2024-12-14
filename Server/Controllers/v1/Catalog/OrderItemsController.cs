@@ -38,18 +38,10 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             {
                 return Unauthorized();
             }
-
-            var userId = user.Id;
-            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.OrderItems.View);
-
-            if (!hasPermission)
-            {
-                return Forbid();
-            }
-
+            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
             var ordersQuery = new GetAllOrdersQuery
             {
-                UserId = userId
+                UserId = isAdmin ? null : user.Id
             };
 
             return Ok(await _mediator.Send(ordersQuery));
@@ -64,23 +56,15 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             {
                 return Unauthorized();
             }
-
-            var userId = user.Id;
-            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.OrderItems.View);
-
-            if (!hasPermission)
-            {
-                return Forbid();
-            }
-
+            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
             var orderItemQuery = new GetOrderItemByIdQuery
             {
                 Id = id,
-                UserId = userId
+                UserId = isAdmin ? null : user.Id
             };
-
             return Ok(await _mediator.Send(orderItemQuery));
         }
+
 
 
         [Authorize(Policy = Permissions.OrderItems.Create)]

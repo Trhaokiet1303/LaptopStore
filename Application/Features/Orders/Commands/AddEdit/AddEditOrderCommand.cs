@@ -30,7 +30,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.AddEdit
         public List<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
 
         [Required]
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
 
         [Required]
         public string MethodPayment { get; set; }

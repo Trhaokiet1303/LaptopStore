@@ -35,7 +35,7 @@ namespace LaptopStore.Application.Features.OrderItems.Commands.AddEdit
         [Required]
         public decimal Rate { get; set; }
         [Required]
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
         [Required]
         public int OrderId { get; set; }
         public Order Order { get; set; }

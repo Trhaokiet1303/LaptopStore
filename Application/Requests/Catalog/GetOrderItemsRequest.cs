@@ -10,7 +10,7 @@ namespace LaptopStore.Application.Requests.Catalog
         public int ProductPrice { get; set; }
         public string ProductImage { get; set; } = string.Empty;
         public int Quantity { get; set; }
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
         public bool IsRated { get; set; }
         public decimal Rate { get; set; }
     }

@@ -182,26 +182,9 @@ namespace LaptopStore.Infrastructure.Services.Identity
                 var role = await _roleManager.FindByIdAsync(request.RoleId);
                 if (role.Name == RoleConstants.AdministratorRole)
                 {
-                    var currentUser = await _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId);
-                    if (await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
-                    {
-                        return await Result<string>.FailAsync(_localizer["Không được phép sửa đổi quyền cho vai trò này."]);
-                    }
+                    return await Result<string>.FailAsync(_localizer["Không được phép sửa đổi quyền của vai trò Administrator."]);
                 }
-
                 var selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
-                if (role.Name == RoleConstants.AdministratorRole)
-                {
-                    if (!selectedClaims.Any(x => x.Value == Permissions.Roles.View)
-                       || !selectedClaims.Any(x => x.Value == Permissions.RoleClaims.View)
-                       || !selectedClaims.Any(x => x.Value == Permissions.RoleClaims.Edit))
-                    {
-                        return await Result<string>.FailAsync(string.Format(
-                            _localizer["Không được phép bỏ chọn {0} hoặc {1} hoặc {2} cho Vai trò này."],
-                            Permissions.Roles.View, Permissions.RoleClaims.View, Permissions.RoleClaims.Edit));
-                    }
-                }
-
                 var claims = await _roleManager.GetClaimsAsync(role);
                 foreach (var claim in claims)
                 {
@@ -215,7 +198,6 @@ namespace LaptopStore.Infrastructure.Services.Identity
                         errors.AddRange(addResult.Errors.Select(e => _localizer[e.Description].ToString()));
                     }
                 }
-
                 var addedClaims = await _roleClaimService.GetAllByRoleIdAsync(role.Id);
                 if (addedClaims.Succeeded)
                 {

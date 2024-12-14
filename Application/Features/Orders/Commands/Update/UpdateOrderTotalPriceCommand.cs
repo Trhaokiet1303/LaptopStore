@@ -12,7 +12,7 @@ namespace LaptopStore.Application.Features.Orders.Commands.Update
     public class UpdateOrderTotalPriceCommand : IRequest<Result<int>>
     {
         public int OrderId { get; set; }
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
 
         public class UpdateOrderTotalPriceCommandHandler : IRequestHandler<UpdateOrderTotalPriceCommand, Result<int>>
         {

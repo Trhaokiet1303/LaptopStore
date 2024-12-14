@@ -12,7 +12,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
         public string UserName { get; set; }
         public string UserPhone { get; set; }
         public string UserAddress { get; set; }
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
         public string MethodPayment { get; set; }
         public string StatusOrder { get; set; }
         public bool IsPayment { get; set; }
@@ -28,7 +28,7 @@ namespace LaptopStore.Application.Features.Orders.Queries.GetById
         public int ProductPrice { get; set; }
         public string ProductImage { get; set; }
         public int Quantity { get; set; }
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
         public int Instock { get; set; }
         public bool IsRated { get; set; }
         public decimal Rate { get; set; }
