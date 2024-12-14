@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Blazored.FluentValidation;
 using LaptopStore.Shared.Constants.Storage;
+using Microsoft.JSInterop;
+using System.Linq;
 
 namespace LaptopStore.Client.Pages.Identity
 {
@@ -17,7 +19,7 @@ namespace LaptopStore.Client.Pages.Identity
         private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
         private char _firstLetterOfName;
         private readonly UpdateProfileRequest _profileModel = new();
-
+        [Inject] private IJSRuntime JS { get; set; }
         public string UserId { get; set; }
 
         private async Task UpdateProfileAsync()
@@ -28,6 +30,8 @@ namespace LaptopStore.Client.Pages.Identity
                 await _authenticationManager.Logout();
                 _snackBar.Add(_localizer["Cập nhật thành công. Đăng nhập lại để cập nhật."], Severity.Success);
                 _navigationManager.NavigateTo("/");
+                await JS.InvokeVoidAsync("eval", "location.reload();");
+
             }
             else
             {
@@ -36,6 +40,15 @@ namespace LaptopStore.Client.Pages.Identity
                     _snackBar.Add(message, Severity.Error);
                 }
             }
+        }
+
+        private bool IsPhoneNumberValid = true;
+
+        private void ValidatePhoneNumber()
+        {
+            IsPhoneNumberValid = !string.IsNullOrEmpty(_profileModel.PhoneNumber) &&
+                                 _profileModel.PhoneNumber.Length == 10 &&
+                                 _profileModel.PhoneNumber.All(char.IsDigit);
         }
 
         protected override async Task OnInitializedAsync()
@@ -86,6 +99,7 @@ namespace LaptopStore.Client.Pages.Identity
                     await _localStorage.SetItemAsync(StorageConstants.Local.UserImageURL, result.Data);
                     _snackBar.Add(_localizer["Đổi ảnh thành công."], Severity.Success);
                     _navigationManager.NavigateTo("/account", true);
+
                 }
                 else
                 {

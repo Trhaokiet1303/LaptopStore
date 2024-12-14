@@ -77,7 +77,6 @@
 
     private async Task Logout()
     {
-        // Đăng xuất thông qua SignalR hoặc các phương thức của bạn
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);

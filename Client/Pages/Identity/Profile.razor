@@ -25,7 +25,7 @@
                            Size="Size.Small"
                            StartIcon="@Icons.Filled.CloudUpload"
                            for="fileInput">
-                    @_localizer["Upload Image"]
+                    @_localizer["Đổi ảnh đại diện"]
                 </MudButton>
                 @if (!string.IsNullOrEmpty(@ImageDataUrl))
                 {
@@ -34,7 +34,7 @@
                                StartIcon="@Icons.Filled.Delete"
                                Size="Size.Small"
                                OnClick="DeleteAsync">
-                        @_localizer["Delete Image"]
+                        @_localizer["Xóa ảnh đại diện"]
                     </MudButton>
                 }
             </MudCardActions>
@@ -44,29 +44,45 @@
         <EditForm Model="@_profileModel" OnValidSubmit="UpdateProfileAsync">
             <FluentValidationValidator @ref="_fluentValidationValidator" />
             <MudCard Elevation="25">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText>@_localizer["Profile Details"]</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
                 <MudCardContent>
-                    <MudGrid>
+                    <MudGrid>            
                         <MudItem xs="12" md="6">
-                            <MudTextField @bind-Value="@_profileModel.FirstName" For="@(() => _profileModel.FirstName)" Label="@_localizer["First Name"]" Variant="Variant.Outlined" />
+                            <div class="input-group">
+                                <label>@_localizer["Họ"]</label>
+                                <MudTextField @bind-Value="@_profileModel.LastName" For="@(() => _profileModel.LastName)" Variant="Variant.Outlined" Style="width: 100%;" />
+                            </div>
                         </MudItem>
                         <MudItem xs="12" md="6">
-                            <MudTextField @bind-Value="@_profileModel.LastName" For="@(() => _profileModel.LastName)" Label="@_localizer["Last Name"]" Variant="Variant.Outlined" />
+                            <div class="input-group">
+                                <label>@_localizer["Tên"]</label>
+                                <MudTextField @bind-Value="@_profileModel.FirstName" For="@(() => _profileModel.FirstName)" Variant="Variant.Outlined" Style="width: 100%;" />
+                            </div>
                         </MudItem>
                         <MudItem xs="12" md="6">
-                            <MudTextField @bind-Value="@_profileModel.PhoneNumber" For="@(() => _profileModel.PhoneNumber)" Label="@_localizer["Phone Number"]" Variant="Variant.Outlined" />
+                            <div class="input-group">
+                                <label>@_localizer["Số điện thoại"]</label>
+                                <MudTextField @bind-Value="@_profileModel.PhoneNumber"
+                                              For="@(() => _profileModel.PhoneNumber)"
+                                              Variant="Variant.Outlined"
+                                              Style="width: 100%;"
+                                              InputType="InputType.Telephone"
+                                              Pattern="[0-9]{10}"
+                                              HelperText="@_localizer["Số điện thoại phải dài đúng 10 ký tự"]"
+                                              Error="!IsPhoneNumberValid"
+                                              ErrorText="@_localizer["Số điện thoại không hợp lệ"]"
+                                              OnBlur="@ValidatePhoneNumber" />
+                            </div>
                         </MudItem>
                         <MudItem xs="12" md="6">
-                            <MudTextField @bind-Value="@_profileModel.Email" Label="@_localizer["Email"]" For="@(() => _profileModel.Email)" Variant="Variant.Outlined" InputType="InputType.Email" Disabled=true />
+                            <div class="input-group">
+                                <label>@_localizer["Email"]</label>
+                                <MudTextField @bind-Value="@_profileModel.Email" For="@(() => _profileModel.Email)" Variant="Variant.Outlined" InputType="InputType.Email" Disabled="true" Style="width: 100%;" />
+                            </div>
                         </MudItem>
                     </MudGrid>
                 </MudCardContent>
                 <MudCardActions Class="pb-4 pl-4">
-                    <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Save Changes"]</MudButton>
+                    <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Lưu thay đổi"]</MudButton>
                 </MudCardActions>
             </MudCard>
         </EditForm>

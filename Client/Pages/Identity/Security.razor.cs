@@ -3,7 +3,7 @@ using MudBlazor;
 using System.Threading.Tasks;
 using Blazored.FluentValidation;
 
-namespace LaptopStore.Client.Pages.Admin.View
+namespace LaptopStore.Client.Pages.Identity
 {
     public partial class Security
     {

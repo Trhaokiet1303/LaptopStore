@@ -4,6 +4,7 @@ using MudBlazor;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.FluentValidation;
+using System.Linq;
 
 namespace LaptopStore.Client.Pages.Authentication
 {
@@ -12,35 +13,50 @@ namespace LaptopStore.Client.Pages.Authentication
         private FluentValidationValidator _fluentValidationValidator;
         private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
         private TokenRequest _tokenModel = new();
+        private ClaimsPrincipal _user;
+        private bool _isAdmin;
 
         protected override async Task OnInitializedAsync()
         {
             var state = await _stateProvider.GetAuthenticationStateAsync();
-            if (state?.User?.Identity?.IsAuthenticated != true)
+            _user = state?.User;
+            _isAdmin = !(_user?.IsInRole("Basic") ?? false);
+            if (_user?.Identity?.IsAuthenticated == true)
+            {
+                if (!_isAdmin)
+                {
+                    _navigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    _navigationManager.NavigateTo("/admin/dashboard"); 
+                }
+            }
+            else
             {
                 _navigationManager.NavigateTo("/login");
             }
         }
-
 
         private async Task SubmitAsync()
         {
             var result = await _authenticationManager.Login(_tokenModel);
             if (result.Succeeded)
             {
+                _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
                 var state = await _stateProvider.GetAuthenticationStateAsync();
-                var user = state?.User;
+                _user = state?.User;
+                _isAdmin = !(_user?.IsInRole("Basic") ?? false);
 
-                if (user != null && user.IsInRole("basic"))
+                if (!_isAdmin)
                 {
-                    _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
-                    _navigationManager.NavigateTo("/", true); 
+                    _navigationManager.NavigateTo("/"); 
                 }
                 else
                 {
-                    _snackBar.Add(string.Format(_localizer["Welcome {0}"], _tokenModel.Email), Severity.Success);
-                    _navigationManager.NavigateTo("/admin/dashboard", true);
+                    _navigationManager.NavigateTo("/admin/dashboard");
                 }
+                _navigationManager.NavigateTo(_navigationManager.Uri, true);
             }
             else
             {
@@ -51,14 +67,13 @@ namespace LaptopStore.Client.Pages.Authentication
             }
         }
 
-
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;
         private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
         void TogglePasswordVisibility()
         {
-            if(_passwordVisibility)
+            if (_passwordVisibility)
             {
                 _passwordVisibility = false;
                 _passwordInputIcon = Icons.Material.Filled.VisibilityOff;

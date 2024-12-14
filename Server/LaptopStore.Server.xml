@@ -4,10 +4,5 @@
         <name>LaptopStore.Server</name>
     </assembly>
     <members>
-        <member name="T:LaptopStore.Server.Controllers.BaseApiController`1">
-            <summary>
-            Abstract BaseApi Controller Class
-            </summary>
-        </member>
     </members>
 </doc>

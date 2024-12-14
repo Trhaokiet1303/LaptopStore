@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LaptopStore.Server.Controllers
 {
-    /// <summary>
-    /// Abstract BaseApi Controller Class
-    /// </summary>
+
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     public abstract class BaseApiController<T> : ControllerBase

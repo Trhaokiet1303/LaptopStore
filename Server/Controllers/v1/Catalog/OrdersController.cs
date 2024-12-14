@@ -28,7 +28,7 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
         }
 
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -38,16 +38,20 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
                 return Unauthorized();
             }
             var userId = user.Id;
-            var isAdmin = await _userManager.IsInRoleAsync(user, "Administrator");
+            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.Orders.View);
+
+            if (!hasPermission)
+            {
+                return Forbid(); 
+            }
             var ordersQuery = new GetAllOrdersQuery
             {
-                UserId = isAdmin ? null : userId
+                UserId = userId
             };
             return Ok(await _mediator.Send(ordersQuery));
         }
 
-
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -56,13 +60,16 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             {
                 return Unauthorized();
             }
-
             var userId = user.Id;
-            var isAdmin = await _userManager.IsInRoleAsync(user, "Administrator");
-
+            var hasPermission = User.HasClaim(c => c.Type == "Permission" && c.Value == Permissions.Orders.View);
+            if (!hasPermission)
+            {
+                return Forbid();
+            }
             var orderQuery = new GetOrderByIdQuery
-            { 
-                Id = id, UserId = isAdmin ? null : userId 
+            {
+                Id = id,
+                UserId = userId
             };
             return Ok(await _mediator.Send(orderQuery));
         }

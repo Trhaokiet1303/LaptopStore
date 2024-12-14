@@ -122,11 +122,12 @@ namespace LaptopStore.Client.Pages.Admin.View
 
             var currentUserRole = _currentUser?.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (currentUserRole != "Administrator")
+            if (currentUserRole != "Administrator" && currentUserRole != "ManagerUser")
             {
                 _snackBar.Add(_localizer["Người dùng không được phép quản lý vai trò."], Severity.Error);
                 return;
             }
+
 
             _navigationManager.NavigateTo($"/admin/user-roles/{userId}");
         }

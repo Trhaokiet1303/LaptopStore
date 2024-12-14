@@ -148,7 +148,7 @@
         });
         var state = await _stateProvider.GetAuthenticationStateAsync();
         _user = state?.User;
-        _isAdmin = _user?.IsInRole("Administrator") ?? false;
+        _isAdmin = !(_user?.IsInRole("Basic") ?? false);
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity.IsAuthenticated;
@@ -176,13 +176,11 @@
 
         if (segments.Length <= 1 || segments.Last() == "/")
         {
-            // Nếu đang ở trang chủ
             CurrentPage = "Trang chủ";
             IsHomePage = true;
         }
         else
         {
-            // Nếu không ở trang chủ
             CurrentPage = segments.Last().Replace("/", "").Replace("-", " ");
             IsHomePage = false;
         }
@@ -190,12 +188,10 @@
 
     public void Dispose()
     {
-        // Hủy đăng ký sự kiện khi component bị hủy
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
     private async Task Logout()
     {
-        // Đăng xuất thông qua SignalR hoặc các phương thức của bạn
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);

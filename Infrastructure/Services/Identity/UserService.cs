@@ -189,7 +189,8 @@ namespace LaptopStore.Infrastructure.Services.Identity
             }
             var roles = await _userManager.GetRolesAsync(user);
             var currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
-            if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
+            if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole) &&
+                !await _userManager.IsInRoleAsync(currentUser, RoleConstants.ManagerUserRole))
             {
                 return await Result.FailAsync(_localizer["Bạn không có quyền thực hiện thay đổi vai trò."]);
             }
@@ -203,6 +204,12 @@ namespace LaptopStore.Infrastructure.Services.Identity
             if (!selectedRoles.Any())
             {
                 return await Result.FailAsync(_localizer["Bạn phải chọn ít nhất một vai trò."]);
+            }
+
+            if (selectedRoles.Contains(RoleConstants.AdministratorRole) &&
+                !await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
+            {
+                return await Result.FailAsync(_localizer["Chỉ Quản trị viên mới được phép gán vai trò Administrator."]);
             }
 
             if (selectedRoles.Contains(RoleConstants.AdministratorRole) && selectedRoles.Count > 1)

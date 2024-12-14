@@ -127,3 +127,15 @@
     background-color: #0040fff9;
     color:whitesmoke;
 }
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 4px; 
+}
