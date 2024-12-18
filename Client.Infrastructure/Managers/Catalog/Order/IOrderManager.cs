@@ -15,6 +15,7 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
         Task<IResult<List<GetAllOrdersResponse>>> GetAllAsync();
         Task<IResult<List<GetAllOrdersResponse>>> GetAllForUserAsync();
         Task<IResult<GetOrderByIdResponse>> GetOrderByIdAsync(int orderId);
+        Task<IResult<GetOrderByIdResponse>> GetOrderByIdForUserAsync(int orderId);
         Task<IResult> SaveAsync(AddEditOrderCommand request);
         Task<IResult<int>> DeleteAsync(int id);
         Task<IResult> CreateOrderAsync(Domain.Entities.Catalog.Order orderRequest);

@@ -85,7 +85,6 @@ namespace LaptopStore.Client.Pages.Shop
 
                 var result = await ProductManager.GetProductByIdAsync(id);
 
-                // Kiểm tra nếu `result` không thành công hoặc `Data` là null
                 if (result == null)
                 {
                     Console.WriteLine("Kết quả trả về từ ProductManager.GetProductByIdAsync là null.");
@@ -99,7 +98,6 @@ namespace LaptopStore.Client.Pages.Shop
                     Console.WriteLine($"Dữ liệu sản phẩm đã tải thành công: Tên sản phẩm - {Product.Name}, Giá - {Product.Price}");
                     Snackbar.Add("Dữ liệu sản phẩm đã tải thành công!", Severity.Success);
 
-                    // Cập nhật giao diện để hiển thị dữ liệu
                     StateHasChanged();
                 }
                 else
@@ -119,11 +117,11 @@ namespace LaptopStore.Client.Pages.Shop
         {
             try
             {
-                var result = await OrderItemManager.GetOrderItemByIdAsync(OrderItemId);
+                var result = await OrderItemManager.GetOrderItemByIdForUserAsync(OrderItemId);
                 if (result.Succeeded && result.Data != null)
                 {
-                    _selectedRating = result.Data.Rate; // Lấy giá trị đánh giá từ OrderItem
-                    StateHasChanged(); // Cập nhật giao diện
+                    _selectedRating = result.Data.Rate;
+                    StateHasChanged();
                 }
                 else
                 {
