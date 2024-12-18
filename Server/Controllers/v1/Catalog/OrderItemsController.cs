@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using LaptopStore.Infrastructure.Models.Identity;
 using LaptopStore.Application.Features.Orders.Commands.Update;
 using LaptopStore.Application.Features.OrderItems.Commands.Update;
+using System.Collections.Generic;
 
 namespace LaptopStore.Server.Controllers.v1.Catalog
 {
@@ -29,43 +30,70 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        [Authorize]
-        [HttpGet]
+        [Authorize(Policy = Permissions.OrderItems.View)]
+        [HttpGet("admin/all")]
         public async Task<IActionResult> GetAll()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
-            var ordersQuery = new GetAllOrdersQuery
-            {
-                UserId = isAdmin ? null : user.Id
-            };
-
-            return Ok(await _mediator.Send(ordersQuery));
+            return Ok(await _mediator.Send(new GetAllOrderItemsQuery()));
         }
 
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("user/all")]
+        public async Task<IActionResult> GetAllForUser()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return Unauthorized();
             }
-            var isAdmin = User.IsInRole("Administrator") || User.IsInRole("ManagerWarehouse") || User.IsInRole("CRUWarehouse") || User.IsInRole("DeleteWarehouse");
+            var ordersQuery = new GetAllOrdersQuery
+            {
+                UserId = user.Id
+            };
+            var result = await _mediator.Send(ordersQuery);
+            var orders = result?.Data;
+            if (orders == null || !orders.Any())
+            {
+                return Ok(new List<OrderItem>());
+            }
+            var orderItems = orders
+                .SelectMany(order => order.OrderItem)
+                .ToList();
+            return Ok(orderItems);
+        }
+
+        [Authorize(Policy = Permissions.OrderItems.View)]
+        [HttpGet("admin/{id}")]
+        public async Task<IActionResult> GetOrderItemByAdmin(int id)
+        {
+            var result = await _mediator.Send(new GetOrderItemByIdQuery() { Id = id});
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetOrderItemForUser(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             var orderItemQuery = new GetOrderItemByIdQuery
             {
                 Id = id,
-                UserId = isAdmin ? null : user.Id
+                UserId = user.Id
             };
-            return Ok(await _mediator.Send(orderItemQuery));
+
+            var result = await _mediator.Send(orderItemQuery);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
-
-
 
         [Authorize(Policy = Permissions.OrderItems.Create)]
         [HttpPost("add-edit")]

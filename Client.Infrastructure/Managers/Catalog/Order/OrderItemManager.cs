@@ -41,6 +41,11 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.OrderItem
             var response = await _httpClient.GetAsync(Routes.OrderItemsEndpoints.GetAll);
             return await response.ToResult<List<GetAllOrderItemsResponse>>();
         }
+        //public async Task<IResult<List<GetAllOrderItemsResponse>>> GetAllForUserAsync()
+        //{
+        //    var response = await _httpClient.GetAsync(Routes.OrderItemsEndpoints.GetAllForUser);
+        //    return await response.ToResult<List<GetAllOrderItemsResponse>>();
+        //}
 
         public async Task<IResult<int>> SaveAsync(AddEditOrderItemCommand request)
         {

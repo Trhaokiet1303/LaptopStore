@@ -64,7 +64,7 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            var result = await OrderManager.GetAllAsync();
+            var result = await OrderManager.GetAllForUserAsync();
             if (result.Succeeded)
             {
                 Orders = result.Data
@@ -94,7 +94,7 @@ namespace LaptopStore.Client.Pages.Shop
                 return;
             }
 
-            var result = await OrderManager.GetAllAsync();
+            var result = await OrderManager.GetAllForUserAsync();
             if (result.Succeeded)
             {
                 Orders = result.Data

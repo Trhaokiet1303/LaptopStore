@@ -34,7 +34,6 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
             var response = await _httpClient.GetAsync(Routes.OrdersEndpoints.GetOrderById(orderId));
             return await response.ToResult<GetOrderByIdResponse>();
         }
-
         public async Task<IResult<int>> DeleteAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"{Routes.OrdersEndpoints.Delete}/{id}");
@@ -44,6 +43,11 @@ namespace LaptopStore.Client.Infrastructure.Managers.Catalog.Order
         public async Task<IResult<List<GetAllOrdersResponse>>> GetAllAsync()
         {
             var response = await _httpClient.GetAsync(Routes.OrdersEndpoints.GetAll);
+            return await response.ToResult<List<GetAllOrdersResponse>>();
+        }
+        public async Task<IResult<List<GetAllOrdersResponse>>> GetAllForUserAsync()
+        {
+            var response = await _httpClient.GetAsync(Routes.OrdersEndpoints.GetAllForUser);
             return await response.ToResult<List<GetAllOrdersResponse>>();
         }
 
