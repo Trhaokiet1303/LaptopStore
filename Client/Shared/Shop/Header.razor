@@ -54,14 +54,7 @@
 
             @if (_user?.Identity?.IsAuthenticated == true)
             {
-                if (_isAdmin)
-                {
-                    <MudNavLink Href="/admin/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
-                }
-                else
-                {
-                    <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
-                }
+                <MudNavLink Href="/account" Class="contact-info" Icon="@Icons.Material.Outlined.Person">@UserName</MudNavLink>
             }
             else
             {

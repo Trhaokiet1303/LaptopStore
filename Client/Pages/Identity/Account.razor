@@ -3,6 +3,7 @@
 @using LaptopStore.Client.Shared.Shop
 @using LaptopStore.Shared.Constants.Application
 @using Microsoft.AspNetCore.SignalR.Client
+@using System.Security.Claims
 @layout ShopLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Account> localizer
 @inject NavigationManager NavigationManager
@@ -16,6 +17,14 @@
             <MudPaper Class="sidebar" Elevation="4">
                 <MudText Class="sidebar-title">Tài khoản của bạn</MudText>
                 <MudList Dense>
+                    <MudListItem>
+                        @if (_isAdmin)
+                        {
+                            <MudText Typo="Typo.body1">
+                                <a href="/admin/dashboard" class="text-deco">Dashboard</a>
+                            </MudText>
+                        }
+                    </MudListItem>
                     <MudListItem>
                         <MudText Typo="Typo.body1">
                             <a id="account" class="text-deco">Tài Khoản</a>
@@ -60,18 +69,26 @@
     private HubConnection hubConnection;
     private string CurrentUserId { get; set; }
     private bool isAuthenticated { get; set; }
+    private string UserName { get; set; } = string.Empty;
+    private ClaimsPrincipal _user;
+    private bool _isAdmin;
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = hubConnection.TryInitialize(NavigationManager);
         await hubConnection.StartAsync();
 
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        _user = state?.User;
+        _isAdmin = !(_user?.IsInRole("Basic") ?? false);
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        isAuthenticated = user.Identity.IsAuthenticated;
+        isAuthenticated = authState.User.Identity.IsAuthenticated;
+
         if (isAuthenticated)
         {
-            CurrentUserId = user.FindFirst(c => c.Type == "sub")?.Value;
+            UserName = authState.User.Identity.Name ?? "Người dùng";
+            StateHasChanged();
         }
     }
 
@@ -80,8 +97,8 @@
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
-            await _authenticationManager.Logout(); 
-            NavigationManager.NavigateTo("/login"); 
+            await _authenticationManager.Logout();
+            NavigationManager.NavigateTo("/login");
 
             await JS.InvokeVoidAsync("localStorage.clear");
             await JS.InvokeVoidAsync("sessionStorage.clear");
