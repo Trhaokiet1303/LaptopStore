@@ -89,13 +89,8 @@
                                 <MudDivider Class="my-2" />
 
                                 <MudGrid>
-                                    <MudItem xs="6"><MudText Typo="Typo.body2">Tiền hàng hóa:</MudText></MudItem>
-                                    <MudItem xs="6"><MudText Typo="Typo.body2">Giảm giá:</MudText></MudItem>
-                                    <MudItem xs="6"><MudText Typo="Typo.body2">Vận chuyển:</MudText></MudItem>
                                     <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
-
-                                </MudGrid>
-                                
+                                </MudGrid>                                
                                 <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
                                            OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
                                     Hủy đơn hàng

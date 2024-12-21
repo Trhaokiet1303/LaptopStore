@@ -79,47 +79,10 @@ namespace LaptopStore.Client.Pages.Admin.Products
                 _totalItems = response.TotalCount;
                 _currentPage = response.CurrentPage;
                 _pagedData = response.Data;
-
-                await UpdateFeaturedStatusForAllProducts();
-
             }
             else
             {
                 foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
-        }
-
-        private async Task UpdateFeaturedStatusForAllProducts()
-        {
-            var allProductsResponse = await ProductManager.GetProductsAsync(new GetAllPagedProductsRequest
-            {
-                PageSize = int.MaxValue,
-                PageNumber = 1,
-                SearchString = _searchString
-            });
-
-            if (allProductsResponse.Succeeded)
-            {
-                var allProducts = allProductsResponse.Data;
-
-                foreach (var product in allProducts)
-                {
-                    var updateResponse = await ProductManager.UpdateFeaturedStatusAsync(product.Id);
-                    if (!updateResponse.Succeeded)
-                    {
-                        foreach (var message in updateResponse.Messages)
-                        {
-                            _snackBar.Add(message, Severity.Error);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var message in allProductsResponse.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }

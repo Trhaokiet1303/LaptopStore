@@ -174,12 +174,36 @@ namespace LaptopStore.Client.Pages.Shop
                     Snackbar.Add("Không thể cập nhật trạng thái đã đánh giá. Vui lòng thử lại sau.", Severity.Error);
                 }
 
-                // Reload product data to update UI
+                await UpdateFeaturedStatusForProduct(Product.Id);
                 await LoadProduct(Product.Id);
             }
             else
             {
                 Snackbar.Add("Không thể cập nhật đánh giá. Vui lòng thử lại sau.", Severity.Error);
+            }
+        }
+        private async Task UpdateFeaturedStatusForProduct(int productId)
+        {
+            try
+            {
+                // Gửi yêu cầu cập nhật trạng thái featured cho sản phẩm
+                var response = await ProductManager.UpdateFeaturedStatusAsync(productId);
+
+                if (response.Succeeded)
+                {
+                    Snackbar.Add("Trạng thái nổi bật của sản phẩm đã được cập nhật!", Severity.Success);
+                }
+                else
+                {
+                    foreach (var message in response.Messages)
+                    {
+                        Snackbar.Add(message, Severity.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Có lỗi xảy ra khi cập nhật trạng thái nổi bật: {ex.Message}", Severity.Error);
             }
         }
     }
