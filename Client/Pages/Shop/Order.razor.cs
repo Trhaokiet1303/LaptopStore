@@ -16,6 +16,7 @@ using LaptopStore.Client.Infrastructure.Managers.Catalog.Product;
 using System.Text.Json;
 using Microsoft.JSInterop;
 using LaptopStore.Application.Features.Products.Commands.Update;
+using MudBlazor;
 
 namespace LaptopStore.Client.Pages.Shop
 {
@@ -285,6 +286,7 @@ namespace LaptopStore.Client.Pages.Shop
                             await JS.InvokeVoidAsync("alert", "Có lỗi khi cập nhật số lượng sản phẩm.");
                             return;
                         }
+                        await UpdateFeaturedStatusForProduct(item.ProductId);
                     }
                     else
                     {
@@ -300,6 +302,31 @@ namespace LaptopStore.Client.Pages.Shop
             else
             {
                 await JS.InvokeVoidAsync("alert", "Đặt hàng không thành công, vui lòng thử lại!");
+            }
+        }
+
+        private async Task UpdateFeaturedStatusForProduct(int productId)
+        {
+            try
+            {
+                // Gửi yêu cầu cập nhật trạng thái featured cho sản phẩm
+                var response = await ProductManager.UpdateFeaturedStatusAsync(productId);
+
+                if (response.Succeeded)
+                {
+                    _snackBar.Add("Trạng thái nổi bật của sản phẩm đã được cập nhật!", Severity.Success);
+                }
+                else
+                {
+                    foreach (var message in response.Messages)
+                    {
+                        _snackBar.Add(message, Severity.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _snackBar.Add($"Có lỗi xảy ra khi cập nhật trạng thái nổi bật: {ex.Message}", Severity.Error);
             }
         }
 
