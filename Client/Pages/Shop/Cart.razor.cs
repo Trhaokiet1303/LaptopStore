@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,9 +65,22 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task UpdateQuantity(OrderItem item, int newQuantity)
         {
+            var productResponse = await ProductManager.GetProductByIdAsync(item.ProductId);
+            if (!productResponse.Succeeded)
+            {
+                _snackBar.Add("Không thể tải thông tin sản phẩm.", Severity.Error);
+                return;
+            }
+            var product = productResponse.Data;
+            if (newQuantity > product.Quantity)
+            {
+                _snackBar.Add($"Chỉ có {product.Quantity} sản phẩm trong kho.", Severity.Error);
+                return;
+            }
             item.Quantity = newQuantity;
             await SaveCartToLocalStorage();
         }
+
 
         private async Task RemoveFromCart(int productId)
         {
