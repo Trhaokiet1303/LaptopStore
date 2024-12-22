@@ -65,7 +65,7 @@ namespace LaptopStore.Client.Pages.Shop
             var response = await ProductManager.GetProductsAsync(request);
             if (response.Succeeded)
             {
-                _pagedData = response.Data;
+                _pagedData = response.Data.Where(p => p.Quantity > 0).ToList();
                 _totalItems = response.TotalCount;
             }
         }
@@ -86,9 +86,10 @@ namespace LaptopStore.Client.Pages.Shop
         {
             if (_pagedData == null) return;
 
-            _featuredProducts = _pagedData.Where(p => p.Featured == true).ToList();
-            _RatedProducts = _pagedData.Where(p => p.Rate >= 4.2m).ToList();
+            _featuredProducts = _pagedData.Where(p => p.Featured == true && p.Quantity > 0).ToList();
+            _RatedProducts = _pagedData.Where(p => p.Rate >= 4.2m && p.Quantity > 0).ToList();
         }
+
 
         private List<string> bannerImages = new List<string>
         {

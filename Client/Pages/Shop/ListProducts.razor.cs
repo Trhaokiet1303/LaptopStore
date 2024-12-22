@@ -146,7 +146,6 @@ namespace LaptopStore.Client.Pages.Shop
 
         private async Task LoadData(int pageNumber, int pageSize, TableState state)
         {
-            // Kiểm tra nếu chưa tải dữ liệu tất cả sản phẩm
             if (allProducts.Count == 0)
             {
                 var selectedBrands = _brands.Where(b => b.IsSelected).Select(b => b.Name).ToList();
@@ -156,8 +155,8 @@ namespace LaptopStore.Client.Pages.Shop
 
                 var request = new GetAllPagedProductsRequest
                 {
-                    PageNumber = 1,  
-                    PageSize = int.MaxValue, 
+                    PageNumber = 1,
+                    PageSize = int.MaxValue,
                     SearchString = _searchString,
                     BrandFilter = selectedBrands,
                     DescriptionFilter = selectedDescriptions,
@@ -170,7 +169,8 @@ namespace LaptopStore.Client.Pages.Shop
                 if (response.Succeeded && response.Data != null)
                 {
                     allProducts = ConvertToProductList(response.Data);
-                    _totalItems = response.TotalCount;
+                    // Filter products with quantity > 0 and update _totalItems
+                    _totalItems = allProducts.Count(p => p.Quantity > 0);
                 }
                 else
                 {
@@ -179,12 +179,11 @@ namespace LaptopStore.Client.Pages.Shop
                 }
             }
 
-            // Áp dụng bộ lọc lên tất cả sản phẩm
-            var filteredProducts = ApplyFilters(allProducts);
+            // Filter out products with Quantity > 0
+            var filteredProducts = ApplyFilters(allProducts).Where(p => p.Quantity > 0).ToList();
 
             var newPagedData = ConvertToPagedData(filteredProducts.Skip(pageNumber * pageSize).Take(pageSize).ToList());
 
-            // Nếu đã có dữ liệu trước đó, thì kết hợp chúng lại
             if (_pagedData != null)
             {
                 _pagedData = _pagedData.Concat(newPagedData).ToList();
@@ -197,11 +196,11 @@ namespace LaptopStore.Client.Pages.Shop
             _currentPage = pageNumber;
             if (filteredProducts.Count <= _pagedData.Count())
             {
-                _showLoadMoreButton = false; // Hide the button if no products are left
+                _showLoadMoreButton = false;
             }
             else
             {
-                _showLoadMoreButton = true; // Show the button if more products are available
+                _showLoadMoreButton = true;
             }
         }
 
@@ -223,6 +222,7 @@ namespace LaptopStore.Client.Pages.Shop
                 Description = p.Description,
                 Rate = p.Rate,
                 Barcode = p.Barcode,
+                Quantity = p.Quantity,
                 Brand = new Brand { Name = p.Brand },
                 ImageDataURL = p.ImageDataURL
             }).ToList();
@@ -245,6 +245,7 @@ namespace LaptopStore.Client.Pages.Shop
                 Description = p.Description,
                 Rate = p.Rate,
                 Barcode = p.Barcode,
+                Quantity = p.Quantity,
                 Brand = p.Brand.Name, 
                 ImageDataURL = p.ImageDataURL
             });
