@@ -85,7 +85,7 @@ namespace LaptopStore.Client.Pages.Shop
         }
         private async Task AddToCart()
         {
-            // Lấy thông tin sản phẩm từ cơ sở dữ liệu hoặc API (ví dụ: qua ProductManager)
+            // Lấy thông tin sản phẩm từ cơ sở dữ liệu
             var productResponse = await ProductManager.GetProductByIdAsync(Product.Id);
             if (!productResponse.Succeeded)
             {
@@ -95,9 +95,17 @@ namespace LaptopStore.Client.Pages.Shop
 
             var product = productResponse.Data;
 
-            // Kiểm tra nếu số lượng người dùng muốn thêm vào giỏ hàng lớn hơn số lượng còn lại trong kho
+            // Kiểm tra nếu sản phẩm đã hết hàng
+            if (product.Quantity <= 0)
+            {
+                Snackbar.Add("Sản phẩm đã hết hàng.", Severity.Error);
+                return;
+            }
+
+            // Kiểm tra số lượng muốn thêm vào giỏ hàng
             if (quantity > product.Quantity)
             {
+                Snackbar.Add($"Chỉ có {product.Quantity} sản phẩm trong kho.", Severity.Error);
                 return;
             }
 
@@ -141,6 +149,5 @@ namespace LaptopStore.Client.Pages.Shop
 
             Snackbar.Add("Sản phẩm đã được thêm vào giỏ hàng!", Severity.Success);
         }
-
     }
 }

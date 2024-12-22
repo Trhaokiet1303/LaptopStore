@@ -99,22 +99,30 @@ namespace LaptopStore.Client.Pages.Shop
             }
         }
 
-        private async Task AddToCart()
+        private async Task<bool> AddToCart()
         {
-            // Lấy thông tin sản phẩm từ cơ sở dữ liệu hoặc API (ví dụ: qua ProductManager)
+            // Lấy thông tin sản phẩm từ cơ sở dữ liệu
             var productResponse = await ProductManager.GetProductByIdAsync(Product.Id);
             if (!productResponse.Succeeded)
             {
                 Snackbar.Add("Không thể tải thông tin sản phẩm.", Severity.Error);
-                return;
+                return false;
             }
 
             var product = productResponse.Data;
 
-            // Kiểm tra nếu số lượng người dùng muốn thêm vào giỏ hàng lớn hơn số lượng còn lại trong kho
+            // Kiểm tra nếu sản phẩm đã hết hàng
+            if (product.Quantity <= 0)
+            {
+                Snackbar.Add("Sản phẩm đã hết hàng.", Severity.Error);
+                return false;
+            }
+
+            // Kiểm tra số lượng muốn thêm vào giỏ hàng
             if (quantity > product.Quantity)
             {
-                return;
+                Snackbar.Add($"Chỉ có {product.Quantity} sản phẩm trong kho.", Severity.Error);
+                return false;
             }
 
             var cartItem = new OrderItem
@@ -143,7 +151,7 @@ namespace LaptopStore.Client.Pages.Shop
                 else
                 {
                     Snackbar.Add($"Không thể thêm quá {product.Quantity} sản phẩm vào giỏ hàng.", Severity.Error);
-                    return;
+                    return false;
                 }
             }
             else
@@ -156,7 +164,10 @@ namespace LaptopStore.Client.Pages.Shop
             await JS.InvokeVoidAsync("localStorage.setItem", "cartItems", JsonSerializer.Serialize(cartItems));
 
             Snackbar.Add("Sản phẩm đã được thêm vào giỏ hàng!", Severity.Success);
+            return true;
         }
+
+
         private async Task InvokeModal(int id = 0)
         {
             var parameters = new DialogParameters();
@@ -251,14 +262,20 @@ namespace LaptopStore.Client.Pages.Shop
         }
         private async Task HandleBuyNow()
         {
-            await AddToCart();
+            var addedToCart = await AddToCart();
 
-            // Chờ 0.5 giây trước khi chuyển sang trang "order"
+            // Nếu sản phẩm không được thêm vào giỏ hàng (hết hàng hoặc lỗi), không chuyển hướng
+            if (!addedToCart)
+            {
+                return;
+            }
+
             await Task.Delay(500);
 
             // Chuyển hướng sang trang "order"
             NavigationManager.NavigateTo("/order");
         }
+
 
         private void NavigateToProductDetail(int productId)
         {

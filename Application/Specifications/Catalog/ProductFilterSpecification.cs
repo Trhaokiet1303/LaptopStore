@@ -18,8 +18,9 @@ namespace LaptopStore.Application.Specifications.Catalog
                 p.Screen.Contains(searchString) || p.Card.Contains(searchString) ||
                 p.Ram.Contains(searchString) || p.Rom.Contains(searchString) ||
                 p.Battery.Contains(searchString) || p.Weight.Contains(searchString) ||
-                p.ProductLine.Contains(searchString)
-                );
+                p.ProductLine.Contains(searchString) || p.Rate.ToString().Contains(searchString) ||
+                (searchString == "true" && p.Featured) || (searchString == "false" && !p.Featured) ||
+                p.Quantity.ToString().Contains(searchString) || p.Price.ToString().Contains(searchString));
             }
             else
             {

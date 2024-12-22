@@ -55,7 +55,7 @@
                             <MudText Typo="Typo.body2">@Product.Battery</MudText>
                         </div>
                     </div>
-                <MudNumericField T="int" Label="Số lượng" @bind-Value="quantity" Min="1" Max="@MaxQuantity" Class="quantity-field" />
+                <MudNumericField T="int" @bind-Value="quantity" Min="1" Max="@MaxQuantity" Label="Số lượng" Disabled="@(MaxQuantity == 0)" />
                 <!-- Nút thêm vào giỏ hàng -->
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="add-to-cart-btn" OnClick="AddToCart">
                     @_localizer["Thêm vào giỏ hàng"]

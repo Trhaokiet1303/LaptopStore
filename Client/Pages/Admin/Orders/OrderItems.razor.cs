@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -79,9 +80,9 @@ namespace LaptopStore.Client.Pages.Admin.Orders
         private async Task InvokeAddModal()
         {
             var parameters = new DialogParameters
-            {
-            { nameof(AddEditOrderItemModal.AddEditOrderItemModel), new AddEditOrderItemCommand { OrderId = OrderId } }
-            };
+    {
+        { nameof(AddEditOrderItemModal.AddEditOrderItemModel), new AddEditOrderItemCommand { OrderId = OrderId } }
+    };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<AddEditOrderItemModal>(_localizer["Add Order Item"], parameters, options);
@@ -90,8 +91,15 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             if (!result.Cancelled)
             {
                 await LoadOrderItemsAsync();
+
+                var lastAddedOrderItem = orderItems.OrderByDescending(o => o.Id).FirstOrDefault();
+                if (lastAddedOrderItem != null)
+                {
+                    await UpdateFeaturedStatusForProduct(lastAddedOrderItem.ProductId);
+                }
             }
         }
+
 
         private async Task InvokeEditModal(int id)
         {
@@ -116,6 +124,8 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 if (!result.Cancelled)
                 {
                     await LoadOrderItemsAsync();
+
+                    await UpdateFeaturedStatusForProduct(orderItemToEdit.ProductId);
                 }
             }
         }
@@ -139,30 +149,24 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                     var orderItemToDelete = orderItems.FirstOrDefault(x => x.Id == id);
                     if (orderItemToDelete != null)
                     {
-                        var productResponse = await ProductManager.GetProductByIdAsync(orderItemToDelete.ProductId);
+                        var productId = orderItemToDelete.ProductId;
+
+                        // Cập nhật lại số lượng sản phẩm trong kho
+                        var productResponse = await ProductManager.GetProductByIdAsync(productId);
                         if (productResponse.Succeeded)
                         {
                             var product = productResponse.Data;
-
                             var newQuantity = product.Quantity + orderItemToDelete.Quantity;
 
                             var updateProductQuantityResponse = await ProductManager.UpdateProductQuantityAsync(product.Id, newQuantity);
-                            if (updateProductQuantityResponse.Succeeded)
-                            {
-                                _snackBar.Add("Đã cập nhật lại số lượng sản phẩm trong kho.", Severity.Success);
-                            }
-                            else
+                            if (!updateProductQuantityResponse.Succeeded)
                             {
                                 _snackBar.Add("Cập nhật số lượng sản phẩm thất bại.", Severity.Error);
                             }
                         }
-                        else
-                        {
-                            _snackBar.Add("Không thể tìm thấy sản phẩm để cập nhật số lượng.", Severity.Error);
-                        }
+                        await UpdateFeaturedStatusForProduct(productId);
                     }
 
-                    // Update the order total price
                     var existingOrderItemResponse = await OrderManager.GetOrderByIdAsync(orderId);
                     if (existingOrderItemResponse.Succeeded && existingOrderItemResponse.Data.OrderItem != null)
                     {
@@ -192,7 +196,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                 }
                 else
                 {
-                    await Reset();
                     foreach (var message in response.Messages)
                     {
                         _snackBar.Add(message, Severity.Error);
@@ -202,6 +205,30 @@ namespace LaptopStore.Client.Pages.Admin.Orders
         }
 
 
+        private async Task UpdateFeaturedStatusForProduct(int productId)
+        {
+            try
+            {
+                // Gửi yêu cầu cập nhật trạng thái featured cho sản phẩm
+                var response = await ProductManager.UpdateFeaturedStatusAsync(productId);
+
+                if (response.Succeeded)
+                {
+                    _snackBar.Add("Trạng thái nổi bật của sản phẩm đã được cập nhật!", Severity.Success);
+                }
+                else
+                {
+                    foreach (var message in response.Messages)
+                    {
+                        _snackBar.Add(message, Severity.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _snackBar.Add($"Có lỗi xảy ra khi cập nhật trạng thái nổi bật: {ex.Message}", Severity.Error);
+            }
+        }
         private async Task Reset()
         {
             _orderItem = new GetAllOrderItemsResponse();
