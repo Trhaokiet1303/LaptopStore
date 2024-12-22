@@ -141,7 +141,7 @@ namespace LaptopStore.Client.Pages.Shop
 
         private bool IsCancelDisabled(string status)
         {
-            return status == "Đã Hủy";
+            return status == "Đã Hủy" || status == "Đang Giao" || status == "Đã Giao";
         }
 
         private async Task UpdateOrderStatus(int orderId, string newStatus)
