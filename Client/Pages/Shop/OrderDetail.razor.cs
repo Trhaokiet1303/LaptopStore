@@ -42,7 +42,11 @@ namespace LaptopStore.Client.Pages.Shop
             await LoadData(0, int.MaxValue, new TableState());
             IsLoading = false;
         }
-
+        private async Task FilterAllOrders()
+        {
+            SelectedStatus = string.Empty;
+            await FilterOrdersByStatusAsync(string.Empty);
+        }
         private async Task FilterProcessingOrders() => await FilterOrdersByStatusAsync("Đặt thành công");
         private async Task FilterShippingOrders() => await FilterOrdersByStatusAsync("Đang giao");
         private async Task FilterDeliveredOrders() => await FilterOrdersByStatusAsync("Đã giao");
@@ -84,7 +88,13 @@ namespace LaptopStore.Client.Pages.Shop
 
         private void FilterRatedProducts()
         {
-            Orders = Orders.Where(order => order.OrderItem.Any(item => item.IsRated)).ToList();
+            Orders = Orders
+                .Where(order => order.OrderItem.Any(item => item.IsRated))
+                .ToList();
+            foreach (var order in Orders)
+            {
+                order.OrderItem = order.OrderItem.Where(item => item.IsRated).ToList();
+            }
             IsRatedFilterApplied = true;
         }
 
