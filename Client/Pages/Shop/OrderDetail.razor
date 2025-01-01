@@ -4,11 +4,10 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<OrderDetail> _localizer
 <link href="css/orderdetail.css" rel="stylesheet">
 
-
 <MudContainer Class="main-content">
     <MudGrid Class="content-wrapper">
         <!-- Sidebar -->
-        <MudItem >
+        <MudItem>
             <MudPaper Class="sidebar" Elevation="4">
                 <MudText Class="sidebar-title">Xem đơn hàng</MudText>
                 <MudList Dense>
@@ -38,7 +37,21 @@
 
         <MudItem xs="12" sm="8" md="9">
             <MudPaper Class="info" Elevation="4">
-                <h1 class="orderdetail-container">Đơn hàng của bạn</h1>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1 class="orderdetail-container">Đơn hàng của bạn</h1>
+                    @if (!IsRatedFilterApplied)
+                    {
+                        @if (Orders.Any(order => order.OrderItem.Any(item => item.IsRated)))
+                        {
+                            <MudButton OnClick="FilterRatedProducts"
+                                       Class="rated-button"
+                                       Color="Color.Primary"
+                                       Variant="Variant.Outlined">
+                                Sản phẩm đã đánh giá
+                            </MudButton>
+                        }
+                    }
+                </div>
                 <MudTabs Class="info-container">
                     @if (IsLoading)
                     {
@@ -90,7 +103,7 @@
 
                                 <MudGrid>
                                     <MudItem xs="6"><MudText Typo="Typo.body1" Bold="true">Tổng cộng:@($"{order.TotalPrice:C}")</MudText></MudItem>
-                                </MudGrid>                                
+                                </MudGrid>
                                 <MudButton Disabled="@(IsCancelDisabled(order.StatusOrder))"
                                            OnClick="@(() => ConfirmCancelOrder(order.Id, order.StatusOrder))">
                                     Hủy đơn hàng

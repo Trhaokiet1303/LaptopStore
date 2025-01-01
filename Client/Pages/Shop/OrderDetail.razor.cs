@@ -33,7 +33,7 @@ namespace LaptopStore.Client.Pages.Shop
         private bool IsLoading { get; set; }
         private List<GetAllOrdersResponse> Orders { get; set; } = new();
         private string SelectedStatus { get; set; }
-
+        private bool IsRatedFilterApplied = false;
         protected override async Task OnInitializedAsync()
         {
             IsLoading = true;
@@ -78,8 +78,14 @@ namespace LaptopStore.Client.Pages.Shop
                 Orders.Clear();
                 await JSRuntime.InvokeVoidAsync("alert", "Không thể tải danh sách đơn hàng!");
             }
-
+            IsRatedFilterApplied = false;
             IsLoading = false;
+        }
+
+        private void FilterRatedProducts()
+        {
+            Orders = Orders.Where(order => order.OrderItem.Any(item => item.IsRated)).ToList();
+            IsRatedFilterApplied = true;
         }
 
         private async Task LoadOrdersAsync(string status = "")

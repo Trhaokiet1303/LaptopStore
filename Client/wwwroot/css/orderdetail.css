@@ -182,6 +182,17 @@
     background-color: #cc0000;
     color: #fff;
     border: none;
-    opacity: 1; /* Đảm bảo không bị làm mờ */
-    pointer-events: none; /* Đảm bảo không thể click */
+    opacity: 1; 
+    pointer-events: none;
 }
+.rated-button {
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .rated-button:hover {
+        background-color: #1976d2; /* Change to your preferred hover color */
+        color: white;
+    }

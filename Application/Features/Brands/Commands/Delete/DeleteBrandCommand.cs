@@ -46,7 +46,7 @@ namespace LaptopStore.Application.Features.Brands.Commands.Delete
             }
             else
             {
-                return await Result<int>.FailAsync(_localizer["Không có quyền xóa!"]);
+                return await Result<int>.FailAsync(_localizer["Có sản phẩm của hãng này!"]);
             }
         }
     }

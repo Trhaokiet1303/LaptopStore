@@ -209,7 +209,8 @@
 
             if (currentSearch != text)
             {
-                NavigationManager.NavigateTo($"/allproducts?search={text}");
+                NavigationManager.NavigateTo($"/allproducts?search={text}", forceLoad: true);
+                
             }
             else
             {
