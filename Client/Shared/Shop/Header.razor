@@ -188,8 +188,8 @@
         try
         {
             await hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
-            await _authenticationManager.Logout(); // Đảm bảo gọi phương thức logout ở đây
-            NavigationManager.NavigateTo("/login"); // Điều hướng người dùng đến trang login sau khi đăng xuất
+            await _authenticationManager.Logout();
+            NavigationManager.NavigateTo("/login");
         }
         catch (Exception ex)
         {
@@ -232,7 +232,7 @@
         }
         else
         {
-            cartItemCount = 0; // Nếu giỏ hàng rỗng, đặt về 0
+            cartItemCount = 0;
         }
     }
 }

@@ -38,6 +38,11 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
         private async Task SaveAsync()
         {
+            if (AddEditOrderModel.StatusOrder == "Đã Giao" && AddEditOrderModel.IsPayment != true)
+            {
+                _snackBar.Add("Phải thanh toán trước khi đặt trạng thái là Đã Giao!", Severity.Error);
+                return;
+            }
             var response = await OrderManager.SaveAsync(AddEditOrderModel);
             if (response.Succeeded)
             {

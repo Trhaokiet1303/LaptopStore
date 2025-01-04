@@ -1,9 +1,7 @@
-﻿
-/* General Styles */
-.header {
+﻿.header {
     background-color: deepskyblue;
     height: 80px;
-    padding-top: 10px ;
+    padding-top: 10px;
     display: flex;
     align-items: center;
 }
@@ -31,7 +29,7 @@
     align-items: center;
     justify-content: center;
     min-width: 20%;
-    max-width:45%;
+    max-width: 45%;
 }
 
 .search-bar {
@@ -56,13 +54,12 @@
     padding-bottom: 15px;
 }
 
-
 .menu-container {
     display: flex;
     gap: 10px;
-    align-items: center; 
+    align-items: center;
     justify-content: flex-start;
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
 }
 
 .menu-button {
@@ -77,8 +74,8 @@
     text-overflow: ellipsis;
     text-align: center;
     border: 1px solid #00aaff;
-    text-align: center;
 }
+
     .menu-button:hover {
         color: #00aaff;
         background-color: #ffff;
@@ -90,28 +87,10 @@
     justify-content: flex-end;
     align-items: center;
     width: 70%;
-    padding-right:15px;
+    padding-right: 15px;
 }
 
-.contact {
-    border-radius: 25px;
-    background-color: #00aaff;
-    color: white;
-    font-weight: bolder;
-    font-size: 18px;
-    text-decoration: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    border: 1px solid #00aaff;
-    margin-right: 5px;
-    text-align: center;
-}
-    .contact:hover {
-        color: #00aaff;
-        background-color: #ffff;
-    }
+.contact,
 .contact-info {
     border-radius: 25px;
     background-color: #00aaff;
@@ -125,17 +104,18 @@
     text-align: center;
     border: 1px solid #00aaff;
     margin-right: 5px;
-    text-align:center;
 }
+
+    .contact:hover,
     .contact-info:hover {
         color: #00aaff;
         background-color: #ffff;
     }
-/* Responsive Design */
+
 @media (max-width: 1200px) {
     .menu-container,
     .contact-container .contact-info {
-        display: none; /* Hide "Danh mục", "Thông tin", and "Liên hệ" buttons */
+        display: none;
     }
 
     .contact-container {
@@ -143,10 +123,10 @@
     }
 
     .search-container {
-        flex: 3; /* Increase search bar size */
+        flex: 3;
     }
 }
-/* thanh địa chỉ*/
+
 .breadcrumb-container {
     padding: 10px 20px;
     background: linear-gradient(to bottom, #ffffff, #f8f8f8);
@@ -161,7 +141,6 @@
     padding: 4px 8px;
     border-radius: 50%;
 }
-
 
 .breadcrumb {
     display: flex;
@@ -194,4 +173,30 @@
 .breadcrumb-current {
     font-weight: bold;
     color: #333;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .search-container {
+        max-width: 80%;
+    }
+
+    .menu-button, .contact, .contact-info {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    .cart-badge {
+        font-size: 0.7rem;
+    }
+
+    .breadcrumb {
+        flex-direction: column;
+        font-size: 12px;
+    }
 }
