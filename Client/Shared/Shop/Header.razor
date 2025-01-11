@@ -32,14 +32,7 @@
         </div>
 
         <!-- Search Bar -->
-        <MudItem Class="search-container">
-            <div class="search-bar">
-                <MudTextField Class="search-text" T="string" ValueChanged="@(s => OnSearch(s))"
-                              Placeholder="@localizer["Bạn muốn tìm gì..."]"
-                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
-                              IconSize="Size.Medium" />
-            </div>
-        </MudItem>
+
 
 
         <!-- Contact Icons -->
@@ -47,7 +40,7 @@
             <MudNavLink Href="/info" Class="contact-info" Icon="@Icons.Material.Filled.Info">Thông tin </MudNavLink>
             <MudNavLink Href="/info#lienhe" Class="contact-info" Icon="@Icons.Material.Filled.MailOutline">Liên Hệ</MudNavLink>
             <MudNavLink Href="/orderdetail" Class="contact" Icon="@Icons.Material.Filled.Receipt">Đơn hàng</MudNavLink>
-            <MudNavLink Href="/cart" Class="contact" Icon="@Icons.Material.Filled.ShoppingCart">
+            <MudNavLink Href="/cart" Class="contact1" Icon="@Icons.Material.Filled.ShoppingCart">
                 Giỏ hàng
             </MudNavLink>
 
@@ -61,6 +54,16 @@
                 <MudNavLink Href="/login" Class="contact-info" Icon="@Icons.Material.Filled.Login">Đăng nhập</MudNavLink>
             }
 
+
+        </MudItem>
+
+        <MudItem Class="search-container">
+            <div class="search-bar">
+                <MudTextField Class="search-text" T="string" ValueChanged="@(s => OnSearch(s))"
+                              Placeholder="@localizer["Bạn muốn tìm gì..."]"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium" />
+            </div>
         </MudItem>
     </div>
 </MudPaper>

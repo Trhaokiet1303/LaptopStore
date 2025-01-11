@@ -74,7 +74,7 @@ namespace LaptopStore.Client.Pages.Shop
             var product = productResponse.Data;
             if (newQuantity > product.Quantity)
             {
-                _snackBar.Add($"Chỉ có {product.Quantity} sản phẩm trong kho.", Severity.Error);
+                _snackBar.Add($"Không thể thêm quá {product.Quantity} sản phẩm vào giỏ hàng.", Severity.Error);
                 return;
             }
             item.Quantity = newQuantity;

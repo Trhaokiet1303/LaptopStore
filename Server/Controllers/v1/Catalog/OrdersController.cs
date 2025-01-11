@@ -132,7 +132,6 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             return Ok(result);
         }
 
-        [Authorize(Policy = Permissions.Orders.Create)]
         [HttpPut("update-totalprice")]
         public async Task<IActionResult> UpdateTotalPrice(UpdateOrderTotalPriceCommand command)
         {

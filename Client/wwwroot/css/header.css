@@ -112,9 +112,30 @@
         background-color: #ffff;
     }
 
+.contact1 {
+    border-radius: 25px;
+    background-color: blue;
+    color: white;
+    font-weight: bolder;
+    font-size: 18px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    border: 1px solid red;
+    margin-right: 5px;
+}
+
+    .contact1:hover {
+        color: #00aaff;
+        background-color: #ffff;
+    }
+
+
 @media (max-width: 1200px) {
     .menu-container,
-    .contact-container .contact-info {
+    .contact-container .contact1 {
         display: none;
     }
 

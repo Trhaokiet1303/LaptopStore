@@ -72,7 +72,6 @@ namespace LaptopStore.Server.Controllers.v1.Catalog
             return Ok(await _mediator.Send(command));
         }
 
-        [Authorize(Policy = Permissions.Products.Create)]
         [HttpPut("update-quantity")]
         public async Task<IActionResult> UpdateProductQuantityAsync([FromBody] UpdateProductQuantityCommand command)
         {

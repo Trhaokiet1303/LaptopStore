@@ -87,12 +87,6 @@ namespace LaptopStore.Client.Pages.Admin.Orders
             {
                 AddEditOrderItemModel.ProductName = productResponse.Data.Name;
                 AddEditOrderItemModel.ProductPrice = productResponse.Data.Price;
-
-                if (AddEditOrderItemModel.Quantity > productResponse.Data.Quantity)
-                {
-                    _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
-                    return;
-                }
             }
             else
             {
@@ -108,10 +102,9 @@ namespace LaptopStore.Client.Pages.Admin.Orders
 
                 if (existingOrderItem != null)
                 {
-                    // Calculate the difference in quantity
                     var quantityDifference = AddEditOrderItemModel.Quantity - existingOrderItem.Quantity;
 
-                    if (quantityDifference <= productResponse.Data.Quantity || quantityDifference <= 0) // Ensure sufficient stock or reduction
+                    if (quantityDifference <= productResponse.Data.Quantity || quantityDifference <= 0)
                     {
                         var updateCommand = new AddEditOrderItemCommand
                         {
@@ -175,7 +168,7 @@ namespace LaptopStore.Client.Pages.Admin.Orders
                     }
                     else
                     {
-                        _snackBar.Add("Số lượng mới không hợp lệ (vượt quá tồn kho).", Severity.Error);
+                        _snackBar.Add($"Chỉ còn {productResponse.Data.Quantity} sản phẩm trong kho.", Severity.Error);
                     }
                 }
                 else
